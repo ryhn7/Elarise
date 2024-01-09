@@ -2,8 +2,16 @@ import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
 
-class AssistantChatroomScreen extends StatelessWidget {
+class AssistantChatroomScreen extends StatefulWidget {
   const AssistantChatroomScreen({super.key});
+
+  @override
+  State<AssistantChatroomScreen> createState() =>
+      _AssistantChatroomScreenState();
+}
+
+class _AssistantChatroomScreenState extends State<AssistantChatroomScreen> {
+  bool isTyping = false;
 
   @override
   Widget build(BuildContext context) {
@@ -130,15 +138,90 @@ class AssistantChatroomScreen extends StatelessWidget {
       );
     }
 
+    Widget chatSpace() {
+      return Container(
+          margin: const EdgeInsets.only(bottom: 24, left: 16, right: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width * 0.75,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                ),
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          onChanged: (text) {
+                            setState(() {
+                              isTyping = text.isNotEmpty;
+                            });
+                          },
+                          textAlignVertical: TextAlignVertical.center,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            hintText: "Type your message here...",
+                            hintStyle:
+                                getSansFranciscoRegular16(color: Colors.black),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ]),
+              ),
+              Stack(
+                children: [
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: primary,
+                      borderRadius: const BorderRadius.all(Radius.circular(50)),
+                    ),
+                  ),
+                  Positioned.fill(
+                      child: Align(
+                    alignment: Alignment.center,
+                    child: isTyping
+                        ? InkWell(
+                            onTap: () {},
+                            child: Image.asset(
+                                "assets/icons/icon_send_black.png",
+                                width: 32,
+                                height: 32),
+                          )
+                        : IconButton(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.mic,
+                              color: Colors.black,
+                              size: 32,
+                            )),
+                  ))
+                ],
+              )
+            ],
+          ));
+    }
+
     return Scaffold(
       backgroundColor: darkGray,
-      body: SingleChildScrollView(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          appBar(),
-          responseMessage(),
-          requestMessage(),
-        ]),
-      ),
+      body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        appBar(),
+        Expanded(
+            child: SingleChildScrollView(
+          child: Column(children: [
+            responseMessage(),
+            requestMessage(),
+          ]),
+        )),
+        chatSpace()
+      ]),
     );
   }
 }
