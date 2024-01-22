@@ -1,4 +1,5 @@
 import 'package:elarise/feature_assistant/presentation/assistant_chatroom/assistant_chatroom_screen.dart';
+import 'package:elarise/feature_auth/presentation/login/login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
 
         useMaterial3: true,
       ),
-      home: const AssistantChatroomScreen()
+      home: const Login()
     );
   }
 }
