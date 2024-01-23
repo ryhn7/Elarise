@@ -1,5 +1,6 @@
 import 'package:elarise/feature_assistant/presentation/assistant_chatroom/assistant_chatroom_screen.dart';
 import 'package:elarise/feature_auth/presentation/login/login.dart';
+import 'package:elarise/feature_auth/presentation/signup/signup.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,14 +14,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Elarise',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-
-        useMaterial3: true,
-      ),
-      home: const Login()
-    );
+        title: 'Elarise',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          useMaterial3: true,
+        ),
+        home: SignUp());
   }
 }
-
