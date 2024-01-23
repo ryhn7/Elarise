@@ -2,37 +2,62 @@ import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
 
-class ElariseAuthTextfield extends StatelessWidget {
+class ElariseAuthTextfield extends StatefulWidget {
   final String labelText;
   final TextEditingController controller;
   final bool obsecureText;
+  final Widget? icon;
 
+  const ElariseAuthTextfield(
+      {super.key,
+      required this.labelText,
+      required this.controller,
+      this.obsecureText = false,
+      this.icon});
 
-  const ElariseAuthTextfield({
-    super.key, 
-    required this.labelText, 
-    required this.controller,
-    this.obsecureText = false
-    });
+  @override
+  State<ElariseAuthTextfield> createState() => _ElariseAuthTextfieldState();
+}
+
+class _ElariseAuthTextfieldState extends State<ElariseAuthTextfield> {
+  late bool _isObscure;
+
+  @override
+  void initState() {
+    super.initState();
+    _isObscure = widget.obsecureText;
+  }
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: controller,
-      obscureText: obsecureText,
+      controller: widget.controller,
+      obscureText: _isObscure,
       decoration: InputDecoration(
-        labelText: labelText,
-        labelStyle: getSansFranciscoRegular16(color: neutralThree),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: neutralThree30),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: neutralThree),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        floatingLabelBehavior: FloatingLabelBehavior.never
-      ),
+          labelText: widget.labelText,
+          labelStyle: getSansFranciscoRegular16(color: neutralThree),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: neutralThree30),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: neutralThree),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          suffixIcon: widget.obsecureText
+              ? IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _isObscure = !_isObscure;
+                    });
+                  },
+                  icon: Icon(
+                    _isObscure ? Icons.visibility : Icons.visibility_off,
+                    color: neutralThree,
+                  ),
+                )
+              : widget.icon),
     );
   }
 }
