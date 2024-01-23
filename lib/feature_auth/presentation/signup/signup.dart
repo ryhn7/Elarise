@@ -1,5 +1,6 @@
 import 'package:elarise/feature_auth/presentation/widget/elaris_auth_button.dart';
 import 'package:elarise/feature_auth/presentation/widget/elarise_auth_textfield.dart';
+import 'package:elarise/feature_auth/presentation/widget/google_auth_button.dart';
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
@@ -17,12 +18,11 @@ class SignUp extends StatelessWidget {
       children: [
         Image.asset("assets/images/dummy_logo_header.png",
             width: 64, height: 64),
-        const SizedBox(height: 16),
+        const SizedBox(height: 8),
         Text(
           "Create your account",
           style: getGrotesqueSemiBoldStyle40(color: neutralFour),
         ),
-        const SizedBox(height: 12),
         Row(
           children: [
             Text(
@@ -30,12 +30,15 @@ class SignUp extends StatelessWidget {
               style: getSansFranciscoRegular16(color: darkSilver),
             ),
             TextButton(
-              onPressed: () {},
-              child: Text(
-                "Login",
-                style: getSansFranciscoSemiBold16(color: primary),
-              ),
-            ),
+                onPressed: () {},
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  foregroundColor: primary,
+                ),
+                child: Text(
+                  "Login",
+                  style: getSansFranciscoSemiBold16(color: primary),
+                )),
           ],
         )
       ],
@@ -82,7 +85,7 @@ class SignUp extends StatelessWidget {
         child: Column(
           children: [
             header(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
             ElariseAuthTextfield(
                 labelText: 'Username', controller: userNameController),
             const SizedBox(height: 24),
@@ -98,29 +101,7 @@ class SignUp extends StatelessWidget {
             const SizedBox(height: 24),
             dividerSignUpAlternate(),
             const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: tan,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(36))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset("assets/images/google_logo.png",
-                        width: 24, height: 24),
-                    const SizedBox(width: 12),
-                    Text(
-                      "Sign Up with Google",
-                      style: getSansFranciscoBold16(color: neutralFour),
-                    ),
-                  ],
-                ),
-              ),
-            )
+            const GoogleAuthButton(labelText: "Sign Up with Google")
           ],
         ),
       )),
