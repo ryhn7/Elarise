@@ -1,4 +1,5 @@
 import 'package:elarise/feature_assistant/presentation/assistant_chatroom/assistant_chatroom_screen.dart';
+import 'package:elarise/feature_assistant/presentation/home/home_screen.dart';
 import 'package:elarise/feature_auth/presentation/login/login.dart';
 import 'package:elarise/feature_auth/presentation/signup/signup.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: true,
         ),
-        home: Login());
+        home: const HomeScreen());
   }
 }

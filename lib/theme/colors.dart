@@ -13,3 +13,4 @@ Color darkGray = const Color(0xFF1e1e1e);
 Color blackOlive = const Color(0xFF3c3c3c);
 Color darkSilver = const Color(0xFF776F69);
 Color tan = const Color(0xFFe4ded9);
+Color tumbleweed = const Color(0xFFE8A089);

@@ -13,6 +13,12 @@ TextStyle _getTextStyle(
 }
 
 // Bricolage Grotesque
+TextStyle getGrotesqueSemiBoldStyle24(
+    {double fontSize = FontSize.s24, required Color color}) {
+  return _getTextStyle(fontSize, FontBricolageGrotesque.fontFamily,
+      FonttWeightManager.fontWeightBold, color);
+}
+
 TextStyle getGrotesqueSemiBoldStyle40(
     {double fontSize = FontSize.s40, required Color color}) {
   return _getTextStyle(fontSize, FontBricolageGrotesque.fontFamily,
