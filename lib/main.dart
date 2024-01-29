@@ -1,14 +1,16 @@
+import 'package:elarise/feature_account_setting/presentation/account_setting/account_setting_screen.dart';
+import 'package:elarise/feature_account_setting/presentation/account_setting/manage_account_screen.dart';
 import 'package:elarise/feature_assistant/presentation/assistant_chatroom/assistant_chatroom_screen.dart';
 import 'package:elarise/feature_assistant/presentation/home/home_screen.dart';
-import 'package:elarise/feature_auth/presentation/login/login.dart';
-import 'package:elarise/feature_auth/presentation/signup/signup.dart';
+import 'package:elarise/feature_auth/presentation/login/login_screen.dart';
+import 'package:elarise/feature_auth/presentation/signup/signup_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget { 
   const MyApp({super.key});
 
   // This widget is the root of your application.
@@ -20,6 +22,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: true,
         ),
-        home: const HomeScreen());
+        home: const ManageAccountScreen());
   }
 }
