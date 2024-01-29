@@ -1,3 +1,4 @@
+import 'package:elarise/feature_assistant/presentation/home/widget/chatroom_card.dart';
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class HomeScreen extends StatelessWidget {
               ),
               Text(
                 "Let's see what can i do for you",
-                style: getSansFranciscoRegular14(color: neutralFour),
+                style: getSansFranciscoRegular14(color: neutralThree),
               )
             ],
           ),
@@ -115,30 +116,14 @@ class HomeScreen extends StatelessWidget {
         const SizedBox(
           height: 24.0,
         ),
-        Container(
-          height: 266,
-          width: 200,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(36),
-            border: Border.all(
-              color: neutralThree30,
-              width: 1,
+        const Row(
+          children: [
+            ChatRoomCard(),
+            SizedBox(
+              width: 8.0,
             ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(24.0, 32.0, 24.0, 0.0),
-            child: Column(
-              children: [
-                Text("How can I forget a bad memory?",
-                    style: getSansFranciscoBold16(color: neutralFour)),
-                const SizedBox(height: 12),
-                Text(
-                  "Forgetting a bad memory entirely may be challenging, as memories are complex and deeply",
-                  style: getSansFranciscoRegular16(color: neutralThree),
-                )
-              ],
-            ),
-          ),
+            ChatRoomCard(),
+          ],
         )
       ],
     );
