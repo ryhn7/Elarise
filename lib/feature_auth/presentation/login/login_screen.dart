@@ -5,10 +5,10 @@ import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
 
-class Login extends StatelessWidget {
+class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  Login({super.key});
+  LoginScreen({super.key});
 
   Widget header() {
     return Column(

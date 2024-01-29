@@ -5,12 +5,12 @@ import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
 
-class SignUp extends StatelessWidget {
+class SignUpScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController userNameController = TextEditingController();
 
-  SignUp({super.key});
+  SignUpScreen({super.key});
 
   Widget header() {
     return Column(
