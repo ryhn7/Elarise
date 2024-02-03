@@ -1,4 +1,4 @@
-package com.example.elarise
+package com.elariseteam.elarise
 
 import io.flutter.embedding.android.FlutterActivity
 
