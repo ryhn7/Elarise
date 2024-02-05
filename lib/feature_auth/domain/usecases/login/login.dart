@@ -1,14 +1,14 @@
 import 'package:elarise/core/common/result_state.dart';
 import 'package:elarise/core/common/usecases.dart';
-import 'package:elarise/feature_auth/data/interface_repositories/i_authentication_repository.dart.dart';
-import 'package:elarise/feature_auth/data/interface_repositories/i_user_repository.dart';
+import 'package:elarise/feature_auth/data/repositories/authentication_repository.dart.dart';
+import 'package:elarise/feature_auth/data/repositories/user_repository.dart';
 import 'package:elarise/feature_auth/domain/entities/user.dart';
 
 part 'login_params.dart';
 
 class Login implements UseCases<ResultState<User>, LoginParams> {
-  final IAuthenticationRepository authenticationRepository;
-  final IUserRepository userRepository;
+  final AuthenticationRepository authenticationRepository;
+  final UserRepository userRepository;
 
   Login({
     required this.authenticationRepository,

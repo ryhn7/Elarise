@@ -7,12 +7,12 @@ part of 'authentication_repository_provider.dart';
 // **************************************************************************
 
 String _$authenticationRepositoryHash() =>
-    r'bbe6dc918e5e99676e2fd2e95f1c0311c4f18fac';
+    r'b1e122bc1bda5030ef7a386be5812ea91a0a9fab';
 
 /// See also [authenticationRepository].
 @ProviderFor(authenticationRepository)
 final authenticationRepositoryProvider =
-    AutoDisposeProvider<IAuthenticationRepository>.internal(
+    AutoDisposeProvider<AuthenticationRepository>.internal(
   authenticationRepository,
   name: r'authenticationRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -23,6 +23,6 @@ final authenticationRepositoryProvider =
 );
 
 typedef AuthenticationRepositoryRef
-    = AutoDisposeProviderRef<IAuthenticationRepository>;
+    = AutoDisposeProviderRef<AuthenticationRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
