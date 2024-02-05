@@ -6,7 +6,6 @@ import 'package:elarise/feature_auth/domain/entities/user.dart';
 abstract interface class UserRepository {
   Future<ResultState<User>> createUser({
     required String email,
-    required String password,
     required String username,
     String? photoProfile,
   });
@@ -14,5 +13,5 @@ abstract interface class UserRepository {
   Future<ResultState<User>> getUser({required String uid});
   Future<ResultState<User>> updateUser({required User user});
   Future<ResultState<User>> uploadPhotoProfile(
-      {required String uid, required File photoPath});
+      {required User user, required File photoPath});
 }
