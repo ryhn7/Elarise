@@ -1,11 +1,19 @@
+import 'package:elarise/feature_assistant/presentation/home/home_state.dart';
 import 'package:elarise/feature_assistant/presentation/home/widget/chatroom_card.dart';
+import 'package:elarise/router/router_provider.dart';
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget header() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -14,7 +22,11 @@ class HomeScreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Hey Anthony",
+              Text(
+                  ref.watch(homeStateProvider).when(
+                      data: (user) => "Hello, ${user?.username ?? "User"}",
+                      error: (error, stackTrace) => "Error: $error",
+                      loading: () => "Loading..."),
                   style: getGrotesqueSemiBoldStyle24(color: neutralFour)),
               const SizedBox(
                 height: 4.0,
@@ -25,7 +37,12 @@ class HomeScreen extends StatelessWidget {
               )
             ],
           ),
-          Image.asset("assets/images/dummy_avatar.png", width: 50, height: 50),
+          InkWell(
+              onTap: () {
+                ref.read(routerProvider).goNamed('setting');
+              },
+              child: Image.asset("assets/images/dummy_avatar.png",
+                  width: 50, height: 50)),
         ]),
         const SizedBox(
           height: 24.0,
