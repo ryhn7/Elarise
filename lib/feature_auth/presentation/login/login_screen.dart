@@ -1,11 +1,16 @@
+import 'package:elarise/feature_auth/presentation/login/login_state.dart';
 import 'package:elarise/feature_auth/presentation/widget/elaris_auth_button.dart';
 import 'package:elarise/feature_auth/presentation/widget/elarise_auth_textfield.dart';
 import 'package:elarise/feature_auth/presentation/widget/google_auth_button.dart';
+import 'package:elarise/router/router_provider.dart';
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LoginScreen extends StatelessWidget {
+import '../../../feature_assistant/presentation/home/home_state.dart';
+
+class LoginScreen extends ConsumerWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   LoginScreen({super.key});
@@ -74,7 +79,19 @@ class LoginScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(homeStateProvider, (previous, next) {
+      if (next is AsyncData) {
+        if (next.value != null) {
+          ref.read(routerProvider).goNamed('home');
+        }
+      } else if (next is AsyncError) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(next.error.toString()),
+        ));
+      }
+    });
+
     return Scaffold(
       backgroundColor: neutralOneAlt,
       body: SafeArea(
@@ -105,7 +122,13 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            const ElariseAuthButton(labelText: "Login"),
+            ElariseAuthButton(
+                labelText: "Login",
+                onPressed: () {
+                  ref.read(loginStateProvider.notifier).login(
+                      email: emailController.text,
+                      password: passwordController.text);
+                }),
             const SizedBox(height: 24),
             dividerLoginAlternate(),
             const SizedBox(height: 24),
