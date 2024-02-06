@@ -1,27 +1,34 @@
-import 'package:elarise/feature_account_setting/presentation/account_setting/account_setting_screen.dart';
-import 'package:elarise/feature_account_setting/presentation/account_setting/manage_account_screen.dart';
-import 'package:elarise/feature_assistant/presentation/assistant_chatroom/assistant_chatroom_screen.dart';
-import 'package:elarise/feature_assistant/presentation/home/home_screen.dart';
-import 'package:elarise/feature_auth/presentation/login/login_screen.dart';
-import 'package:elarise/feature_auth/presentation/signup/signup_screen.dart';
+import 'package:elarise/firebase_options.dart';
+import 'package:elarise/router/router_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget { 
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Elarise',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          useMaterial3: true,
-        ),
-        home: const ManageAccountScreen());
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MaterialApp.router(
+      routeInformationParser: ref.watch(routerProvider).routeInformationParser,
+      routeInformationProvider:
+          ref.watch(routerProvider).routeInformationProvider,
+      routerDelegate: ref.watch(routerProvider).routerDelegate,
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+      ),
+    );
   }
 }
