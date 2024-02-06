@@ -1,13 +1,15 @@
 import 'package:elarise/feature_account_setting/presentation/account_setting/widget/option.dart';
+import 'package:elarise/router/router_provider.dart';
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AccountSettingScreen extends StatelessWidget {
+class AccountSettingScreen extends ConsumerWidget {
   const AccountSettingScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     Widget appBar() {
       return AppBar(
         backgroundColor: neutralOneAlt,
@@ -15,7 +17,7 @@ class AccountSettingScreen extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_rounded, color: neutralFour),
           onPressed: () {
-            Navigator.pop(context);
+            ref.read(routerProvider).goNamed('home');
           },
         ),
         title: Text("Profile & Settings",
@@ -62,13 +64,17 @@ class AccountSettingScreen extends StatelessWidget {
     }
 
     Widget options() {
-      return const Column(
+      return Column(
         children: [
-          Option(title: "Change password"),
-          SizedBox(height: 24),
-          Option(title: "Manage account"),
-          SizedBox(height: 24),
-          Option(
+          const Option(title: "Change password"),
+          const SizedBox(height: 24),
+          InkWell(
+              onTap: () {
+                ref.read(routerProvider).goNamed('manage-account');
+              },
+              child: const Option(title: "Manage account")),
+          const SizedBox(height: 24),
+          const Option(
             title: "Elarise app",
             information: "v 1.0.0",
           ),
