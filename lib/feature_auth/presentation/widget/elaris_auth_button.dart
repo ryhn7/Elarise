@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 class ElariseAuthButton extends StatelessWidget {
   final String labelText;
   final VoidCallback? onPressed; 
+  final bool isLoading;
 
-  const ElariseAuthButton({super.key, required this.labelText, this.onPressed});
+  const ElariseAuthButton({super.key, required this.labelText, this.onPressed, this.isLoading = false});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,9 @@ class ElariseAuthButton extends StatelessWidget {
             backgroundColor: primary,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(36))),
-        child: Text(
+        child: isLoading ? CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(neutralFour),
+        ) : Text(
           labelText,
           style: getSansFranciscoBold16(color: neutralFour),
         ),
