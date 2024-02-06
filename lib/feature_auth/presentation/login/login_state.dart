@@ -1,34 +1,18 @@
-import 'package:elarise/core/common/result_state.dart';
-import 'package:elarise/feature_auth/domain/entities/user.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../domain/entities/user.dart';
 
-import '../../../di/usecases/auth_usecases/login_provider.dart';
-import '../../domain/usecases/login/login.dart';
+class LoginState {
+  final bool isLoading;
+  final String? error;
 
-class LoginState extends StateNotifier<AsyncValue<User?>> {
-  final Ref ref;
+  final User? user;
 
-  LoginState(this.ref) : super(const AsyncData(null));
+  LoginState({this.isLoading = false, this.error, this.user});
 
-  Future<void> login({required String email, required String password}) async {
-    state = const AsyncLoading();
-
-    Login login = ref.read(loginProvider);
-
-    var result = await login(LoginParams(email: email, password: password));
-
-    switch (result) {
-      case Success(data: final user):
-        state = AsyncData(user);
-      case Error(message: final message):
-        state = AsyncError(FlutterError(message), StackTrace.current);
-        state = const AsyncData(null);
-    }
+  LoginState copyWith(
+      {bool? isLoading, bool? isUserLoggedIn, String? error, User? user}) {
+    return LoginState(
+        isLoading: isLoading ?? this.isLoading,
+        error: error ?? this.error,
+        user: user ?? this.user);
   }
 }
-
-final loginStateProvider =
-    StateNotifierProvider<LoginState, AsyncValue<User?>>((ref) {
-  return LoginState(ref);
-});
