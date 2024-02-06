@@ -45,7 +45,7 @@ class UserRepositoryImpl implements UserRepository {
   Future<ResultState<User>> getUser({required String uid}) async {
     try {
       DocumentReference<Map<String, dynamic>> userRef =
-          _firebaseFirestore.collection('users').doc(uid);
+          _firebaseFirestore.collection('Users').doc(uid);
 
       DocumentSnapshot<Map<String, dynamic>> result = await userRef.get();
 
