@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 
 class ElariseAuthButton extends StatelessWidget {
   final String labelText;
-  const ElariseAuthButton({super.key, required this.labelText});
+  final VoidCallback? onPressed; 
+
+  const ElariseAuthButton({super.key, required this.labelText, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +14,7 @@ class ElariseAuthButton extends StatelessWidget {
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
             backgroundColor: primary,
             shape: RoundedRectangleBorder(
