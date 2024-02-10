@@ -1,3 +1,5 @@
+import 'package:elarise/feature_auth/presentation/signup/signup_state.dart';
+import 'package:elarise/feature_auth/presentation/signup/signup_state_notifier.dart';
 import 'package:elarise/feature_auth/presentation/widget/elaris_auth_button.dart';
 import 'package:elarise/feature_auth/presentation/widget/elarise_auth_textfield.dart';
 import 'package:elarise/feature_auth/presentation/widget/google_auth_button.dart';
@@ -11,12 +13,24 @@ import '../../../router/router_provider.dart';
 class SignUpScreen extends ConsumerWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController userNameController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
 
   SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<SignUpState>(signUpStateNotifierProvider, (previous, next) {
+      if (next.user != null) {
+        ref.read(routerProvider).goNamed('home');
+      } else if (next.error != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(next.error.toString()),
+        ));
+      }
+    });
+
+    final signUpState = ref.watch(signUpStateNotifierProvider);
+
     Widget header() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,8 +105,7 @@ class SignUpScreen extends ConsumerWidget {
           children: [
             header(),
             const SizedBox(height: 12),
-            ElariseAuthTextfield(
-                labelText: 'Username', controller: userNameController),
+            ElariseAuthTextfield(labelText: 'Name', controller: nameController),
             const SizedBox(height: 24),
             ElariseAuthTextfield(
                 labelText: 'Email', controller: emailController),
@@ -102,7 +115,16 @@ class SignUpScreen extends ConsumerWidget {
                 controller: passwordController,
                 obsecureText: true),
             const SizedBox(height: 24),
-            const ElariseAuthButton(labelText: "Sign Up"),
+            ElariseAuthButton(
+              labelText: signUpState.isLoading ? "." : "Sign Up",
+              onPressed: () {
+                ref.read(signUpStateNotifierProvider.notifier).signup(
+                    name: nameController.text,
+                    email: emailController.text,
+                    password: passwordController.text);
+              },
+              isLoading: signUpState.isLoading,
+            ),
             const SizedBox(height: 24),
             dividerSignUpAlternate(),
             const SizedBox(height: 24),
