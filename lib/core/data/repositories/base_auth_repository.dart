@@ -8,5 +8,6 @@ abstract class BaseAuthRepository {
   Future<void> sendPasswordResetEmail(String email);
   Future<void> logout();
   firebase_auth.User? getCurrentUser();
-  // Future<String?> getUserToken();
+  Future<String?> getUserToken();
+  Future<firebase_auth.User?> updateProfile(String name, String? photoProfile);
 }

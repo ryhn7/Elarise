@@ -57,6 +57,35 @@ class BaseAuthRepositoryImpl implements BaseAuthRepository {
       throw FirebaseAuthException(e.toString());
     }
   }
+
+  @override
+  Future<String?> getUserToken() async {
+    try {
+      return await _firebaseAuth.currentUser?.getIdToken(true);
+    } catch (e) {
+      throw FirebaseAuthException(e.toString());
+    }
+  }
+
+  @override
+  Future<firebase_auth.User?> updateProfile(
+      String name, String? photoProfile) async {
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user != null) {
+        await user.updateDisplayName(name);
+        await user.updatePhotoURL(photoProfile ??
+            'https://firebasestorage.googleapis.com/v0/b/conversation-app-e3566.appspot.com/o/profileImage%2Fuser_placeholder.png?alt=media&token=77393a77-8952-4c2d-a0bc-c343dac4efed');
+        await user.reload();
+        final updatedUser = _firebaseAuth.currentUser;
+        return updatedUser;
+      } else {
+        throw FirebaseAuthException('User not found');
+      }
+    } catch (e) {
+      throw FirebaseAuthException(e.toString());
+    }
+  }
 }
 
 class FirebaseAuthException implements Exception {
