@@ -75,7 +75,7 @@ class BaseAuthRepositoryImpl implements BaseAuthRepository {
       if (user != null) {
         await user.updateDisplayName(name);
         await user.updatePhotoURL(photoProfile ??
-            'https://firebasestorage.googleapis.com/v0/b/conversation-app-e3566.appspot.com/o/profileImage%2Fuser_placeholder.png?alt=media&token=77393a77-8952-4c2d-a0bc-c343dac4efed');
+            'https://firebasestorage.googleapis.com/v0/b/conversation-app-e3566.appspot.com/o/profileImage%2Fuser_placeholder.png?alt=media&token=b59b54f9-84c0-47e0-a900-60bfa9b05ae9');
         await user.reload();
         final updatedUser = _firebaseAuth.currentUser;
         return updatedUser;
