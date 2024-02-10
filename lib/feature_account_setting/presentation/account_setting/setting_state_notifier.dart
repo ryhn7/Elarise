@@ -1,6 +1,5 @@
 import 'package:elarise/core/common/result_state.dart';
 import 'package:elarise/di/usecases/setting_usecases/logout_provider.dart';
-import 'package:elarise/feature_account_setting/domain/usecases/logout/logout.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/setting_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,11 +13,11 @@ class SettingStateNotifier extends StateNotifier<SettingState> {
 
   Future<void> logout() async {
     try {
-      Logout useCase = ref.read(logoutProvider);
-      var result = await useCase(null);
+      final useCase = ref.read(useCaseSettingProvider);
+      var result = await useCase.logout();
 
       if (result is Success) {
-        state = state.copyWith(user: null, isLogout: true);
+        state = state.copyWith(firebaseUser: null, isLogout: true);
         ref.read(loginStateNotifierProvider.notifier).state =
             LoginState(isLoading: false, user: null);
       } else {

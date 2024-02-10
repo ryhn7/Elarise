@@ -1,17 +1,21 @@
-import '../../../feature_auth/domain/entities/user.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 class SettingState {
-  final User? user;
+  final firebase_auth.User? firebaseUser;
   final bool isLogout;
 
-  SettingState({this.user, this.isLogout = false});
+  SettingState({
+    firebase_auth.User? firebaseUser,
+    this.isLogout = false,
+  }) : firebaseUser =
+            firebaseUser ?? firebase_auth.FirebaseAuth.instance.currentUser;
 
   SettingState copyWith({
-    User? user,
+    firebase_auth.User? firebaseUser,
     bool? isLogout,
   }) {
     return SettingState(
-      user: user ?? this.user,
+      firebaseUser: firebaseUser ?? firebaseUser,
       isLogout: isLogout ?? this.isLogout,
     );
   }

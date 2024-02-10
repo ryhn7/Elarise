@@ -14,7 +14,10 @@ class ManageAccountScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<SettingState>(settingStateProvider, (previous, next) {
-      if (next.isLogout && next.user == null) {
+      if (previous != null &&
+          previous.firebaseUser != null &&
+          next.isLogout &&
+          next.firebaseUser == null) {
         ref.read(routerProvider).goNamed('login');
       }
     });
