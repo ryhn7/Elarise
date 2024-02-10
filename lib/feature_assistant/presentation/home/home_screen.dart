@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:elarise/di/repositories/user_datastore_repository/user_datastore_repository_provider.dart';
 import 'package:elarise/feature_assistant/presentation/home/widget/chatroom_card.dart';
 import 'package:elarise/router/router_provider.dart';
@@ -13,7 +15,6 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return FutureBuilder<UserPreferences?>(
       future: ref.read(userDatastoreRepositoryProvider).getUser(),
       builder: (context, snapshot) {
@@ -37,33 +38,48 @@ class HomeScreen extends ConsumerWidget {
   Widget homeScreenContent(
       BuildContext context, WidgetRef ref, UserPreferences userPreferences) {
     final userName = userPreferences.name ?? "User";
+    final photoUrl = userPreferences.photoProfile;
+    // final token = userPreferences.token;
+    // log("Token: $token");
 
     Widget header() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Column(
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Hello, $userName",
-                    style: getGrotesqueSemiBoldStyle24(color: neutralFour)),
-                const SizedBox(
-                  height: 4.0,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Hello, $userName",
+                        style: getGrotesqueSemiBoldStyle24(color: neutralFour)),
+                    const SizedBox(
+                      height: 4.0,
+                    ),
+                    Text(
+                      "Let's see what can i do for you",
+                      style: getSansFranciscoRegular14(color: neutralThree),
+                    )
+                  ],
                 ),
-                Text(
-                  "Let's see what can i do for you",
-                  style: getSansFranciscoRegular14(color: neutralThree),
-                )
-              ],
-            ),
-            InkWell(
-                onTap: () {
-                  ref.read(routerProvider).goNamed('setting');
-                },
-                child: Image.asset("assets/images/dummy_avatar.png",
-                    width: 50, height: 50)),
-          ]),
+                InkWell(
+                    onTap: () {
+                      ref.read(routerProvider).goNamed('setting');
+                    },
+                    child: Container(
+                        width: 55,
+                        height: 55,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: NetworkImage(photoUrl ??
+                                "https://firebasestorage.googleapis.com/v0/b/conversation-app-e3566.appspot.com/o/profileImage%2Fuser_placeholder.png?alt=media&token=b59b54f9-84c0-47e0-a900-60bfa9b05ae9"),
+                            fit: BoxFit.cover,
+                          ),
+                        ))),
+              ]),
           const SizedBox(
             height: 24.0,
           ),
