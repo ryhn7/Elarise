@@ -22,7 +22,7 @@ User _$UserFromJson(Map<String, dynamic> json) {
 mixin _$User {
   String get uid => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
-  String get username => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
   String? get photoProfile => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -35,7 +35,7 @@ abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res, User>;
   @useResult
-  $Res call({String uid, String email, String username, String? photoProfile});
+  $Res call({String uid, String email, String name, String? photoProfile});
 }
 
 /// @nodoc
@@ -53,7 +53,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   $Res call({
     Object? uid = null,
     Object? email = null,
-    Object? username = null,
+    Object? name = null,
     Object? photoProfile = freezed,
   }) {
     return _then(_value.copyWith(
@@ -65,9 +65,9 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
-      username: null == username
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
               as String,
       photoProfile: freezed == photoProfile
           ? _value.photoProfile
@@ -84,7 +84,7 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
       __$$UserImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String uid, String email, String username, String? photoProfile});
+  $Res call({String uid, String email, String name, String? photoProfile});
 }
 
 /// @nodoc
@@ -99,7 +99,7 @@ class __$$UserImplCopyWithImpl<$Res>
   $Res call({
     Object? uid = null,
     Object? email = null,
-    Object? username = null,
+    Object? name = null,
     Object? photoProfile = freezed,
   }) {
     return _then(_$UserImpl(
@@ -111,9 +111,9 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
-      username: null == username
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
               as String,
       photoProfile: freezed == photoProfile
           ? _value.photoProfile
@@ -129,7 +129,7 @@ class _$UserImpl implements _User {
   const _$UserImpl(
       {required this.uid,
       required this.email,
-      required this.username,
+      required this.name,
       this.photoProfile});
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
@@ -140,13 +140,13 @@ class _$UserImpl implements _User {
   @override
   final String email;
   @override
-  final String username;
+  final String name;
   @override
   final String? photoProfile;
 
   @override
   String toString() {
-    return 'User(uid: $uid, email: $email, username: $username, photoProfile: $photoProfile)';
+    return 'User(uid: $uid, email: $email, name: $name, photoProfile: $photoProfile)';
   }
 
   @override
@@ -156,16 +156,14 @@ class _$UserImpl implements _User {
             other is _$UserImpl &&
             (identical(other.uid, uid) || other.uid == uid) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.username, username) ||
-                other.username == username) &&
+            (identical(other.name, name) || other.name == name) &&
             (identical(other.photoProfile, photoProfile) ||
                 other.photoProfile == photoProfile));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, uid, email, username, photoProfile);
+  int get hashCode => Object.hash(runtimeType, uid, email, name, photoProfile);
 
   @JsonKey(ignore: true)
   @override
@@ -185,7 +183,7 @@ abstract class _User implements User {
   const factory _User(
       {required final String uid,
       required final String email,
-      required final String username,
+      required final String name,
       final String? photoProfile}) = _$UserImpl;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
@@ -195,7 +193,7 @@ abstract class _User implements User {
   @override
   String get email;
   @override
-  String get username;
+  String get name;
   @override
   String? get photoProfile;
   @override
