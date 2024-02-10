@@ -1,50 +1,55 @@
 import 'package:elarise/core/common/result_state.dart';
-import 'package:elarise/di/usecases/auth_usecases/get_logged_in_user_provider.dart';
-import 'package:elarise/feature_auth/domain/usecases/get_logged_in_user/get_logged_in_user.dart';
+import 'package:elarise/di/usecases/auth_usecases/usecase_auth_provider.dart';
 import 'package:elarise/feature_auth/presentation/login/login_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../di/usecases/auth_usecases/login_provider.dart';
-import '../../domain/usecases/login/login.dart';
 
 class LoginStateNotifier extends StateNotifier<LoginState> {
   final Ref ref;
 
-  LoginStateNotifier(this.ref) : super(LoginState(isLoading: false)) {
-    _attemptAutoLogin();
+  LoginStateNotifier(this.ref)
+      : super(LoginState(isLoading: false, user: null, error: null)) {
+    _checkUser();
   }
 
-  Future<void> _attemptAutoLogin() async {
+  Future<void> _checkUser() async {
     try {
-      GetLoggedInUser useCase = ref.read(getLoggedInUserProvider);
-      var result = await useCase(null);
+      final useCase = ref.read(useCaseAuthProvider);
+      var result = await useCase.getCurrentUser();
 
       if (result is Success) {
-        state = state.copyWith(user: result.resultData, isLoading: false);
+        state = state.copyWith(
+            user: result.resultData, isLoading: false, error: null);
       } else {
-        state = state.copyWith(user: null, isLoading: false);
+        state = state.copyWith(
+          user: null,
+          isLoading: false,
+          error: result.errorMessage ?? 'Failed to get user',
+        );
       }
     } catch (e) {
-      state = state.copyWith(error: e.toString());
+      state = state.copyWith(error: e.toString(), isLoading: false, user: null);
     }
   }
 
   Future<void> login({required String email, required String password}) async {
     try {
-      state = state.copyWith(isLoading: true, user: null);
+      state = state.copyWith(isLoading: true, user: null, error: null);
 
-      Login useCase = ref.read(loginProvider);
+      final useCase = ref.read(useCaseAuthProvider);
 
-      var result = await useCase(LoginParams(email: email, password: password));
+      var result = await useCase.loginEmailPassword(email, password);
 
       if (result is Success) {
-        state = state.copyWith(user: result.resultData, isLoading: false);
+        state = state.copyWith(
+            user: result.resultData, isLoading: false, error: null);
       } else {
         state = state.copyWith(
-            error: result.errorMessage ?? 'Failed to login', isLoading: false);
+            error: result.errorMessage ?? 'Failed to login',
+            isLoading: false,
+            user: null);
       }
     } catch (e) {
-      state = state.copyWith(error: e.toString(), isLoading: false);
+      state = state.copyWith(error: e.toString(), isLoading: false, user: null);
     }
   }
 }

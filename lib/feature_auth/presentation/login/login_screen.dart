@@ -28,6 +28,14 @@ class LoginScreen extends ConsumerWidget {
 
     final loginState = ref.watch(loginStateNotifierProvider);
 
+    // if(loginState.user != null) {
+    //   ref.read(routerProvider).goNamed('home');
+    // } else if(loginState.error != null) {
+    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //     content: Text(loginState.error.toString()),
+    //   ));
+    // }
+
     // if (loginState.isLoading) {
     //   return const Center(
     //     child: CircularProgressIndicator(),
