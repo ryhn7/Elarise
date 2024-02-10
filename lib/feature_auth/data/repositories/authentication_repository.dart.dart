@@ -1,15 +1,19 @@
 import 'package:elarise/core/common/result_state.dart';
 
+import '../../domain/entities/user.dart';
+
 abstract interface class AuthenticationRepository {
-  Future<ResultState<String>> signUp({
+  Future<ResultState<User?>> signUpEmailPassword({
+    required String name,
     required String email,
     required String password,
   });
 
-  Future<ResultState<String>> login({
+  Future<ResultState<User?>> loginEmailPassword({
     required String email,
     required String password,
   });
 
-  String getLoggedInUserId();
+
+  Future<ResultState<User?>> getCurrentUser();
 }
