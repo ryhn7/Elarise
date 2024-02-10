@@ -5,11 +5,39 @@ import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/domain/entities/user_preferences.dart';
+import '../../../di/repositories/user_datastore_repository/user_datastore_repository_provider.dart';
+
 class AccountSettingScreen extends ConsumerWidget {
   const AccountSettingScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    return FutureBuilder<UserPreferences?>(
+      future: ref.read(userDatastoreRepositoryProvider).getUser(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasData && snapshot.data?.token != null) {
+          // User is logged in, continue showing AccountSettingScreen
+          return accountSettingContent(context, ref, snapshot.data!);
+        } else {
+          // No valid session, redirect to SignInScreen
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            ref.read(routerProvider).goNamed('login');
+          });
+          return const SizedBox
+              .shrink(); // Return an empty widget or a loading indicator as needed
+        }
+      },
+    );
+  }
+
+  Widget accountSettingContent(
+      BuildContext context, WidgetRef ref, UserPreferences userPreferences) {
+    final userName = userPreferences.name ?? "User";
+    final photoUrl = userPreferences.photoProfile;
+
     Widget appBar() {
       return AppBar(
         backgroundColor: neutralOneAlt,
@@ -34,11 +62,19 @@ class AccountSettingScreen extends ConsumerWidget {
       return Center(
         child: Column(
           children: [
-            Image.asset("assets/images/dummy_avatar.png",
-                width: 80, height: 80),
-            const SizedBox(height: 16),
-            Text("Anthony Adams",
-                style: getSansFranciscoBold24(color: neutralFour)),
+            Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: NetworkImage(photoUrl ??
+                        "https://firebasestorage.googleapis.com/v0/b/conversation-app-e3566.appspot.com/o/profileImage%2Fuser_placeholder.png?alt=media&token=b59b54f9-84c0-47e0-a900-60bfa9b05ae9"),
+                    fit: BoxFit.cover,
+                  ),
+                )),
+            const SizedBox(height: 10),
+            Text(userName, style: getSansFranciscoBold24(color: neutralFour)),
             const SizedBox(height: 8),
             SizedBox(
               width: 160,
@@ -67,12 +103,16 @@ class AccountSettingScreen extends ConsumerWidget {
       return Column(
         children: [
           const Option(title: "Change password"),
-          const SizedBox(height: 24),
           InkWell(
               onTap: () {
                 ref.read(routerProvider).goNamed('manage-account');
               },
-              child: const Option(title: "Manage account")),
+              child: const Column(
+                children: [
+                  SizedBox(height: 24),
+                  Option(title: "Manage account"),
+                ],
+              )),
           const SizedBox(height: 24),
           const Option(
             title: "Elarise app",
