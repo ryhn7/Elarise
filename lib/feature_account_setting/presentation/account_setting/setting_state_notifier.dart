@@ -1,5 +1,5 @@
 import 'package:elarise/core/common/result_state.dart';
-import 'package:elarise/di/usecases/setting_usecases/logout_provider.dart';
+import 'package:elarise/di/usecases/setting_usecases/usecase_setting_provider.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/setting_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
