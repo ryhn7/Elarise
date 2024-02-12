@@ -13,7 +13,7 @@ class ManageAccountScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<SettingState>(settingStateProvider, (previous, next) {
+    ref.listen<SettingState>(settingStateNotifierProvider, (previous, next) {
       if (previous != null &&
           previous.firebaseUser != null &&
           next.isLogout &&
@@ -44,7 +44,7 @@ class ManageAccountScreen extends ConsumerWidget {
           children: [
             InkWell(
               onTap: () {
-                ref.read(settingStateProvider.notifier).logout();
+                ref.read(settingStateNotifierProvider.notifier).logout();
               },
               child: const Option(
                 title: "Log out",
