@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:elarise/di/repositories/user_datastore_repository/user_datastore_repository_provider.dart';
 import 'package:elarise/feature_assistant/presentation/home/widget/chatroom_card.dart';
 import 'package:elarise/router/router_provider.dart';
@@ -38,10 +36,11 @@ class HomeScreen extends ConsumerWidget {
   Widget homeScreenContent(
       BuildContext context, WidgetRef ref, UserPreferences userPreferences) {
     final userName = userPreferences.name ?? "User";
-    final photoUrl = userPreferences.photoProfile;
+    final photoUrl = userPreferences.photoProfile ??
+        "https://firebasestorage.googleapis.com/v0/b/conversation-app-e3566.appspot.com/o/profileImage%2Fuser_placeholder.png?alt=media&token=b59b54f9-84c0-47e0-a900-60bfa9b05ae9";
     // final token = userPreferences.token;
     // log("Token: $token");
-
+    
     Widget header() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +63,7 @@ class HomeScreen extends ConsumerWidget {
                     )
                   ],
                 ),
-                InkWell(
+                GestureDetector(
                     onTap: () {
                       ref.read(routerProvider).goNamed('setting');
                     },
@@ -74,8 +73,7 @@ class HomeScreen extends ConsumerWidget {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
-                            image: NetworkImage(photoUrl ??
-                                "https://firebasestorage.googleapis.com/v0/b/conversation-app-e3566.appspot.com/o/profileImage%2Fuser_placeholder.png?alt=media&token=b59b54f9-84c0-47e0-a900-60bfa9b05ae9"),
+                            image: NetworkImage(photoUrl),
                             fit: BoxFit.cover,
                           ),
                         ))),
