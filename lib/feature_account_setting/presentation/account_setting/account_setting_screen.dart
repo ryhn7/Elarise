@@ -36,7 +36,8 @@ class AccountSettingScreen extends ConsumerWidget {
   Widget accountSettingContent(
       BuildContext context, WidgetRef ref, UserPreferences userPreferences) {
     final userName = userPreferences.name ?? "User";
-    final photoUrl = userPreferences.photoProfile;
+    final photoUrl = userPreferences.photoProfile ??
+        "https://firebasestorage.googleapis.com/v0/b/conversation-app-e3566.appspot.com/o/profileImage%2Fuser_placeholder.png?alt=media&token=b59b54f9-84c0-47e0-a900-60bfa9b05ae9";
 
     Widget appBar() {
       return AppBar(
@@ -68,18 +69,19 @@ class AccountSettingScreen extends ConsumerWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                    image: NetworkImage(photoUrl ??
-                        "https://firebasestorage.googleapis.com/v0/b/conversation-app-e3566.appspot.com/o/profileImage%2Fuser_placeholder.png?alt=media&token=b59b54f9-84c0-47e0-a900-60bfa9b05ae9"),
+                    image: NetworkImage(photoUrl),
                     fit: BoxFit.cover,
                   ),
                 )),
             const SizedBox(height: 10),
             Text(userName, style: getSansFranciscoBold24(color: neutralFour)),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             SizedBox(
               width: 160,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  ref.read(routerProvider).goNamed('edit-profile');
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primary,
                 ),
