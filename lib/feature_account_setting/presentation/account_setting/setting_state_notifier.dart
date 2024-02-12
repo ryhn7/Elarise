@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:elarise/core/common/result_state.dart';
 import 'package:elarise/di/usecases/setting_usecases/usecase_setting_provider.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/setting_state.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../feature_auth/presentation/login/login_state.dart';
 import '../../../feature_auth/presentation/login/login_state_notifier.dart';
+import '../../../router/router_provider.dart';
 
 class SettingStateNotifier extends StateNotifier<SettingState> {
   final Ref ref;
@@ -27,9 +30,27 @@ class SettingStateNotifier extends StateNotifier<SettingState> {
       state = state.copyWith(isLogout: false);
     }
   }
+
+  Future<void> updateProfile({String? name, File? photoPath}) async {
+    try {
+      state = state.copyWith(isLoading: true, error: null);
+      final useCase = ref.read(useCaseSettingProvider);
+      var result =
+          await useCase.updateProfile(name: name, photoPath: photoPath);
+
+      if (result is Success) {
+        state = state.copyWith(user: result.resultData, isLoading: false);
+        ref.read(routerProvider).goNamed('setting');
+      } else {
+        state = state.copyWith(error: result.errorMessage, isLoading: false);
+      }
+    } catch (e) {
+      state = state.copyWith(error: e.toString());
+    }
+  }
 }
 
-final settingStateProvider =
+final settingStateNotifierProvider =
     StateNotifierProvider<SettingStateNotifier, SettingState>((ref) {
   return SettingStateNotifier(ref);
 });
