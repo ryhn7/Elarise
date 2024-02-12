@@ -1,5 +1,5 @@
-import 'package:elarise/theme/colors.dart';
-import 'package:elarise/theme/style.dart';
+import '../../../../theme/colors.dart';
+import '../../../../theme/style.dart';
 import 'package:flutter/material.dart';
 
 class ElariseAuthTextfield extends StatefulWidget {
@@ -33,6 +33,7 @@ class _ElariseAuthTextfieldState extends State<ElariseAuthTextfield> {
     return TextField(
       controller: widget.controller,
       obscureText: _isObscure,
+      style: getSansFranciscoRegular16(color: neutralFour),
       decoration: InputDecoration(
           labelText: widget.labelText,
           labelStyle: getSansFranciscoRegular16(color: neutralThree),
