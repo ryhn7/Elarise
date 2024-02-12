@@ -9,5 +9,5 @@ abstract class BaseAuthRepository {
   Future<void> logout();
   firebase_auth.User? getCurrentUser();
   Future<String?> getUserToken();
-  Future<firebase_auth.User?> updateProfile(String name, String? photoProfile);
+  Future<firebase_auth.User?> initProfile(String name);
 }

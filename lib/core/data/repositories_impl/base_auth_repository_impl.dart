@@ -68,13 +68,12 @@ class BaseAuthRepositoryImpl implements BaseAuthRepository {
   }
 
   @override
-  Future<firebase_auth.User?> updateProfile(
-      String name, String? photoProfile) async {
+  Future<firebase_auth.User?> initProfile(String name) async {
     try {
       final user = _firebaseAuth.currentUser;
       if (user != null) {
         await user.updateDisplayName(name);
-        await user.updatePhotoURL(photoProfile ??
+        await user.updatePhotoURL(
             'https://firebasestorage.googleapis.com/v0/b/conversation-app-e3566.appspot.com/o/profileImage%2Fuser_placeholder.png?alt=media&token=b59b54f9-84c0-47e0-a900-60bfa9b05ae9');
         await user.reload();
         final updatedUser = _firebaseAuth.currentUser;
