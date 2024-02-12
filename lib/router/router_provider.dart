@@ -1,4 +1,5 @@
 import 'package:elarise/feature_account_setting/presentation/account_setting/account_setting_screen.dart';
+import 'package:elarise/feature_account_setting/presentation/account_setting/edit_profile_screen.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/manage_account_screen.dart';
 import 'package:elarise/feature_assistant/presentation/home/home_screen.dart';
 import 'package:elarise/feature_auth/presentation/login/login_screen.dart';
@@ -30,4 +31,8 @@ Raw<GoRouter> router(RouterRef ref) => GoRouter(routes: [
           path: '/manage-account',
           name: 'manage-account',
           builder: (context, state) => const ManageAccountScreen()),
+      GoRoute(
+          path: '/edit-profile',
+          name: 'edit-profile',
+          builder: (context, state) =>  const EditProfileScreen()),
     ], initialLocation: '/login', debugLogDiagnostics: false);
