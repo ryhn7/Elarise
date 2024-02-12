@@ -6,7 +6,7 @@ part of 'usecase_setting_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$useCaseSettingHash() => r'3b3c3d82f776680832475a93d43d3a46f632a362';
+String _$useCaseSettingHash() => r'63aa1a4e8fba8c2f5be98f86f09fc80a3a05203b';
 
 /// See also [useCaseSetting].
 @ProviderFor(useCaseSetting)
