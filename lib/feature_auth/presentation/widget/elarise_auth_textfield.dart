@@ -7,12 +7,14 @@ class ElariseAuthTextfield extends StatefulWidget {
   final TextEditingController controller;
   final bool obsecureText;
   final Widget? icon;
+  final bool isEmail;
 
   const ElariseAuthTextfield(
       {super.key,
       required this.labelText,
       required this.controller,
       this.obsecureText = false,
+      this.isEmail = false,
       this.icon});
 
   @override
@@ -28,12 +30,30 @@ class _ElariseAuthTextfieldState extends State<ElariseAuthTextfield> {
     _isObscure = widget.obsecureText;
   }
 
+  String? _emailValidator(String? value) {
+    // Regular expression for validating email
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (value == null || value.isEmpty) {
+      return '${widget.labelText} cannot be empty';
+    } else if (!emailRegex.hasMatch(value)) {
+      return 'Please enter a valid email address';
+    }
+    return null; // Returning null indicates that the input is valid.
+  }
+
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: widget.controller,
       obscureText: _isObscure,
       style: getSansFranciscoRegular16(color: neutralFour),
+      validator: widget.isEmail ? _emailValidator : (value) {
+        if (value == null || value.isEmpty) {
+          return '${widget.labelText} cannot be empty'; // This is your error message.
+        }
+        return null; // Returning null indicates that the input is valid.
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
           labelText: widget.labelText,
           labelStyle: getSansFranciscoRegular16(color: neutralThree),
@@ -45,7 +65,16 @@ class _ElariseAuthTextfieldState extends State<ElariseAuthTextfield> {
             borderSide: BorderSide(color: neutralThree),
             borderRadius: BorderRadius.circular(16),
           ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: red),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: red),
+            borderRadius: BorderRadius.circular(16),
+          ),
           floatingLabelBehavior: FloatingLabelBehavior.never,
+          errorStyle: getSansFranciscoRegular14(color: red),
           suffixIcon: widget.obsecureText
               ? IconButton(
                   onPressed: () {
