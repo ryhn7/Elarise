@@ -23,8 +23,15 @@ class ElariseEditTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(labelText, style: getSansFranciscoRegular14(color: textColor)),
-        TextField(
+        TextFormField(
             controller: controller,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return '$labelText cannot be empty'; // This is your error message.
+              }
+              return null; // Returning null indicates that the input is valid.
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             style: getSansFranciscoRegular16(color: textColor),
             enabled: isEnabled,
             decoration: InputDecoration(
@@ -34,7 +41,13 @@ class ElariseEditTextField extends StatelessWidget {
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: darkGray),
               ),
-          
+              errorBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: red),
+              ),
+              focusedErrorBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: red),
+              ),
+              errorStyle: getSansFranciscoRegular14(color: red),
             ))
       ],
     );
