@@ -23,6 +23,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   late TextEditingController nameController;
   late TextEditingController emailController;
   XFile? xfile;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -100,10 +101,12 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             child: ElevatedButton(
               onPressed: () {
                 // Add your save functionality here
-                ref.read(settingStateNotifierProvider.notifier).updateProfile(
-                  name: nameController.text,
-                  photoPath: xfile != null ? File(xfile!.path) : null,
-                );
+                if (_formKey.currentState!.validate()) {
+                  ref.read(settingStateNotifierProvider.notifier).updateProfile(
+                        name: nameController.text,
+                        photoPath: xfile != null ? File(xfile!.path) : null,
+                      );
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: primary, // Your primary color
@@ -205,10 +208,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             appBar(),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  profileField(),
-                ],
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    profileField(),
+                  ],
+                ),
               ),
             ),
           ],
