@@ -14,6 +14,7 @@ class SignUpScreen extends ConsumerWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   SignUpScreen({super.key});
 
@@ -31,7 +32,7 @@ class SignUpScreen extends ConsumerWidget {
 
     final signUpState = ref.watch(signUpStateNotifierProvider);
 
-    Widget header() {
+    Widget buildHeader() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -66,7 +67,7 @@ class SignUpScreen extends ConsumerWidget {
       );
     }
 
-    Widget dividerSignUpAlternate() {
+    Widget buildDividerSignUpAlternate() {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -80,7 +81,7 @@ class SignUpScreen extends ConsumerWidget {
           ),
           const SizedBox(width: 12),
           Text(
-            "Or sign up with",
+            "Or",
             style: getSansFranciscoRegular14(color: neutralThree),
           ),
           const SizedBox(width: 12),
@@ -101,35 +102,44 @@ class SignUpScreen extends ConsumerWidget {
       body: SafeArea(
           child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 24.0),
-        child: Column(
-          children: [
-            header(),
-            const SizedBox(height: 12),
-            ElariseAuthTextfield(labelText: 'Name', controller: nameController),
-            const SizedBox(height: 24),
-            ElariseAuthTextfield(
-                labelText: 'Email', controller: emailController),
-            const SizedBox(height: 20),
-            ElariseAuthTextfield(
-                labelText: 'Password',
-                controller: passwordController,
-                obsecureText: true),
-            const SizedBox(height: 24),
-            ElariseAuthButton(
-              labelText: signUpState.isLoading ? "." : "Sign Up",
-              onPressed: () {
-                ref.read(signUpStateNotifierProvider.notifier).signup(
-                    name: nameController.text,
-                    email: emailController.text,
-                    password: passwordController.text);
-              },
-              isLoading: signUpState.isLoading,
-            ),
-            const SizedBox(height: 24),
-            dividerSignUpAlternate(),
-            const SizedBox(height: 24),
-            const GoogleAuthButton(labelText: "Sign Up with Google")
-          ],
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              buildHeader(),
+              const SizedBox(height: 12),
+              ElariseAuthTextfield(
+                  labelText: 'Name', controller: nameController),
+              const SizedBox(height: 24),
+              ElariseAuthTextfield(
+                labelText: 'Email',
+                controller: emailController,
+                isEmail: true,
+              ),
+              const SizedBox(height: 20),
+              ElariseAuthTextfield(
+                  labelText: 'Password',
+                  controller: passwordController,
+                  obsecureText: true),
+              const SizedBox(height: 24),
+              ElariseAuthButton(
+                labelText: signUpState.isLoading ? "." : "Sign Up",
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    ref.read(signUpStateNotifierProvider.notifier).signup(
+                        name: nameController.text,
+                        email: emailController.text,
+                        password: passwordController.text);
+                  }
+                },
+                isLoading: signUpState.isLoading,
+              ),
+              const SizedBox(height: 24),
+              buildDividerSignUpAlternate(),
+              const SizedBox(height: 24),
+              const GoogleAuthButton(labelText: "Continue with Google")
+            ],
+          ),
         ),
       )),
     );
