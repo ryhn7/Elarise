@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class LoginScreen extends ConsumerWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   LoginScreen({super.key});
 
   @override
@@ -49,7 +50,7 @@ class LoginScreen extends ConsumerWidget {
 
     // }
 
-    Widget header() {
+    Widget buildHeader() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -84,7 +85,23 @@ class LoginScreen extends ConsumerWidget {
       );
     }
 
-    Widget dividerLoginAlternate() {
+    Widget buildForgotPasswordButton() {
+      return Align(
+        alignment: Alignment.centerRight,
+        child: TextButton(
+          onPressed: () {},
+          style: TextButton.styleFrom(
+            foregroundColor: primary,
+          ),
+          child: Text(
+            "Forgot Password?",
+            style: getSansFranciscoSemiBold16(color: primary),
+          ),
+        ),
+      );
+    }
+
+    Widget buildDividerLoginAlternate() {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -98,7 +115,7 @@ class LoginScreen extends ConsumerWidget {
           ),
           const SizedBox(width: 12),
           Text(
-            "Or login with",
+            "Or",
             style: getSansFranciscoRegular14(color: neutralThree),
           ),
           const SizedBox(width: 12),
@@ -119,45 +136,41 @@ class LoginScreen extends ConsumerWidget {
       body: SafeArea(
           child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 24.0),
-        child: Column(
-          children: [
-            header(),
-            const SizedBox(height: 12),
-            ElariseAuthTextfield(
-                labelText: 'Email', controller: emailController),
-            const SizedBox(height: 20),
-            ElariseAuthTextfield(
-                labelText: 'Password',
-                controller: passwordController,
-                obsecureText: true),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {},
-                style: TextButton.styleFrom(
-                  foregroundColor: primary,
-                ),
-                child: Text(
-                  "Forgot Password?",
-                  style: getSansFranciscoSemiBold16(color: primary),
-                ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              buildHeader(),
+              const SizedBox(height: 12),
+              ElariseAuthTextfield(
+                labelText: 'Email',
+                controller: emailController,
+                isEmail: true,
               ),
-            ),
-            const SizedBox(height: 16),
-            ElariseAuthButton(
-              labelText: loginState.isLoading ? "" : "Login",
-              onPressed: () {
-                ref.read(loginStateNotifierProvider.notifier).login(
-                    email: emailController.text,
-                    password: passwordController.text);
-              },
-              isLoading: loginState.isLoading,
-            ),
-            const SizedBox(height: 24),
-            dividerLoginAlternate(),
-            const SizedBox(height: 24),
-            const GoogleAuthButton(labelText: "Login with Google")
-          ],
+              const SizedBox(height: 20),
+              ElariseAuthTextfield(
+                  labelText: 'Password',
+                  controller: passwordController,
+                  obsecureText: true),
+              const SizedBox(height: 16),
+              buildForgotPasswordButton(),
+              ElariseAuthButton(
+                labelText: loginState.isLoading ? "" : "Login",
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    ref.read(loginStateNotifierProvider.notifier).login(
+                        email: emailController.text,
+                        password: passwordController.text);
+                  }
+                },
+                isLoading: loginState.isLoading,
+              ),
+              const SizedBox(height: 24),
+              buildDividerLoginAlternate(),
+              const SizedBox(height: 24),
+              const GoogleAuthButton(labelText: "Continue with Google")
+            ],
+          ),
         ),
       )),
     );
