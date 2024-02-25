@@ -1,5 +1,5 @@
 import 'package:elarise/feature_account_setting/presentation/account_setting/account_setting_screen.dart';
-import 'package:elarise/feature_account_setting/presentation/account_setting/edit_profile_screen.dart';
+import 'package:elarise/feature_account_setting/presentation/account_setting/edit_profile/edit_profile_screen.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/manage_account_screen.dart';
 import 'package:elarise/feature_assistant/presentation/home/home_screen.dart';
 import 'package:elarise/feature_auth/presentation/login/login_screen.dart';
