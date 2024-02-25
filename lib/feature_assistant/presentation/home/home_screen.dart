@@ -1,10 +1,12 @@
-import 'package:elarise/di/repositories/user_datastore_repository/user_datastore_repository_provider.dart';
+import 'package:elarise/feature_assistant/presentation/home/home_state_notifier.dart';
 import 'package:elarise/feature_assistant/presentation/home/widget/chatroom_card.dart';
 import 'package:elarise/router/router_provider.dart';
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../core/domain/entities/user_preferences.dart';
 
@@ -13,24 +15,22 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder<UserPreferences?>(
-      future: ref.read(userDatastoreRepositoryProvider).getUser(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasData && snapshot.data?.token != null) {
-          // User is logged in, continue showing HomeScreen
-          return homeScreenContent(context, ref, snapshot.data!);
-        } else {
-          // No valid session, redirect to SignInScreen
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            ref.read(routerProvider).goNamed('login');
-          });
-          return const SizedBox
-              .shrink(); // Return an empty widget or a loading indicator as needed
-        }
-      },
-    );
+    final homeState = ref.watch(homeStateNotifierProvider);
+
+    if (homeState.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (homeState.userPreferences != null &&
+        homeState.userPreferences!.token != null) {
+      // User is logged in, continue showing HomeScreen
+      return homeScreenContent(context, ref, homeState.userPreferences!);
+    } else {
+      // Handle error or no valid session
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(routerProvider).goNamed('login');
+      });
+      // Optionally, display an error message or a placeholder
+      return const SizedBox.shrink();
+    }
   }
 
   Widget homeScreenContent(
@@ -40,7 +40,7 @@ class HomeScreen extends ConsumerWidget {
         "https://firebasestorage.googleapis.com/v0/b/conversation-app-e3566.appspot.com/o/profileImage%2Fuser_placeholder.png?alt=media&token=b59b54f9-84c0-47e0-a900-60bfa9b05ae9";
     // final token = userPreferences.token;
     // log("Token: $token");
-    
+
     Widget header() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,19 +64,36 @@ class HomeScreen extends ConsumerWidget {
                   ],
                 ),
                 GestureDetector(
-                    onTap: () {
-                      ref.read(routerProvider).goNamed('setting');
-                    },
-                    child: Container(
+                  onTap: () {
+                    ref.read(routerProvider).goNamed('setting');
+                  },
+                  child: CachedNetworkImage(
+                    imageUrl: photoUrl,
+                    imageBuilder: (context, imageProvider) => Container(
+                      width: 55,
+                      height: 55,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.cover),
+                      ),
+                    ),
+                    placeholder: (context, url) => Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
                         width: 55,
                         height: 55,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: NetworkImage(photoUrl),
-                            fit: BoxFit.cover,
-                          ),
-                        ))),
+                          color: Colors.grey[300],
+                        ),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
+                )
               ]),
           const SizedBox(
             height: 24.0,
