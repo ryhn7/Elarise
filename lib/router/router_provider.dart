@@ -4,6 +4,7 @@ import 'package:elarise/feature_account_setting/presentation/account_setting/man
 import 'package:elarise/feature_assistant/presentation/home/home_screen.dart';
 import 'package:elarise/feature_auth/presentation/login/login_screen.dart';
 import 'package:elarise/feature_auth/presentation/signup/signup_screen.dart';
+import 'package:elarise/feature_auth/presentation/splash/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -11,6 +12,10 @@ part 'router_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 Raw<GoRouter> router(RouterRef ref) => GoRouter(routes: [
+      GoRoute(
+          path: '/',
+          name: 'splash',
+          builder: (context, state) => const SplashScreen()),
       GoRoute(
           path: '/home',
           name: 'home',
@@ -35,4 +40,4 @@ Raw<GoRouter> router(RouterRef ref) => GoRouter(routes: [
           path: '/edit-profile',
           name: 'edit-profile',
           builder: (context, state) =>  const EditProfileScreen()),
-    ], initialLocation: '/login', debugLogDiagnostics: false);
+    ], initialLocation: '/', debugLogDiagnostics: false);
