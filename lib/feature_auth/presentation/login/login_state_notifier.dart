@@ -7,29 +7,8 @@ class LoginStateNotifier extends StateNotifier<LoginState> {
   final Ref ref;
 
   LoginStateNotifier(this.ref)
-      : super(LoginState(isLoading: false, user: null, error: null)) {
-    _checkUser();
-  }
+      : super(LoginState(isLoading: false, user: null, error: null));
 
-  Future<void> _checkUser() async {
-    try {
-      final useCase = ref.read(useCaseAuthProvider);
-      var result = await useCase.getCurrentUser();
-
-      if (result is Success) {
-        state = state.copyWith(
-            user: result.resultData, isLoading: false, error: null);
-      } else {
-        state = state.copyWith(
-          user: null,
-          isLoading: false,
-          error: result.errorMessage ?? 'Failed to get user',
-        );
-      }
-    } catch (e) {
-      state = state.copyWith(error: e.toString(), isLoading: false, user: null);
-    }
-  }
 
   Future<void> login({required String email, required String password}) async {
     try {

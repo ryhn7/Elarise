@@ -20,7 +20,7 @@ class LoginScreen extends ConsumerWidget {
     ref.listen<LoginState>(loginStateNotifierProvider, (previous, next) {
       if (next.user != null) {
         ref.read(routerProvider).goNamed('home');
-      } else if (next.error != null) {
+      } else if (next.error != null && next.error != "User not found") {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(next.error.toString()),
         ));
@@ -28,27 +28,6 @@ class LoginScreen extends ConsumerWidget {
     });
 
     final loginState = ref.watch(loginStateNotifierProvider);
-
-    // if(loginState.user != null) {
-    //   ref.read(routerProvider).goNamed('home');
-    // } else if(loginState.error != null) {
-    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    //     content: Text(loginState.error.toString()),
-    //   ));
-    // }
-
-    // if (loginState.isLoading) {
-    //   return const Center(
-    //     child: CircularProgressIndicator(),
-    //   );
-    // } else
-    // if (loginState.error != null) {
-    //   return Center(
-    //     child: Text(loginState.error.toString()),
-    //   );
-    // } else {
-
-    // }
 
     Widget buildHeader() {
       return Column(
