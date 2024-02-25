@@ -48,7 +48,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       final firebaseUser =
           await _baseAuthRepository.registerWithEmailPassword(email, password);
 
-      await _baseAuthRepository.updateProfile(name, null);
+      await _baseAuthRepository.initProfile(name);
 
       await firebaseUser?.reload();
 
