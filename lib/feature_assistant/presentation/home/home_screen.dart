@@ -9,12 +9,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/domain/entities/user_preferences.dart';
+import '../../../feature_account_setting/presentation/account_setting/manage_account/account_state_notifier.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(homeStateNotifierProvider.notifier).refreshUserPreferences();
+    });
     final homeState = ref.watch(homeStateNotifierProvider);
 
     if (homeState.isLoading) {
@@ -26,6 +30,8 @@ class HomeScreen extends ConsumerWidget {
     } else {
       // Handle error or no valid session
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(accountStateNotifierProvider.notifier).logout();
+
         ref.read(routerProvider).goNamed('login');
       });
       // Optionally, display an error message or a placeholder
