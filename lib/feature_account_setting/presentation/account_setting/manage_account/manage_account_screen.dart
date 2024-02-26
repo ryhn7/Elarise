@@ -1,19 +1,19 @@
-import 'package:elarise/feature_account_setting/presentation/account_setting/setting_state.dart';
-import 'package:elarise/feature_account_setting/presentation/account_setting/setting_state_notifier.dart';
+import 'package:elarise/feature_account_setting/presentation/account_setting/manage_account/account_state.dart';
+import 'package:elarise/feature_account_setting/presentation/account_setting/manage_account/setting_state_notifier.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/widget/option.dart';
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../router/router_provider.dart';
+import '../../../../router/router_provider.dart';
 
 class ManageAccountScreen extends ConsumerWidget {
   const ManageAccountScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<SettingState>(settingStateNotifierProvider, (previous, next) {
+    ref.listen<AccountState>(accountStateNotifierProvider, (previous, next) {
       if (previous != null &&
           previous.firebaseUser != null &&
           next.isLogout &&
@@ -44,7 +44,7 @@ class ManageAccountScreen extends ConsumerWidget {
           children: [
             InkWell(
               onTap: () {
-                ref.read(settingStateNotifierProvider.notifier).logout();
+                ref.read(accountStateNotifierProvider.notifier).logout();
               },
               child: const Option(
                 title: "Log out",

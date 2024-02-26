@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
-import '../../../feature_auth/domain/entities/user.dart';
+import '../../../../feature_auth/domain/entities/user.dart';
 
-class SettingState {
+class AccountState {
   final firebase_auth.User? firebaseUser;
   final String? error;
   final bool isLoading;
@@ -10,7 +10,7 @@ class SettingState {
 
   final bool isLogout;
 
-  SettingState({
+  AccountState({
     firebase_auth.User? firebaseUser,
     this.isLogout = false,
     this.error,
@@ -19,14 +19,14 @@ class SettingState {
   }) : firebaseUser =
             firebaseUser ?? firebase_auth.FirebaseAuth.instance.currentUser;
 
-  SettingState copyWith({
+  AccountState copyWith({
     firebase_auth.User? firebaseUser,
     String? error,
     User? user,
     bool? isLogout,
     bool? isLoading,
   }) {
-    return SettingState(
+    return AccountState(
       firebaseUser: firebaseUser ?? firebaseUser,
       user: user ?? this.user,
       isLoading: isLoading ?? this.isLoading,

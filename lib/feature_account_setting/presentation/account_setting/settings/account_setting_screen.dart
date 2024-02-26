@@ -1,36 +1,36 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:elarise/feature_account_setting/presentation/account_setting/settings/setting_state_notifier.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/widget/option.dart';
 import 'package:elarise/router/router_provider.dart';
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shimmer/shimmer.dart';
 
-import '../../../core/domain/entities/user_preferences.dart';
-import '../../../di/repositories/user_datastore_repository/user_datastore_repository_provider.dart';
+import '../../../../core/domain/entities/user_preferences.dart';
 
 class AccountSettingScreen extends ConsumerWidget {
   const AccountSettingScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder<UserPreferences?>(
-      future: ref.read(userDatastoreRepositoryProvider).getUser(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasData && snapshot.data?.token != null) {
-          // User is logged in, continue showing AccountSettingScreen
-          return accountSettingContent(context, ref, snapshot.data!);
-        } else {
-          // No valid session, redirect to SignInScreen
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            ref.read(routerProvider).goNamed('login');
-          });
-          return const SizedBox
-              .shrink(); // Return an empty widget or a loading indicator as needed
-        }
-      },
-    );
+    final settingState = ref.watch(settingStateNotifierProvider);
+
+    if (settingState.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (settingState.userPreferences != null &&
+        settingState.userPreferences!.token != null) {
+      // User is logged in, continue showing AccountSettingScreen
+      return accountSettingContent(context, ref, settingState.userPreferences!);
+    } else {
+      // No valid session, redirect to SignInScreen
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(routerProvider).goNamed('login');
+      });
+      return const SizedBox
+          .shrink(); // Return an empty widget or a loading indicator as needed
+    }
   }
 
   Widget accountSettingContent(
@@ -63,16 +63,31 @@ class AccountSettingScreen extends ConsumerWidget {
       return Center(
         child: Column(
           children: [
-            Container(
+            CachedNetworkImage(
+              imageUrl: photoUrl,
+              imageBuilder: (context, imageProvider) => Container(
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: NetworkImage(photoUrl),
-                    fit: BoxFit.cover,
+                  image:
+                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                ),
+              ),
+              placeholder: (context, url) => Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey[300],
                   ),
-                )),
+                ),
+              ),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+            ),
             const SizedBox(height: 10),
             Text(userName, style: getSansFranciscoBold24(color: neutralFour)),
             const SizedBox(height: 10),

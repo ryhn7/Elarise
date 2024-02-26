@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/result_state.dart';
 import '../../../../di/repositories/user_datastore_repository/user_datastore_repository_provider.dart';
 import '../../../../di/usecases/setting_usecases/usecase_setting_provider.dart';
-import '../../../../router/router_provider.dart';
 
 class EditProfileStateNotifier extends StateNotifier<EditProfileState> {
   final Ref ref;
