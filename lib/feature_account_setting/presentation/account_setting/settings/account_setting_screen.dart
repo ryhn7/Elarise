@@ -9,12 +9,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../core/domain/entities/user_preferences.dart';
+import '../manage_account/account_state_notifier.dart';
 
 class AccountSettingScreen extends ConsumerWidget {
   const AccountSettingScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Triggering user preferences load or refresh
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(settingStateNotifierProvider.notifier).refreshUserPreferences();
+    });
+
     final settingState = ref.watch(settingStateNotifierProvider);
 
     if (settingState.isLoading) {
@@ -26,6 +32,8 @@ class AccountSettingScreen extends ConsumerWidget {
     } else {
       // No valid session, redirect to SignInScreen
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(accountStateNotifierProvider.notifier).logout();
+
         ref.read(routerProvider).goNamed('login');
       });
       return const SizedBox
