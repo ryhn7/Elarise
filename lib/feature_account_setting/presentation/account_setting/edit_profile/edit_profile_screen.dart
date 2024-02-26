@@ -1,15 +1,18 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/edit_profile/edit_profile_state_notifier.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/widget/elarise_edit_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../core/domain/entities/user_preferences.dart';
 import '../../../../router/router_provider.dart';
 import '../../../../theme/colors.dart';
 import '../../../../theme/style.dart';
+import '../manage_account/account_state_notifier.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({super.key});
@@ -61,6 +64,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           context, ref, editProfileState.userPreferences!);
     } else {
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(accountStateNotifierProvider.notifier).logout();
+
         ref.read(routerProvider).goNamed('login');
       });
       return const SizedBox.shrink();
@@ -103,14 +108,16 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             padding: const EdgeInsets.only(right: 16.0),
             child: ElevatedButton(
               onPressed: () async {
-                // Add your save functionality here
                 if (_formKey.currentState!.validate()) {
-                  ref
+                  await ref
                       .read(editProfileStateNotifierProvider.notifier)
                       .updateProfile(
                         name: nameController.text,
                         photoPath: xfile != null ? File(xfile!.path) : null,
                       );
+
+                  // Check if the widget is still mounted before proceeding
+                  if (!mounted) return;
 
                   // After updateProfile completes, check the state for errors
                   final currentState =
@@ -118,6 +125,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
                   if (currentState.error == null) {
                     // No error in the state, indicating success
+
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
@@ -130,6 +138,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         actions: <Widget>[
                           TextButton(
                               onPressed: () {
+                                if (!mounted) return;
                                 ref.read(routerProvider).goNamed('setting');
                               },
                               child: Text('OKAY',
@@ -151,6 +160,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         actions: <Widget>[
                           TextButton(
                               onPressed: () {
+                                if (!mounted) return;
                                 ref.read(routerProvider).goNamed('setting');
                               },
                               child: Text('OKAY',
@@ -194,6 +204,55 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       );
     }
 
+    Widget profileImageWidget() {
+      // Check if the imageProvider is a FileImage and return an Image widget
+      if (imageProvider is FileImage) {
+        return Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+            ),
+          ),
+        );
+      }
+      // If imageProvider is a NetworkImage, use CachedNetworkImage
+      else if (imageProvider is NetworkImage) {
+        return CachedNetworkImage(
+          imageUrl: (imageProvider).url,
+          imageBuilder: (context, imageProvider) => Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+            ),
+          ),
+          placeholder: (context, url) => Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.grey[300],
+              ),
+            ),
+          ),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+        );
+      }
+      // Default case to handle unexpected types, can return an error widget or a default image
+      else {
+        return const Icon(
+            Icons.error); // Placeholder for unexpected types, adjust as needed
+      }
+    }
+
     Widget profileField() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,29 +265,19 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               Column(
                 children: [
                   GestureDetector(
-                    onTap: () async {
-                      // Use ImagePicker to let the user select an image
-                      XFile? selectedFile = await ImagePicker()
-                          .pickImage(source: ImageSource.gallery);
+                      onTap: () async {
+                        // Use ImagePicker to let the user select an image
+                        XFile? selectedFile = await ImagePicker()
+                            .pickImage(source: ImageSource.gallery);
 
-                      // If an image is selected, update the state with the new image
-                      if (selectedFile != null) {
-                        setState(() {
-                          xfile = selectedFile;
-                        });
-                      }
-                    },
-                    child: Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        )),
-                  ),
+                        // If an image is selected, update the state with the new image
+                        if (selectedFile != null) {
+                          setState(() {
+                            xfile = selectedFile;
+                          });
+                        }
+                      },
+                      child: profileImageWidget()),
                   const SizedBox(height: 8),
                   Text(
                     "Add a pic",

@@ -1,5 +1,5 @@
 import 'package:elarise/feature_account_setting/presentation/account_setting/manage_account/account_state.dart';
-import 'package:elarise/feature_account_setting/presentation/account_setting/manage_account/setting_state_notifier.dart';
+import 'package:elarise/feature_account_setting/presentation/account_setting/manage_account/account_state_notifier.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/widget/option.dart';
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
