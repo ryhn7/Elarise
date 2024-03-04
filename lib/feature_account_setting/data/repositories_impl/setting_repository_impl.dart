@@ -39,7 +39,7 @@ class SettingRepositoryImpl implements SettingRepository {
   Future<ResultState<User?>> updateProfile(
       {String? name, File? photoPath}) async {
     String filename = basename(photoPath?.path ??
-        'https://firebasestorage.googleapis.com/v0/b/conversation-app-e3566.appspot.com/o/profileImage%2Fuser_placeholder.png?alt=media&token=b59b54f9-84c0-47e0-a900-60bfa9b05ae9');
+        'https://firebasestorage.googleapis.com/v0/b/elarise-1d057.appspot.com/o/profileImage%2Fuser_placeholder.png?alt=media&token=edfb4a25-2f56-479c-9ed3-f58e90ca8ce5');
 
     Reference reference =
         FirebaseStorage.instance.ref().child('profileImage/$filename');
