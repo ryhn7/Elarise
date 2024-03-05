@@ -1,17 +1,41 @@
+import 'package:elarise/feature_assistant/domain/entities/talk_freely_response.dart';
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AssistantChatroomScreen extends StatefulWidget {
+import '../../../router/router_provider.dart';
+
+class AssistantChatroomScreen extends ConsumerStatefulWidget {
   const AssistantChatroomScreen({super.key});
 
   @override
-  State<AssistantChatroomScreen> createState() =>
+  ConsumerState<AssistantChatroomScreen> createState() =>
       _AssistantChatroomScreenState();
 }
 
-class _AssistantChatroomScreenState extends State<AssistantChatroomScreen> {
+class _AssistantChatroomScreenState
+    extends ConsumerState<AssistantChatroomScreen> {
+  List<TalkFreelyResponse> messages = [];
+  final TextEditingController messageController = TextEditingController();
   bool isTyping = false;
+
+  @override
+  void dispose() {
+    messageController.dispose();
+    super.dispose();
+  }
+
+  void sendMessage(String text) {
+    setState(() {
+      messages.add(TalkFreelyResponse(message: text, isUserMessage: true));
+      messages.add(const TalkFreelyResponse(
+          message: "Hello, you'll be successful forever",
+          isUserMessage: false));
+      isTyping = false;
+    });
+    messageController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +47,7 @@ class _AssistantChatroomScreenState extends State<AssistantChatroomScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context);
+            ref.read(routerProvider).goNamed('home');
           },
         ),
         title: Row(
@@ -47,6 +71,81 @@ class _AssistantChatroomScreenState extends State<AssistantChatroomScreen> {
           )
         ],
       );
+    }
+
+    Widget buildMessages(TalkFreelyResponse message) {
+      bool isUserMessage = message.isUserMessage;
+      return Container(
+        margin:
+            EdgeInsets.only(top: isUserMessage ? 40 : 0, right: 16, left: 16),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: isUserMessage
+                  ? MainAxisAlignment.end
+                  : MainAxisAlignment.start,
+              children: [
+                if (!isUserMessage)
+                  Image.asset("assets/images/dummy_logo.png",
+                      width: 24, height: 24),
+                if (isUserMessage)
+                  Image.asset("assets/images/dummy_avatar.png",
+                      width: 24, height: 24),
+                const SizedBox(width: 12),
+                Text(
+                  isUserMessage ? "You" : "Elara AI",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white),
+                )
+              ],
+            ),
+            const SizedBox(height: 12),
+            Align(
+              alignment:
+                  isUserMessage ? Alignment.centerRight : Alignment.centerLeft,
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.7,
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: isUserMessage
+                      ? Colors.white
+                      : Theme.of(context).colorScheme.secondary,
+                  borderRadius: const BorderRadius.all(Radius.circular(30)),
+                ),
+                child: Text(message.message,
+                    style: TextStyle(
+                        color: isUserMessage ? Colors.black : Colors.white)),
+              ),
+            ),
+          ],
+        ),
+      );
+      // return ListView.builder(
+      //   itemCount: messages.length,
+      //   itemBuilder: (context, index) {
+      //     final message = messages[index];
+      //     final bool isUserMessage = index
+      //         .isOdd; // Assuming odd indexes are user messages for simplicity
+
+      //     return Container(
+      //       alignment:
+      //           isUserMessage ? Alignment.centerRight : Alignment.centerLeft,
+      //       child: Container(
+      //         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      //         margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+      //         decoration: BoxDecoration(
+      //           color: isUserMessage ? Colors.blue[100] : Colors.grey[300],
+      //           borderRadius: BorderRadius.circular(20),
+      //         ),
+      //         child:
+      //             Text(message.message, style: const TextStyle(fontSize: 16)),
+      //       ),
+      //     );
+      //   },
+      // );
     }
 
     Widget responseMessage() {
@@ -157,6 +256,7 @@ class _AssistantChatroomScreenState extends State<AssistantChatroomScreen> {
                     children: [
                       Expanded(
                         child: TextField(
+                          controller: messageController,
                           onChanged: (text) {
                             setState(() {
                               isTyping = text.isNotEmpty;
@@ -189,7 +289,11 @@ class _AssistantChatroomScreenState extends State<AssistantChatroomScreen> {
                     alignment: Alignment.center,
                     child: isTyping
                         ? InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              if (messageController.text.isNotEmpty) {
+                                sendMessage(messageController.text);
+                              }
+                            },
                             child: Image.asset(
                                 "assets/icons/icon_send_black.png",
                                 width: 32,
@@ -214,12 +318,24 @@ class _AssistantChatroomScreenState extends State<AssistantChatroomScreen> {
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         appBar(),
         Expanded(
-            child: SingleChildScrollView(
-          child: Column(children: [
-            responseMessage(),
-            requestMessage(),
-          ]),
-        )),
+          //     child: SingleChildScrollView(
+          //   child: Column(children: [
+          //     responseMessage(),
+          //     requestMessage(),
+          //   ]),
+          // )
+          child: ListView.builder(
+            padding: const EdgeInsets.only(bottom: 8),
+            reverse: true,
+            itemCount: messages.length,
+            itemBuilder: ((context, index) {
+              // This reverses the message list so that the latest message is at the bottom of the screen.
+              int reversedIndex = messages.length - 1 - index;
+              return buildMessages(messages[reversedIndex]);
+            }),
+          ),
+        ),
+        const SizedBox(height: 4),
         chatSpace()
       ]),
     );
