@@ -123,29 +123,6 @@ class _AssistantChatroomScreenState
           ],
         ),
       );
-      // return ListView.builder(
-      //   itemCount: messages.length,
-      //   itemBuilder: (context, index) {
-      //     final message = messages[index];
-      //     final bool isUserMessage = index
-      //         .isOdd; // Assuming odd indexes are user messages for simplicity
-
-      //     return Container(
-      //       alignment:
-      //           isUserMessage ? Alignment.centerRight : Alignment.centerLeft,
-      //       child: Container(
-      //         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      //         margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-      //         decoration: BoxDecoration(
-      //           color: isUserMessage ? Colors.blue[100] : Colors.grey[300],
-      //           borderRadius: BorderRadius.circular(20),
-      //         ),
-      //         child:
-      //             Text(message.message, style: const TextStyle(fontSize: 16)),
-      //       ),
-      //     );
-      //   },
-      // );
     }
 
     Widget responseMessage() {
@@ -318,12 +295,6 @@ class _AssistantChatroomScreenState
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         appBar(),
         Expanded(
-          //     child: SingleChildScrollView(
-          //   child: Column(children: [
-          //     responseMessage(),
-          //     requestMessage(),
-          //   ]),
-          // )
           child: ListView.builder(
             padding: const EdgeInsets.only(bottom: 8),
             reverse: true,
