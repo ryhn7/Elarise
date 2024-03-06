@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:elarise/di/repositories/user_datastore_repository/user_datastore_repository_provider.dart';
 import 'package:elarise/feature_assistant/presentation/home/home_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,8 +43,11 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
           isLoading: false,
           chatRoomVoiceResponse: result.resultData,
         );
-        log("ChatRoom created successfully: ${result.resultData}");
-        ref.read(routerProvider).goNamed('talk-freely');
+        // log("ChatRoom created successfully: ${result.resultData}");
+        ref.read(routerProvider).goNamed(
+              'talk-freely',
+              extra: result.resultData?.chatRoomId,
+            );
       } else {
         state = state.copyWith(
           isLoading: false,

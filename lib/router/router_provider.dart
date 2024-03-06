@@ -46,7 +46,10 @@ Raw<GoRouter> router(RouterRef ref) => GoRouter(
           GoRoute(
               path: '/talk-freely',
               name: 'talk-freely',
-              builder: (context, state) => const AssistantChatroomScreen()),
+              builder: (context, state) {
+                final chatRoomId = state.extra as String;
+                return AssistantChatroomScreen(chatRoomId);
+              }),
         ],
         initialLocation: '/',
         debugLogDiagnostics: false,
