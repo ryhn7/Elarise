@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elarise/core/common/result_state.dart';
 import 'package:elarise/core/data/repositories/base_auth_repository.dart';
 import 'package:elarise/feature_account_setting/data/repositories/setting_repository.dart';
@@ -14,15 +13,12 @@ import '../../../feature_auth/domain/mapper/user_mapper.dart';
 class SettingRepositoryImpl implements SettingRepository {
   final BaseAuthRepository _baseAuthRepository;
   final UserDatastoreRepository _userDatastoreRepository;
-  final FirebaseFirestore _firebaseFirestore;
 
   SettingRepositoryImpl(
       {required BaseAuthRepository baseAuthRepository,
-      required UserDatastoreRepository userDatastoreRepository,
-      FirebaseFirestore? firebaseFirestore})
+      required UserDatastoreRepository userDatastoreRepository})
       : _baseAuthRepository = baseAuthRepository,
-        _userDatastoreRepository = userDatastoreRepository,
-        _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
+        _userDatastoreRepository = userDatastoreRepository;
 
   @override
   Future<ResultState<bool>> logout() async {
