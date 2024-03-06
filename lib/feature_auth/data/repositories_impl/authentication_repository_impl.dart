@@ -1,6 +1,7 @@
 import 'package:elarise/core/common/result_state.dart';
 import 'package:elarise/core/data/repositories/base_auth_repository.dart';
 import 'package:elarise/core/data/repositories/user_datastore_repository.dart';
+import 'package:elarise/core/utils/config.dart';
 import 'package:elarise/feature_auth/data/repositories/authentication_repository.dart.dart';
 import 'package:elarise/feature_auth/domain/entities/user.dart';
 
@@ -32,6 +33,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
           ? firebaseUserToUserPreference(firebaseUser, token)
           : null;
       await _userDatastoreRepository.saveUser(userPreference!);
+
+      Configuration.token = token;
 
       return ResultState.success(user);
     } catch (e) {
@@ -65,6 +68,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
           : null;
       await _userDatastoreRepository.saveUser(userPreference!);
 
+      Configuration.token = token;
+
       return ResultState.success(user);
     } catch (e) {
       return ResultState.error(e.toString());
@@ -83,6 +88,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       final user = userPreferenceToUser(userPref);
       final token = await _baseAuthRepository.getUserToken() ?? '';
       await _userDatastoreRepository.saveToken(token);
+
+      Configuration.token = token;
 
       return ResultState.success(user);
     } catch (e) {
