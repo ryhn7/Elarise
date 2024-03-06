@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:elarise/feature_assistant/domain/entities/talk_freely_response.dart';
+import 'package:elarise/feature_assistant/presentation/assistant_chatroom/freely_talk_chat_state_notifier.dart';
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../router/router_provider.dart';
 
 class AssistantChatroomScreen extends ConsumerStatefulWidget {
-  const AssistantChatroomScreen({super.key});
+  final String chatRoomId;
+  const AssistantChatroomScreen(this.chatRoomId, {super.key});
 
   @override
   ConsumerState<AssistantChatroomScreen> createState() =>
@@ -27,18 +31,38 @@ class _AssistantChatroomScreenState
   }
 
   void sendMessage(String text) {
+    log("chatRoomId: ${widget.chatRoomId}");
+
+    if (text.trim().isEmpty) {
+      return; // Prevent sending empty messages
+    }
+
     setState(() {
       messages.add(TalkFreelyResponse(message: text, isUserMessage: true));
-      messages.add(const TalkFreelyResponse(
-          message: "Hello, you'll be successful forever",
-          isUserMessage: false));
       isTyping = false;
     });
     messageController.clear();
+
+    // call method to send message to the server
+    ref
+        .read(freelyTalkChatStateNotifierProvider.notifier)
+        .freelyTalkChat(chatRoomId: widget.chatRoomId, messageText: text);
   }
 
   @override
   Widget build(BuildContext context) {
+    // Listen to the FreelyTalkChatState
+    final freelyTalkChatState = ref.watch(freelyTalkChatStateNotifierProvider);
+
+    // Handle errors (showing a SnackBar for simplicity)
+    if (freelyTalkChatState.error != null && !freelyTalkChatState.isLoading) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(freelyTalkChatState.error!)),
+        );
+      });
+    }
+
     Widget appBar() {
       return AppBar(
         backgroundColor: darkGray,
@@ -94,8 +118,7 @@ class _AssistantChatroomScreenState
                 const SizedBox(width: 12),
                 Text(
                   isUserMessage ? "You" : "Elara AI",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.white),
+                  style: getSansFranciscoSemiBold16(color: Colors.white),
                 )
               ],
             ),
@@ -110,13 +133,11 @@ class _AssistantChatroomScreenState
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: isUserMessage
-                      ? Colors.white
-                      : Theme.of(context).colorScheme.secondary,
+                  color: isUserMessage ? Colors.white : blackOlive,
                   borderRadius: const BorderRadius.all(Radius.circular(30)),
                 ),
                 child: Text(message.message,
-                    style: TextStyle(
+                    style: getSansFranciscoRegular16(
                         color: isUserMessage ? Colors.black : Colors.white)),
               ),
             ),
@@ -298,11 +319,13 @@ class _AssistantChatroomScreenState
           child: ListView.builder(
             padding: const EdgeInsets.only(bottom: 8),
             reverse: true,
-            itemCount: messages.length,
+            itemCount: freelyTalkChatState.messageResponse.length,
             itemBuilder: ((context, index) {
               // This reverses the message list so that the latest message is at the bottom of the screen.
-              int reversedIndex = messages.length - 1 - index;
-              return buildMessages(messages[reversedIndex]);
+              int reversedIndex =
+                  freelyTalkChatState.messageResponse.length - 1 - index;
+              return buildMessages(
+                  freelyTalkChatState.messageResponse[reversedIndex]);
             }),
           ),
         ),
