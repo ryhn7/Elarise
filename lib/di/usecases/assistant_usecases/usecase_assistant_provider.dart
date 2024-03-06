@@ -1,4 +1,5 @@
 import 'package:elarise/di/repositories/assistant_repository/assistant_repository_provider.dart';
+import 'package:elarise/feature_assistant/domain/usecases/freely_talk_chat.dart';
 import 'package:elarise/feature_assistant/domain/usecases/usecase_assistant.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -8,5 +9,9 @@ part 'usecase_assistant_provider.g.dart';
 
 @riverpod
 UseCaseAssistant useCaseAssistant(UseCaseAssistantRef ref) => UseCaseAssistant(
-      createFreelyTalkRoom: CreateFreelyTalkRoom(assistantRepository: ref.watch(assistantRepositoryProvider)),
-    );
+    createFreelyTalkRoom: CreateFreelyTalkRoom(
+      assistantRepository: ref.watch(assistantRepositoryProvider),
+    ),
+    freelyTalkChat: FreelyTalkChat(
+      assistantRepository: ref.watch(assistantRepositoryProvider),
+    ));
