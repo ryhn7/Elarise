@@ -1,6 +1,12 @@
+import 'dart:developer';
+
 import 'package:elarise/di/repositories/user_datastore_repository/user_datastore_repository_provider.dart';
 import 'package:elarise/feature_assistant/presentation/home/home_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../core/common/result_state.dart';
+import '../../../di/usecases/assistant_usecases/usecase_assistant_provider.dart';
+import '../../../router/router_provider.dart';
 
 class HomeStateNotifier extends StateNotifier<HomeState> {
   final Ref ref;
@@ -23,6 +29,34 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
           state.copyWith(userPreferences: userPreferences, isLoading: false);
     } catch (e) {
       state = state.copyWith(error: e.toString(), isLoading: false);
+    }
+  }
+
+  Future<void> createFreelyTalkRoom() async {
+    try {
+      state = state.copyWith(isLoading: true);
+
+      final useCase = ref.read(useCaseAssistantProvider);
+
+      var result = await useCase.createFreelyTalkRoom();
+
+      if (result is Success) {
+        state = state.copyWith(
+          isLoading: false,
+          chatRoomVoiceResponse: result.resultData,
+        );
+        log("ChatRoom created successfully: ${result.resultData}");
+        ref.read(routerProvider).goNamed('talk-freely');
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          error: result.errorMessage ?? 'An error occurred',
+          chatRoomVoiceResponse: null,
+        );
+      }
+    } catch (e) {
+      state = state.copyWith(
+          isLoading: false, error: e.toString(), chatRoomVoiceResponse: null);
     }
   }
 }

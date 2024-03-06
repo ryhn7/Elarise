@@ -134,7 +134,11 @@ class HomeScreen extends ConsumerWidget {
                 width: 156,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ref
+                          .read(homeStateNotifierProvider.notifier)
+                          .createFreelyTalkRoom();
+                    },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: primary,
                         shape: const RoundedRectangleBorder(
