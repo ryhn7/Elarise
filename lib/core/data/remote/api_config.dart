@@ -95,4 +95,30 @@ class ApiConfig {
       throw Exception('Failed to load data');
     }
   }
+
+  // Add a method specifically for fetching binary data, such as an MP3 file
+  Future<http.Response> fetchBinaryData(String path,
+      {Map<String, String>? headers, Object? body}) async {
+    final Map<String, String> authHeaders = {
+      'Authorization': 'Bearer ${Configuration.openAIKey}',
+    };
+
+    headers?.forEach((key, value) => authHeaders[key] = value);
+
+    try {
+      final Uri uri = Uri.parse(path);
+      final response = await http.post(uri, headers: authHeaders, body: body);
+
+      alice.onHttpResponse(response);
+
+      if (response.statusCode == 200) {
+        return response;
+      } else {
+        throw Exception('Failed to fetch binary data: ${response.statusCode}');
+      }
+    } catch (e) {
+      log(e.toString(), name: 'ApiConfig');
+      throw Exception('Failed to fetch binary data');
+    }
+  }
 }
