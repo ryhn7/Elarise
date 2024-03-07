@@ -7,7 +7,7 @@ part of 'assistant_repository_provider.dart';
 // **************************************************************************
 
 String _$assistantRepositoryHash() =>
-    r'dc74b4ff1b00e65821161ce1efdb04e7b0db26db';
+    r'147e89319fb7cfd0d4153b00de20809023f37ce0';
 
 /// See also [assistantRepository].
 @ProviderFor(assistantRepository)
