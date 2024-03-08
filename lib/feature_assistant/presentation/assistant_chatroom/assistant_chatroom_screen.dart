@@ -4,8 +4,10 @@ import 'package:elarise/feature_assistant/domain/entities/talk_freely_response.d
 import 'package:elarise/feature_assistant/presentation/assistant_chatroom/freely_talk_chat_state_notifier.dart';
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../../router/router_provider.dart';
 
@@ -24,9 +26,72 @@ class _AssistantChatroomScreenState
   final TextEditingController messageController = TextEditingController();
   bool isTyping = false;
 
+  SpeechToText speechToText = SpeechToText();
+  bool isListening = false; // Tracks if the app is currently listening
+
+  @override
+  void initState() {
+    super.initState();
+    checkMicrophoneAvailability();
+  }
+
+  void checkMicrophoneAvailability() async {
+    bool available = await speechToText.initialize(
+      onError: (val) {
+        if (kDebugMode) {
+          log("Error initializing speech to text: $val");
+        }
+      },
+      onStatus: (status) {
+        if (kDebugMode) {
+          log("Status: $status");
+        }
+      },
+      debugLogging: true,
+    );
+    if (available) {
+      setState(() {
+        if (kDebugMode) {
+          log('Microphone available: $available');
+        }
+      });
+    } else {
+      if (kDebugMode) {
+        log("The user has denied the use of speech recognition.");
+      }
+    }
+  }
+
+  void startListening() {
+    speechToText.listen(
+      onResult: (result) {
+        setState(() {
+          messageController.text = result.recognizedWords;
+        });
+
+        if (result.finalResult) {
+          // If final, send the message
+          sendMessage(result.recognizedWords);
+        }
+      },
+      listenFor: const Duration(
+          seconds: 60), // Adjust the listening duration as needed
+      pauseFor: const Duration(seconds: 3),
+    );
+  }
+
+  void stopListening() {
+    speechToText.stop();
+    setState(() {
+      isListening = false;
+    });
+  }
+
   @override
   void dispose() {
     messageController.dispose();
+    speechToText.stop();
+    speechToText.cancel();
     super.dispose();
   }
 
@@ -298,9 +363,15 @@ class _AssistantChatroomScreenState
                                 height: 32),
                           )
                         : IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.mic,
+                            onPressed: () {
+                              if (isListening) {
+                                stopListening();
+                              } else {
+                                startListening();
+                              }
+                            },
+                            icon: Icon(
+                              isListening ? Icons.mic : Icons.mic_off,
                               color: Colors.black,
                               size: 32,
                             )),
