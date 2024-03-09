@@ -2,13 +2,70 @@ import 'package:elarise/core/common/result_state.dart';
 import 'package:elarise/di/usecases/assistant_usecases/usecase_assistant_provider.dart';
 import 'package:elarise/feature_assistant/presentation/assistant_chatroom/freely_talk_chat_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../domain/entities/talk_freely_response.dart';
 
 class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
   final Ref ref;
+  String? _chatRoomId; // Hold the chatRoomId internally
+  final SpeechToText speechToText = SpeechToText();
 
-  FreelyTalkChatStateNotifier(this.ref) : super(FreelyTalkChatState());
+  FreelyTalkChatStateNotifier(this.ref) : super(FreelyTalkChatState()) {
+    checkMicrophoneAvailability();
+  }
+
+  void checkMicrophoneAvailability() async {
+    bool available = await speechToText.initialize(
+      onError: (val) => state =
+          state.copyWith(error: "Error initializing speech to text: $val"),
+      onStatus: (status) => {},
+      debugLogging: true,
+    );
+    if (!available) {
+      state = state.copyWith(
+          error: "The user has denied the use of speech recognition.");
+    }
+  }
+
+  void startListening() {
+    if (!state.isListening) {
+      speechToText.listen(
+        onResult: (result) {
+          state = state.copyWith(isTyping: true);
+          if (result.finalResult) {
+            sendMessage(result.recognizedWords);
+            state = state.copyWith(isTyping: false);
+          }
+        },
+        listenFor: const Duration(seconds: 60),
+        pauseFor: const Duration(seconds: 3),
+      );
+      state = state.copyWith(isListening: true);
+    }
+  }
+
+  void stopListening() {
+    if (state.isListening) {
+      speechToText.stop();
+      state = state.copyWith(isListening: false);
+    }
+  }
+
+  set chatRoomId(String value) {
+    _chatRoomId = value;
+  }
+
+  void sendMessage(String text) {
+    if (text.trim().isEmpty) {
+      return; // Prevent sending empty messages
+    }
+
+    // call method to send message to the server
+    ref
+        .read(freelyTalkChatStateNotifierProvider.notifier)
+        .freelyTalkChat(chatRoomId: _chatRoomId!, messageText: text);
+  }
 
   Future<void> freelyTalkChat(
       {required String chatRoomId, required String messageText}) async {
@@ -47,6 +104,17 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
         messageResponse: null,
       );
     }
+  }
+
+  void updateTypingState(bool isTyping) {
+    state = state.copyWith(isTyping: isTyping);
+  }
+
+  @override
+  void dispose() {
+    speechToText.stop();
+    speechToText.cancel();
+    super.dispose();
   }
 }
 

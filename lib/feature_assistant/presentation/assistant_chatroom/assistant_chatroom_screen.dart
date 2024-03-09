@@ -22,96 +22,28 @@ class AssistantChatroomScreen extends ConsumerStatefulWidget {
 
 class _AssistantChatroomScreenState
     extends ConsumerState<AssistantChatroomScreen> {
-  List<TalkFreelyResponse> messages = [];
   final TextEditingController messageController = TextEditingController();
-  bool isTyping = false;
-
-  SpeechToText speechToText = SpeechToText();
-  bool isListening = false; // Tracks if the app is currently listening
 
   @override
   void initState() {
     super.initState();
-    checkMicrophoneAvailability();
+    ref.read(freelyTalkChatStateNotifierProvider.notifier).chatRoomId =
+        widget.chatRoomId;
   }
 
-  void checkMicrophoneAvailability() async {
-    bool available = await speechToText.initialize(
-      onError: (val) {
-        if (kDebugMode) {
-          log("Error initializing speech to text: $val");
-        }
-      },
-      onStatus: (status) {
-        if (kDebugMode) {
-          log("Status: $status");
-        }
-      },
-      debugLogging: true,
-    );
-    if (available) {
-      setState(() {
-        if (kDebugMode) {
-          log('Microphone available: $available');
-        }
-      });
-    } else {
-      if (kDebugMode) {
-        log("The user has denied the use of speech recognition.");
-      }
+  void sendMessage(String text) {
+    final messageText = messageController.text.trim();
+    if (messageText.isNotEmpty) {
+      ref.read(freelyTalkChatStateNotifierProvider.notifier).sendMessage(text);
+      messageController.clear();
     }
-  }
-
-  void startListening() {
-    speechToText.listen(
-      onResult: (result) {
-        setState(() {
-          messageController.text = result.recognizedWords;
-        });
-
-        if (result.finalResult) {
-          // If final, send the message
-          sendMessage(result.recognizedWords);
-        }
-      },
-      listenFor: const Duration(
-          seconds: 60), // Adjust the listening duration as needed
-      pauseFor: const Duration(seconds: 3),
-    );
-  }
-
-  void stopListening() {
-    speechToText.stop();
-    setState(() {
-      isListening = false;
-    });
+    log("Message sent: $text");
   }
 
   @override
   void dispose() {
     messageController.dispose();
-    speechToText.stop();
-    speechToText.cancel();
     super.dispose();
-  }
-
-  void sendMessage(String text) {
-    log("chatRoomId: ${widget.chatRoomId}");
-
-    if (text.trim().isEmpty) {
-      return; // Prevent sending empty messages
-    }
-
-    setState(() {
-      messages.add(TalkFreelyResponse(message: text, isUserMessage: true));
-      isTyping = false;
-    });
-    messageController.clear();
-
-    // call method to send message to the server
-    ref
-        .read(freelyTalkChatStateNotifierProvider.notifier)
-        .freelyTalkChat(chatRoomId: widget.chatRoomId, messageText: text);
   }
 
   @override
@@ -301,6 +233,10 @@ class _AssistantChatroomScreenState
     }
 
     Widget chatSpace() {
+      // Listen to the FreelyTalkChatState
+      final freelyTalkChatState =
+          ref.watch(freelyTalkChatStateNotifierProvider);
+
       return Container(
           margin: const EdgeInsets.only(bottom: 24, left: 16, right: 16),
           child: Row(
@@ -321,9 +257,10 @@ class _AssistantChatroomScreenState
                         child: TextField(
                           controller: messageController,
                           onChanged: (text) {
-                            setState(() {
-                              isTyping = text.isNotEmpty;
-                            });
+                            ref
+                                .read(freelyTalkChatStateNotifierProvider
+                                    .notifier)
+                                .updateTypingState(text.isNotEmpty);
                           },
                           textAlignVertical: TextAlignVertical.center,
                           maxLines: null,
@@ -350,7 +287,7 @@ class _AssistantChatroomScreenState
                   Positioned.fill(
                       child: Align(
                     alignment: Alignment.center,
-                    child: isTyping
+                    child: freelyTalkChatState.isTyping
                         ? InkWell(
                             onTap: () {
                               if (messageController.text.isNotEmpty) {
@@ -364,14 +301,22 @@ class _AssistantChatroomScreenState
                           )
                         : IconButton(
                             onPressed: () {
-                              if (isListening) {
-                                stopListening();
+                              if (freelyTalkChatState.isListening) {
+                                ref
+                                    .read(freelyTalkChatStateNotifierProvider
+                                        .notifier)
+                                    .stopListening();
                               } else {
-                                startListening();
+                                ref
+                                    .read(freelyTalkChatStateNotifierProvider
+                                        .notifier)
+                                    .startListening();
                               }
                             },
                             icon: Icon(
-                              isListening ? Icons.mic : Icons.mic_off,
+                              freelyTalkChatState.isListening
+                                  ? Icons.mic
+                                  : Icons.mic_off,
                               color: Colors.black,
                               size: 32,
                             )),
