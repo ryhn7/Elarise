@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:elarise/feature_assistant/domain/entities/talk_freely_response.dart';
-import 'package:elarise/feature_assistant/presentation/assistant_chatroom/freely_talk_chat_state_notifier.dart';
+import 'package:elarise/feature_assistant/presentation/freely_talk_chatroom/freely_talk_chat_state_notifier.dart';
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
@@ -11,17 +11,17 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../router/router_provider.dart';
 
-class AssistantChatroomScreen extends ConsumerStatefulWidget {
+class FreelyTalkChatroomScreen extends ConsumerStatefulWidget {
   final String chatRoomId;
-  const AssistantChatroomScreen(this.chatRoomId, {super.key});
+  const FreelyTalkChatroomScreen(this.chatRoomId, {super.key});
 
   @override
-  ConsumerState<AssistantChatroomScreen> createState() =>
-      _AssistantChatroomScreenState();
+  ConsumerState<FreelyTalkChatroomScreen> createState() =>
+      _FreelyTalkChatroomScreenState();
 }
 
-class _AssistantChatroomScreenState
-    extends ConsumerState<AssistantChatroomScreen> {
+class _FreelyTalkChatroomScreenState
+    extends ConsumerState<FreelyTalkChatroomScreen> {
   final TextEditingController messageController = TextEditingController();
 
   @override

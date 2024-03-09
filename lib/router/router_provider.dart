@@ -2,7 +2,7 @@ import 'package:elarise/core/data/remote/api_config.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/settings/account_setting_screen.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/edit_profile/edit_profile_screen.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/manage_account/manage_account_screen.dart';
-import 'package:elarise/feature_assistant/presentation/assistant_chatroom/assistant_chatroom_screen.dart';
+import 'package:elarise/feature_assistant/presentation/freely_talk_chatroom/freely_talk_chatroom_screen.dart';
 import 'package:elarise/feature_assistant/presentation/home/home_screen.dart';
 import 'package:elarise/feature_auth/presentation/login/login_screen.dart';
 import 'package:elarise/feature_auth/presentation/signup/signup_screen.dart';
@@ -48,7 +48,7 @@ Raw<GoRouter> router(RouterRef ref) => GoRouter(
               name: 'talk-freely',
               builder: (context, state) {
                 final chatRoomId = state.extra as String;
-                return AssistantChatroomScreen(chatRoomId);
+                return FreelyTalkChatroomScreen(chatRoomId);
               }),
         ],
         initialLocation: '/',

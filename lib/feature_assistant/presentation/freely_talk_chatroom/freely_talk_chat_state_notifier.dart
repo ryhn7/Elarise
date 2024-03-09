@@ -1,6 +1,6 @@
 import 'package:elarise/core/common/result_state.dart';
 import 'package:elarise/di/usecases/assistant_usecases/usecase_assistant_provider.dart';
-import 'package:elarise/feature_assistant/presentation/assistant_chatroom/freely_talk_chat_state.dart';
+import 'package:elarise/feature_assistant/presentation/freely_talk_chatroom/freely_talk_chat_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
