@@ -4,10 +4,8 @@ import 'package:elarise/feature_assistant/domain/entities/talk_freely_response.d
 import 'package:elarise/feature_assistant/presentation/assistant_chatroom/freely_talk_chat_state_notifier.dart';
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../../router/router_provider.dart';
 
@@ -29,6 +27,12 @@ class _AssistantChatroomScreenState
     super.initState();
     ref.read(freelyTalkChatStateNotifierProvider.notifier).chatRoomId =
         widget.chatRoomId;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(freelyTalkChatStateNotifierProvider.notifier).clearChat();
+    }); // Clear the chat when entering a new room
+
+    log(widget.chatRoomId);
   }
 
   void sendMessage(String text) {
@@ -137,95 +141,6 @@ class _AssistantChatroomScreenState
                     style: getSansFranciscoRegular16(
                         color: isUserMessage ? Colors.black : Colors.white)),
               ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    Widget responseMessage() {
-      return Container(
-          margin: const EdgeInsets.only(top: 24, left: 16),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Image.asset("assets/images/dummy_logo.png",
-                      width: 24, height: 24),
-                  const SizedBox(width: 12),
-                  Text(
-                    "Elara AI",
-                    style: getSansFranciscoSemiBold16(color: Colors.white),
-                  )
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width * 0.7,
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: blackOlive,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(30)),
-                      ),
-                      child: Text("Hello, I'm Elara your virtual assistant.",
-                          style:
-                              getSansFranciscoRegular16(color: Colors.white)),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ));
-    }
-
-    Widget requestMessage() {
-      return Container(
-        margin: const EdgeInsets.only(top: 48, right: 16),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Image.asset("assets/images/dummy_avatar.png",
-                    width: 24, height: 24),
-                const SizedBox(width: 12),
-                Text(
-                  "You",
-                  style: getSansFranciscoSemiBold16(color: Colors.white),
-                )
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.7,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                    ),
-                    child: Text("Hi Elara, I need help with my order.",
-                        style: getSansFranciscoRegular16(color: Colors.black)),
-                  ),
-                ),
-              ],
             ),
           ],
         ),

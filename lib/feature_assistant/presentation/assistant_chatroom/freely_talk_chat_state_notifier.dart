@@ -36,6 +36,7 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
           if (result.finalResult) {
             sendMessage(result.recognizedWords);
             state = state.copyWith(isTyping: false);
+            stopListening();
           }
         },
         listenFor: const Duration(seconds: 60),
@@ -65,6 +66,10 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
     ref
         .read(freelyTalkChatStateNotifierProvider.notifier)
         .freelyTalkChat(chatRoomId: _chatRoomId!, messageText: text);
+  }
+
+  void clearChat() {
+    state = state.copyWith(messageResponse: []);
   }
 
   Future<void> freelyTalkChat(
