@@ -1,11 +1,13 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:elarise/feature_assistant/domain/entities/talk_freely_response.dart';
 import 'package:elarise/feature_assistant/presentation/assistant_chatroom/freely_talk_chat_state_notifier.dart';
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../router/router_provider.dart';
 
@@ -99,6 +101,13 @@ class _AssistantChatroomScreenState
     }
 
     Widget buildMessages(TalkFreelyResponse message) {
+      final userState = ref.watch(freelyTalkChatStateNotifierProvider);
+      final fullName = userState.userPreferences?.name ?? "User";
+      final userName = fullName.split(" ")[0];
+      
+      final userPhoto = userState.userPreferences?.photoProfile ??
+          "https://firebasestorage.googleapis.com/v0/b/elarise-1d057.appspot.com/o/profileImage%2Fuser_placeholder.png?alt=media&token=edfb4a25-2f56-479c-9ed3-f58e90ca8ce5";
+
       bool isUserMessage = message.isUserMessage;
       return Container(
         margin:
@@ -114,11 +123,35 @@ class _AssistantChatroomScreenState
                   Image.asset("assets/images/dummy_logo.png",
                       width: 24, height: 24),
                 if (isUserMessage)
-                  Image.asset("assets/images/dummy_avatar.png",
-                      width: 24, height: 24),
+                  CachedNetworkImage(
+                    imageUrl: userPhoto,
+                    imageBuilder: (context, imageProvider) => Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.cover),
+                      ),
+                    ),
+                    placeholder: (context, url) => Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        width: 55,
+                        height: 55,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.grey[300],
+                        ),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
                 const SizedBox(width: 12),
                 Text(
-                  isUserMessage ? "You" : "Elara AI",
+                  isUserMessage ? userName : "Elara AI",
                   style: getSansFranciscoSemiBold16(color: Colors.white),
                 )
               ],

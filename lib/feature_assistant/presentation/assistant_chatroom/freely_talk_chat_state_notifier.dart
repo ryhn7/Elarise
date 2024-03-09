@@ -4,6 +4,7 @@ import 'package:elarise/feature_assistant/presentation/assistant_chatroom/freely
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
+import '../../../di/repositories/user_datastore_repository/user_datastore_repository_provider.dart';
 import '../../domain/entities/talk_freely_response.dart';
 
 class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
@@ -13,6 +14,24 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
 
   FreelyTalkChatStateNotifier(this.ref) : super(FreelyTalkChatState()) {
     checkMicrophoneAvailability();
+    _loadUserPreferences();
+  }
+
+  Future<void> refreshUserPreferences() async {
+    _loadUserPreferences(); // This method should fetch the latest user data
+  }
+
+  Future<void> _loadUserPreferences() async {
+    state = state.copyWith(isLoading: true);
+
+    try {
+      final userPreferences =
+          await ref.read(userDatastoreRepositoryProvider).getUser();
+      state =
+          state.copyWith(userPreferences: userPreferences, isLoading: false);
+    } catch (e) {
+      state = state.copyWith(error: e.toString(), isLoading: false);
+    }
   }
 
   void checkMicrophoneAvailability() async {
@@ -61,7 +80,6 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
     if (text.trim().isEmpty) {
       return; // Prevent sending empty messages
     }
-
     // call method to send message to the server
     ref
         .read(freelyTalkChatStateNotifierProvider.notifier)
@@ -80,6 +98,7 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
       // Assuming you send the messageText here and await a response
       final TalkFreelyResponse userMessage =
           TalkFreelyResponse(message: messageText, isUserMessage: true);
+
       // Add the user's message to state
       state = state
           .copyWith(messageResponse: [...state.messageResponse, userMessage]);
