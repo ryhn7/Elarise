@@ -32,8 +32,14 @@ class ApiConfig {
 
       if (response.statusCode == 200) {
         final jsonResult = json.decode(response.body);
+
+        // Check if the response contains the 'data' key in form of a list and the decoder is not null
+        if (jsonResult.containsKey('data') && jsonResult['data'] is List) {
+          // Pass only the 'data' part of the JSON to the decoder function
+          return decoder!(jsonResult);
+        }
         // Check if the response contains the 'data' key and the decoder is not null
-        if (jsonResult.containsKey('data') && decoder != null) {
+        else if (jsonResult.containsKey('data') && decoder != null) {
           // Pass only the 'data' part of the JSON to the decoder function
           return decoder(jsonResult['data']);
         }
