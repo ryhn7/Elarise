@@ -7,6 +7,7 @@ class HomeState {
   final bool isLoading;
   final String? error;
   final bool isChatRoomLoading;
+  final bool isCreatingRoom;
 
   final UserPreferences? userPreferences;
   final ChatRoomVoiceResponse? chatRoomVoiceResponse;
@@ -15,6 +16,7 @@ class HomeState {
   HomeState(
       {this.isLoading = false,
       this.isChatRoomLoading = false,
+      this.isCreatingRoom = false,
       this.error,
       this.userPreferences,
       this.chatRoomVoiceResponse,
@@ -23,6 +25,7 @@ class HomeState {
   HomeState copyWith({
     bool? isLoading,
     bool? isChatRoomLoading,
+    bool? isCreatingRoom,
     UserPreferences? userPreferences,
     ChatRoomVoiceResponse? chatRoomVoiceResponse,
     List<TalkFreelyChatRoom>? freelyTalkRooms,
@@ -31,6 +34,7 @@ class HomeState {
     return HomeState(
       isLoading: isLoading ?? this.isLoading,
       isChatRoomLoading: isChatRoomLoading ?? this.isChatRoomLoading,
+      isCreatingRoom: isCreatingRoom ?? this.isCreatingRoom,
       userPreferences: userPreferences ?? this.userPreferences,
       chatRoomVoiceResponse:
           chatRoomVoiceResponse ?? this.chatRoomVoiceResponse,

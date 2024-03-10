@@ -14,6 +14,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../core/domain/entities/user_preferences.dart';
 import '../../../feature_account_setting/presentation/account_setting/manage_account/account_state_notifier.dart';
 import '../../domain/entities/get_all_talk_freely_response.dart';
+import '../freely_talk_chatroom/widget/chatroom_loading_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -23,10 +24,14 @@ class HomeScreen extends ConsumerWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(homeStateNotifierProvider.notifier).refreshUserPreferences();
     });
+
     final homeState = ref.watch(homeStateNotifierProvider);
 
     if (homeState.isLoading) {
       return const Center(child: CircularProgressIndicator());
+    } else if (homeState.isCreatingRoom) {
+      // User is logged in, continue showing HomeScreen
+      return const ChatroomLoadingScreen();
     } else if (homeState.userPreferences != null &&
         homeState.userPreferences!.token != null) {
       // User is logged in, continue showing HomeScreen

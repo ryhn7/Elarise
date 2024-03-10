@@ -33,7 +33,7 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
 
   Future<void> createFreelyTalkRoom() async {
     try {
-      state = state.copyWith(isLoading: true);
+      state = state.copyWith(isLoading: true, isCreatingRoom: true);
 
       final useCase = ref.read(useCaseAssistantProvider);
 
@@ -42,6 +42,7 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
       if (result is Success) {
         state = state.copyWith(
           isLoading: false,
+          isCreatingRoom: false,
           chatRoomVoiceResponse: result.resultData,
         );
         // log("ChatRoom created successfully: ${result.resultData}");
@@ -52,13 +53,17 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
       } else {
         state = state.copyWith(
           isLoading: false,
+          isCreatingRoom: false,
           error: result.errorMessage ?? 'An error occurred',
           chatRoomVoiceResponse: null,
         );
       }
     } catch (e) {
       state = state.copyWith(
-          isLoading: false, error: e.toString(), chatRoomVoiceResponse: null);
+          isLoading: false,
+          isCreatingRoom: false,
+          error: e.toString(),
+          chatRoomVoiceResponse: null);
     }
   }
 
