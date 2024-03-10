@@ -11,6 +11,7 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
 
   HomeStateNotifier(this.ref) : super(HomeState()) {
     _loadUserPreferences();
+    getAllFreelyTalkRooms();
   }
 
   Future<void> refreshUserPreferences() async {
@@ -58,6 +59,39 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
     } catch (e) {
       state = state.copyWith(
           isLoading: false, error: e.toString(), chatRoomVoiceResponse: null);
+    }
+  }
+
+  Future<void> getAllFreelyTalkRooms() async {
+    try {
+      state = state.copyWith(isLoading: true, isChatRoomLoading: true);
+
+      // await Future.delayed(const Duration(seconds: 5));
+
+      final useCase = ref.read(useCaseAssistantProvider);
+
+      var result = await useCase.getAllFreelyTalkRooms();
+
+      if (result is Success) {
+        state = state.copyWith(
+          isLoading: false,
+          isChatRoomLoading: false,
+          freelyTalkRooms: result.resultData,
+        );
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          isChatRoomLoading: false,
+          error: result.errorMessage ?? 'An error occurred',
+          freelyTalkRooms: null,
+        );
+      }
+    } catch (e) {
+      state = state.copyWith(
+          isLoading: false,
+          error: e.toString(),
+          freelyTalkRooms: null,
+          isChatRoomLoading: false);
     }
   }
 }

@@ -1,15 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:elarise/core/utils/date_util.dart';
 import 'package:elarise/feature_assistant/presentation/home/home_state_notifier.dart';
 import 'package:elarise/feature_assistant/presentation/home/widget/chatroom_card.dart';
+import 'package:elarise/feature_assistant/presentation/home/widget/chatroom_loading_card.dart';
 import 'package:elarise/router/router_provider.dart';
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/domain/entities/user_preferences.dart';
 import '../../../feature_account_setting/presentation/account_setting/manage_account/account_state_notifier.dart';
+import '../../domain/entities/get_all_talk_freely_response.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -183,7 +187,32 @@ class HomeScreen extends ConsumerWidget {
       );
     }
 
+    Widget buildChatRoomCard(TalkFreelyChatRoom chatRoom, int index) {
+      final relativeTime = DateUtil().formatDateTime(chatRoom.createdAt);
+
+      return ChatRoomCard(
+        chatRoomName: chatRoom.chatRoomName,
+        date: relativeTime,
+        index: index,
+      );
+    }
+
+    Widget buildChatRoomLoadingCard(int index) {
+      return ChatRoomLoadingCard(
+        index: index,
+      );
+    }
+
     Widget history() {
+      final homeState = ref.watch(homeStateNotifierProvider);
+
+      // list of chatrooms
+      final chatRooms = homeState.freelyTalkRooms ?? [];
+      final isLoading = homeState.isChatRoomLoading;
+
+      // Determine how many loading cards to show, for example, 6.
+      const loadingCardCount = 6;
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -195,15 +224,24 @@ class HomeScreen extends ConsumerWidget {
           const SizedBox(
             height: 24.0,
           ),
-          const Row(
-            children: [
-              ChatRoomCard(),
-              SizedBox(
-                width: 8.0,
-              ),
-              ChatRoomCard(),
-            ],
-          )
+          MasonryGridView.builder(
+              mainAxisSpacing: 8.0,
+              crossAxisSpacing: 8.0,
+              shrinkWrap: true, // Use this to prevent scroll within scroll
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate:
+                  const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ), // Use this to prevent scroll within scroll
+              itemCount: isLoading ? loadingCardCount : chatRooms.length,
+              itemBuilder: (context, index) {
+                if (isLoading) {
+                  return buildChatRoomLoadingCard(index);
+                } else {
+                  final chatRoom = chatRooms[index];
+                  return buildChatRoomCard(chatRoom, index);
+                }
+              })
         ],
       );
     }
@@ -211,11 +249,18 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
         backgroundColor: neutralOneAlt,
         body: SafeArea(
-            child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [header(), history()],
+            child: RefreshIndicator(
+          onRefresh: () async => ref
+              .read(homeStateNotifierProvider.notifier)
+              .getAllFreelyTalkRooms(),
+          child: SingleChildScrollView(
+            physics:
+                const AlwaysScrollableScrollPhysics(), // Ensure scrollability
+            padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [header(), history()],
+            ),
           ),
         )));
   }
