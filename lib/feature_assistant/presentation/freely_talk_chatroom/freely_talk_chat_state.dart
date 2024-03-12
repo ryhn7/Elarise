@@ -7,6 +7,7 @@ class FreelyTalkChatState {
   final String? error;
   final bool isListening;
   final bool isTyping;
+  final bool isResponding;
 
   final List<TalkFreelyResponse> messageResponse;
   final UserPreferences? userPreferences;
@@ -18,6 +19,7 @@ class FreelyTalkChatState {
     this.userPreferences,
     this.isListening = false,
     this.isTyping = false,
+    this.isResponding = false,
   });
 
   FreelyTalkChatState copyWith({
@@ -27,6 +29,7 @@ class FreelyTalkChatState {
     String? error,
     bool? isListening,
     bool? isTyping,
+    bool? isResponding,
   }) {
     return FreelyTalkChatState(
       isLoading: isLoading ?? this.isLoading,
@@ -34,6 +37,7 @@ class FreelyTalkChatState {
       userPreferences: userPreferences ?? this.userPreferences,
       isListening: isListening ?? this.isListening,
       isTyping: isTyping ?? this.isTyping,
+      isResponding: isResponding ?? this.isResponding,
       error: error ?? error,
     );
   }

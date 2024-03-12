@@ -84,6 +84,23 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
     ref
         .read(freelyTalkChatStateNotifierProvider.notifier)
         .freelyTalkChat(chatRoomId: _chatRoomId!, messageText: text);
+
+    // After sending the message, add a placeholder response
+    _addPlaceholderForAIResponse();
+  }
+
+  // Helper method to add a placeholder for the AI response
+  void _addPlaceholderForAIResponse() {
+    const placeholderResponse = TalkFreelyResponse(
+      message: '',
+      isUserMessage: false,
+      isPlaceholder: true,
+    );
+
+    state = state.copyWith(
+      messageResponse: [...state.messageResponse, placeholderResponse],
+      isResponding: true, // Set this to true since we're awaiting a response
+    );
   }
 
   void clearChat() {
@@ -93,7 +110,7 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
   Future<void> freelyTalkChat(
       {required String chatRoomId, required String messageText}) async {
     try {
-      state = state.copyWith(isLoading: true);
+      state = state.copyWith(isLoading: true, isResponding: true);
 
       // Assuming you send the messageText here and await a response
       final TalkFreelyResponse userMessage =
@@ -111,20 +128,29 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
       );
 
       if (result is Success) {
+        // Remove the AI pending response placeholder
+        var newMessages = List<TalkFreelyResponse>.from(state.messageResponse)
+          ..removeLast();
+        // Add the actual AI response to the messages
+        newMessages.add(result.resultData!);
+
         state = state.copyWith(
           isLoading: false,
-          messageResponse: [...state.messageResponse, result.resultData!],
+          messageResponse: newMessages,
+          isResponding: false,
         );
       } else {
         state = state.copyWith(
             isLoading: false,
             error: result.errorMessage ?? 'An error occurred',
+            isResponding: false,
             messageResponse: null);
       }
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
         error: 'An error occurred',
+        isResponding: false,
         messageResponse: null,
       );
     }
