@@ -28,6 +28,7 @@ _$TalkFreelyChatRoomImpl _$$TalkFreelyChatRoomImplFromJson(
       createdAt: DateTime.parse(json['createdAt'] as String),
       chatRoomName: json['chatRoomName'] as String,
       type: json['type'] as String,
+      lastAIMessageText: json['lastAIMessageText'] as String?,
     );
 
 Map<String, dynamic> _$$TalkFreelyChatRoomImplToJson(
@@ -38,4 +39,5 @@ Map<String, dynamic> _$$TalkFreelyChatRoomImplToJson(
       'createdAt': instance.createdAt.toIso8601String(),
       'chatRoomName': instance.chatRoomName,
       'type': instance.type,
+      'lastAIMessageText': instance.lastAIMessageText,
     };

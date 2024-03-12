@@ -177,6 +177,7 @@ mixin _$TalkFreelyChatRoom {
   DateTime get createdAt => throw _privateConstructorUsedError;
   String get chatRoomName => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
+  String? get lastAIMessageText => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -195,7 +196,8 @@ abstract class $TalkFreelyChatRoomCopyWith<$Res> {
       String idUser,
       DateTime createdAt,
       String chatRoomName,
-      String type});
+      String type,
+      String? lastAIMessageText});
 }
 
 /// @nodoc
@@ -216,6 +218,7 @@ class _$TalkFreelyChatRoomCopyWithImpl<$Res, $Val extends TalkFreelyChatRoom>
     Object? createdAt = null,
     Object? chatRoomName = null,
     Object? type = null,
+    Object? lastAIMessageText = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -238,6 +241,10 @@ class _$TalkFreelyChatRoomCopyWithImpl<$Res, $Val extends TalkFreelyChatRoom>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
+      lastAIMessageText: freezed == lastAIMessageText
+          ? _value.lastAIMessageText
+          : lastAIMessageText // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -255,7 +262,8 @@ abstract class _$$TalkFreelyChatRoomImplCopyWith<$Res>
       String idUser,
       DateTime createdAt,
       String chatRoomName,
-      String type});
+      String type,
+      String? lastAIMessageText});
 }
 
 /// @nodoc
@@ -274,6 +282,7 @@ class __$$TalkFreelyChatRoomImplCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? chatRoomName = null,
     Object? type = null,
+    Object? lastAIMessageText = freezed,
   }) {
     return _then(_$TalkFreelyChatRoomImpl(
       id: null == id
@@ -296,6 +305,10 @@ class __$$TalkFreelyChatRoomImplCopyWithImpl<$Res>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
+      lastAIMessageText: freezed == lastAIMessageText
+          ? _value.lastAIMessageText
+          : lastAIMessageText // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -308,7 +321,8 @@ class _$TalkFreelyChatRoomImpl implements _TalkFreelyChatRoom {
       required this.idUser,
       required this.createdAt,
       required this.chatRoomName,
-      required this.type});
+      required this.type,
+      this.lastAIMessageText});
 
   factory _$TalkFreelyChatRoomImpl.fromJson(Map<String, dynamic> json) =>
       _$$TalkFreelyChatRoomImplFromJson(json);
@@ -323,10 +337,12 @@ class _$TalkFreelyChatRoomImpl implements _TalkFreelyChatRoom {
   final String chatRoomName;
   @override
   final String type;
+  @override
+  final String? lastAIMessageText;
 
   @override
   String toString() {
-    return 'TalkFreelyChatRoom(id: $id, idUser: $idUser, createdAt: $createdAt, chatRoomName: $chatRoomName, type: $type)';
+    return 'TalkFreelyChatRoom(id: $id, idUser: $idUser, createdAt: $createdAt, chatRoomName: $chatRoomName, type: $type, lastAIMessageText: $lastAIMessageText)';
   }
 
   @override
@@ -340,13 +356,15 @@ class _$TalkFreelyChatRoomImpl implements _TalkFreelyChatRoom {
                 other.createdAt == createdAt) &&
             (identical(other.chatRoomName, chatRoomName) ||
                 other.chatRoomName == chatRoomName) &&
-            (identical(other.type, type) || other.type == type));
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.lastAIMessageText, lastAIMessageText) ||
+                other.lastAIMessageText == lastAIMessageText));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, idUser, createdAt, chatRoomName, type);
+  int get hashCode => Object.hash(runtimeType, id, idUser, createdAt,
+      chatRoomName, type, lastAIMessageText);
 
   @JsonKey(ignore: true)
   @override
@@ -369,7 +387,8 @@ abstract class _TalkFreelyChatRoom implements TalkFreelyChatRoom {
       required final String idUser,
       required final DateTime createdAt,
       required final String chatRoomName,
-      required final String type}) = _$TalkFreelyChatRoomImpl;
+      required final String type,
+      final String? lastAIMessageText}) = _$TalkFreelyChatRoomImpl;
 
   factory _TalkFreelyChatRoom.fromJson(Map<String, dynamic> json) =
       _$TalkFreelyChatRoomImpl.fromJson;
@@ -384,6 +403,8 @@ abstract class _TalkFreelyChatRoom implements TalkFreelyChatRoom {
   String get chatRoomName;
   @override
   String get type;
+  @override
+  String? get lastAIMessageText;
   @override
   @JsonKey(ignore: true)
   _$$TalkFreelyChatRoomImplCopyWith<_$TalkFreelyChatRoomImpl> get copyWith =>

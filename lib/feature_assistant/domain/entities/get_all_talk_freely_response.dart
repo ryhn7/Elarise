@@ -21,6 +21,7 @@ class TalkFreelyChatRoom with _$TalkFreelyChatRoom {
     required DateTime createdAt,
     required String chatRoomName,
     required String type,
+    String? lastAIMessageText,
   }) = _TalkFreelyChatRoom;
 
   factory TalkFreelyChatRoom.fromJson(Map<String, dynamic> json) =>
