@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:elarise/core/utils/config.dart';
+import 'package:elarise/core/utils/env.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
@@ -106,7 +107,7 @@ class ApiConfig {
   Future<http.Response> fetchBinaryData(String path,
       {Map<String, String>? headers, Object? body}) async {
     final Map<String, String> authHeaders = {
-      'Authorization': 'Bearer ${Configuration.openAIKey}',
+      'Authorization': 'Bearer ${Env.openAIKey}',
     };
 
     headers?.forEach((key, value) => authHeaders[key] = value);
