@@ -197,6 +197,7 @@ class HomeScreen extends ConsumerWidget {
 
       return ChatRoomCard(
         chatRoomName: chatRoom.chatRoomName,
+        latestResponse: chatRoom.lastAIMessageText ?? "No response yet",
         date: relativeTime,
         index: index,
       );

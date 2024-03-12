@@ -67,6 +67,11 @@ class AssistantApi {
       // Sort the modifiable list by the createdAt field, newest first
       newResponse.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
+      // exclude lastAIMessageText that have null value
+      newResponse = newResponse
+          .where((chatroom) => chatroom.lastAIMessageText != null)
+          .toList();
+
       return newResponse;
     } catch (e) {
       throw Exception('Failed to get all freely talk chat rooms: $e');

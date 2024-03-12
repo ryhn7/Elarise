@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 class ChatRoomCard extends StatelessWidget {
   final String chatRoomName;
   final String date;
+  final String latestResponse;
   final int index;
 
   const ChatRoomCard({
     super.key,
     required this.chatRoomName,
     required this.date,
+    required this.latestResponse,
     required this.index,
   });
 
@@ -51,7 +53,7 @@ class ChatRoomCard extends StatelessWidget {
             child: SizedBox(
               width: 146,
               child: Text(
-                "Forgetting a bad memory entirely may be challenging, as memories are complex and deeply ingrained in our minds.",
+                latestResponse,
                 maxLines: 5,
                 overflow: TextOverflow.ellipsis,
                 style: getSansFranciscoRegular16(color: neutralThree),
