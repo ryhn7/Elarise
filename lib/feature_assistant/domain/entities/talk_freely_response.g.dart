@@ -11,6 +11,7 @@ _$TalkFreelyResponseImpl _$$TalkFreelyResponseImplFromJson(
     _$TalkFreelyResponseImpl(
       message: json['message'] as String,
       isUserMessage: json['isUserMessage'] as bool? ?? false,
+      isPlaceholder: json['isPlaceholder'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$TalkFreelyResponseImplToJson(
@@ -18,4 +19,5 @@ Map<String, dynamic> _$$TalkFreelyResponseImplToJson(
     <String, dynamic>{
       'message': instance.message,
       'isUserMessage': instance.isUserMessage,
+      'isPlaceholder': instance.isPlaceholder,
     };

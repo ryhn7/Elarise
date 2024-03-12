@@ -9,6 +9,7 @@ class TalkFreelyResponse with _$TalkFreelyResponse {
   const factory TalkFreelyResponse({
     required String message,
     @Default(false) bool isUserMessage,
+    @Default(false) bool isPlaceholder,
   }) = _TalkFreelyResponse;
 
   factory TalkFreelyResponse.fromJson(Map<String, dynamic> json) => _$TalkFreelyResponseFromJson(json);

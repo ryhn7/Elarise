@@ -22,6 +22,7 @@ TalkFreelyResponse _$TalkFreelyResponseFromJson(Map<String, dynamic> json) {
 mixin _$TalkFreelyResponse {
   String get message => throw _privateConstructorUsedError;
   bool get isUserMessage => throw _privateConstructorUsedError;
+  bool get isPlaceholder => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,7 @@ abstract class $TalkFreelyResponseCopyWith<$Res> {
           TalkFreelyResponse value, $Res Function(TalkFreelyResponse) then) =
       _$TalkFreelyResponseCopyWithImpl<$Res, TalkFreelyResponse>;
   @useResult
-  $Res call({String message, bool isUserMessage});
+  $Res call({String message, bool isUserMessage, bool isPlaceholder});
 }
 
 /// @nodoc
@@ -53,6 +54,7 @@ class _$TalkFreelyResponseCopyWithImpl<$Res, $Val extends TalkFreelyResponse>
   $Res call({
     Object? message = null,
     Object? isUserMessage = null,
+    Object? isPlaceholder = null,
   }) {
     return _then(_value.copyWith(
       message: null == message
@@ -62,6 +64,10 @@ class _$TalkFreelyResponseCopyWithImpl<$Res, $Val extends TalkFreelyResponse>
       isUserMessage: null == isUserMessage
           ? _value.isUserMessage
           : isUserMessage // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isPlaceholder: null == isPlaceholder
+          ? _value.isPlaceholder
+          : isPlaceholder // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -75,7 +81,7 @@ abstract class _$$TalkFreelyResponseImplCopyWith<$Res>
       __$$TalkFreelyResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message, bool isUserMessage});
+  $Res call({String message, bool isUserMessage, bool isPlaceholder});
 }
 
 /// @nodoc
@@ -91,6 +97,7 @@ class __$$TalkFreelyResponseImplCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
     Object? isUserMessage = null,
+    Object? isPlaceholder = null,
   }) {
     return _then(_$TalkFreelyResponseImpl(
       message: null == message
@@ -101,6 +108,10 @@ class __$$TalkFreelyResponseImplCopyWithImpl<$Res>
           ? _value.isUserMessage
           : isUserMessage // ignore: cast_nullable_to_non_nullable
               as bool,
+      isPlaceholder: null == isPlaceholder
+          ? _value.isPlaceholder
+          : isPlaceholder // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -109,7 +120,9 @@ class __$$TalkFreelyResponseImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$TalkFreelyResponseImpl implements _TalkFreelyResponse {
   const _$TalkFreelyResponseImpl(
-      {required this.message, this.isUserMessage = false});
+      {required this.message,
+      this.isUserMessage = false,
+      this.isPlaceholder = false});
 
   factory _$TalkFreelyResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$TalkFreelyResponseImplFromJson(json);
@@ -119,10 +132,13 @@ class _$TalkFreelyResponseImpl implements _TalkFreelyResponse {
   @override
   @JsonKey()
   final bool isUserMessage;
+  @override
+  @JsonKey()
+  final bool isPlaceholder;
 
   @override
   String toString() {
-    return 'TalkFreelyResponse(message: $message, isUserMessage: $isUserMessage)';
+    return 'TalkFreelyResponse(message: $message, isUserMessage: $isUserMessage, isPlaceholder: $isPlaceholder)';
   }
 
   @override
@@ -132,12 +148,15 @@ class _$TalkFreelyResponseImpl implements _TalkFreelyResponse {
             other is _$TalkFreelyResponseImpl &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.isUserMessage, isUserMessage) ||
-                other.isUserMessage == isUserMessage));
+                other.isUserMessage == isUserMessage) &&
+            (identical(other.isPlaceholder, isPlaceholder) ||
+                other.isPlaceholder == isPlaceholder));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, message, isUserMessage);
+  int get hashCode =>
+      Object.hash(runtimeType, message, isUserMessage, isPlaceholder);
 
   @JsonKey(ignore: true)
   @override
@@ -157,7 +176,8 @@ class _$TalkFreelyResponseImpl implements _TalkFreelyResponse {
 abstract class _TalkFreelyResponse implements TalkFreelyResponse {
   const factory _TalkFreelyResponse(
       {required final String message,
-      final bool isUserMessage}) = _$TalkFreelyResponseImpl;
+      final bool isUserMessage,
+      final bool isPlaceholder}) = _$TalkFreelyResponseImpl;
 
   factory _TalkFreelyResponse.fromJson(Map<String, dynamic> json) =
       _$TalkFreelyResponseImpl.fromJson;
@@ -166,6 +186,8 @@ abstract class _TalkFreelyResponse implements TalkFreelyResponse {
   String get message;
   @override
   bool get isUserMessage;
+  @override
+  bool get isPlaceholder;
   @override
   @JsonKey(ignore: true)
   _$$TalkFreelyResponseImplCopyWith<_$TalkFreelyResponseImpl> get copyWith =>
