@@ -26,6 +26,24 @@ class AssistantApi {
     }
   }
 
+    Future<ChatRoomResponse> createGrammarTalkRoom() async {
+    try {
+      var headers = {
+        'Content-Type': 'application/json',
+      };
+
+      final response = await apiConfig.postApiService<ChatRoomResponse>(
+          'chatroom-grammar',
+          headers: headers,
+          body: {},
+          decoder: (json) => ChatRoomResponse.fromJson(json));
+
+      return response;
+    } catch (e) {
+      throw Exception('Failed to create grammar talk room: $e');
+    }
+  }
+
   Future<ElaraResponse> freelyTalkChat(
       String chatRoomId, String messageText) async {
     try {
@@ -49,7 +67,59 @@ class AssistantApi {
     }
   }
 
+    Future<ElaraResponse> grammarTalkChat(
+      String chatRoomId, String messageText) async {
+    try {
+      var headers = {
+        'Content-Type': 'application/json',
+      };
+
+      var body = {
+        'messageText': messageText,
+      };
+
+      final response = await apiConfig.postApiService<ElaraResponse>(
+          'chatroom/$chatRoomId/grammar',
+          headers: headers,
+          body: body,
+          decoder: (json) => ElaraResponse.fromJson(json));
+
+      return response;
+    } catch (e) {
+      throw Exception('Failed to grammar chat: $e');
+    }
+  }
+
   Future<List<TalkFreelyChatRoom>> getAllFreelyTalkRooms() async {
+    try {
+      var headers = {
+        'Content-Type': 'application/json',
+      };
+
+      final response = await apiConfig.getApiService<GetAllTalkFreelyResponse>(
+          'get-all-chatroom-voice',
+          headers: headers,
+          decoder: (json) => GetAllTalkFreelyResponse.fromJson(json));
+
+      // Create a new modifiable list from the response data
+      List<TalkFreelyChatRoom> newResponse =
+          List<TalkFreelyChatRoom>.from(response.data);
+
+      // Sort the modifiable list by the createdAt field, newest first
+      newResponse.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+      // exclude lastAIMessageText that have null value
+      newResponse = newResponse
+          .where((chatroom) => chatroom.lastAIMessageText != null)
+          .toList();
+
+      return newResponse;
+    } catch (e) {
+      throw Exception('Failed to get all freely talk chat rooms: $e');
+    }
+  }
+
+    Future<List<TalkFreelyChatRoom>> getAllGrammarTalkRooms() async {
     try {
       var headers = {
         'Content-Type': 'application/json',

@@ -78,4 +78,45 @@ class AssistantRepositoryImpl implements AssistantRepository {
       return ResultState.error(e.toString());
     }
   }
+
+  @override
+  Future<ResultState<ChatRoomResponse>> createGrammarTalkRoom() async {
+    try {
+      final userPreferences = await _userDatastoreRepository.getUser();
+      final token = userPreferences.token ?? '';
+
+      if (token.isEmpty) {
+        return const ResultState.error('Token is empty');
+      }
+
+      final response = await _assistantApi.createGrammarTalkRoom();
+      return ResultState.success(response);
+    } catch (e) {
+      return ResultState.error(e.toString());
+    }
+  }
+
+  @override
+  Future<ResultState<ElaraResponse>> grammarTalkChat(
+      {required String chatRoomId, required String messageText}) async {
+    try {
+      final userPreferences = await _userDatastoreRepository.getUser();
+      final token = userPreferences.token ?? '';
+
+      if (token.isEmpty) {
+        return const ResultState.error('Token is empty');
+      }
+
+      final response =
+          await _assistantApi.grammarTalkChat(chatRoomId, messageText);
+      // final message = response.message;
+
+      // Call text-to-speech service with the chat response
+      // await _openAIService.fetchAndPlaySpeechAudio(message);
+
+      return ResultState.success(response);
+    } catch (e) {
+      return ResultState.error(e.toString());
+    }
+  }
 }
