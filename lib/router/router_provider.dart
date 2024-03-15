@@ -3,6 +3,7 @@ import 'package:elarise/feature_account_setting/presentation/account_setting/edi
 import 'package:elarise/feature_account_setting/presentation/account_setting/manage_account/manage_account_screen.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/settings/account_setting_screen.dart';
 import 'package:elarise/feature_assistant/presentation/freely_talk_chatroom/freely_talk_chatroom_screen.dart';
+import 'package:elarise/feature_assistant/presentation/grammar_talk_chatroom/grammar_talk_chatroom_screen.dart';
 import 'package:elarise/feature_assistant/presentation/home/home_screen.dart';
 import 'package:elarise/feature_auth/presentation/login/login_screen.dart';
 import 'package:elarise/feature_auth/presentation/signup/signup_screen.dart';
@@ -49,6 +50,13 @@ Raw<GoRouter> router(RouterRef ref) => GoRouter(
               builder: (context, state) {
                 final chatRoomId = state.extra as String;
                 return FreelyTalkChatroomScreen(chatRoomId);
+              }),
+          GoRoute(
+              path: '/grammar-talk',
+              name: 'grammar-talk',
+              builder: (context, state) {
+                final chatRoomId = state.extra as String;
+                return GrammarTalkChatroomScreen(chatRoomId);
               }),
         ],
         initialLocation: '/',
