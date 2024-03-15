@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'talk_freely_response.dart';
+part of 'elara_response.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,35 +14,35 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-TalkFreelyResponse _$TalkFreelyResponseFromJson(Map<String, dynamic> json) {
-  return _TalkFreelyResponse.fromJson(json);
+ElaraResponse _$ElaraResponseFromJson(Map<String, dynamic> json) {
+  return _ElaraResponse.fromJson(json);
 }
 
 /// @nodoc
-mixin _$TalkFreelyResponse {
+mixin _$ElaraResponse {
   String get message => throw _privateConstructorUsedError;
   bool get isUserMessage => throw _privateConstructorUsedError;
   bool get isPlaceholder => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $TalkFreelyResponseCopyWith<TalkFreelyResponse> get copyWith =>
+  $ElaraResponseCopyWith<ElaraResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $TalkFreelyResponseCopyWith<$Res> {
-  factory $TalkFreelyResponseCopyWith(
-          TalkFreelyResponse value, $Res Function(TalkFreelyResponse) then) =
-      _$TalkFreelyResponseCopyWithImpl<$Res, TalkFreelyResponse>;
+abstract class $ElaraResponseCopyWith<$Res> {
+  factory $ElaraResponseCopyWith(
+          ElaraResponse value, $Res Function(ElaraResponse) then) =
+      _$ElaraResponseCopyWithImpl<$Res, ElaraResponse>;
   @useResult
   $Res call({String message, bool isUserMessage, bool isPlaceholder});
 }
 
 /// @nodoc
-class _$TalkFreelyResponseCopyWithImpl<$Res, $Val extends TalkFreelyResponse>
-    implements $TalkFreelyResponseCopyWith<$Res> {
-  _$TalkFreelyResponseCopyWithImpl(this._value, this._then);
+class _$ElaraResponseCopyWithImpl<$Res, $Val extends ElaraResponse>
+    implements $ElaraResponseCopyWith<$Res> {
+  _$ElaraResponseCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -74,22 +74,22 @@ class _$TalkFreelyResponseCopyWithImpl<$Res, $Val extends TalkFreelyResponse>
 }
 
 /// @nodoc
-abstract class _$$TalkFreelyResponseImplCopyWith<$Res>
-    implements $TalkFreelyResponseCopyWith<$Res> {
-  factory _$$TalkFreelyResponseImplCopyWith(_$TalkFreelyResponseImpl value,
-          $Res Function(_$TalkFreelyResponseImpl) then) =
-      __$$TalkFreelyResponseImplCopyWithImpl<$Res>;
+abstract class _$$ElaraResponseImplCopyWith<$Res>
+    implements $ElaraResponseCopyWith<$Res> {
+  factory _$$ElaraResponseImplCopyWith(
+          _$ElaraResponseImpl value, $Res Function(_$ElaraResponseImpl) then) =
+      __$$ElaraResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String message, bool isUserMessage, bool isPlaceholder});
 }
 
 /// @nodoc
-class __$$TalkFreelyResponseImplCopyWithImpl<$Res>
-    extends _$TalkFreelyResponseCopyWithImpl<$Res, _$TalkFreelyResponseImpl>
-    implements _$$TalkFreelyResponseImplCopyWith<$Res> {
-  __$$TalkFreelyResponseImplCopyWithImpl(_$TalkFreelyResponseImpl _value,
-      $Res Function(_$TalkFreelyResponseImpl) _then)
+class __$$ElaraResponseImplCopyWithImpl<$Res>
+    extends _$ElaraResponseCopyWithImpl<$Res, _$ElaraResponseImpl>
+    implements _$$ElaraResponseImplCopyWith<$Res> {
+  __$$ElaraResponseImplCopyWithImpl(
+      _$ElaraResponseImpl _value, $Res Function(_$ElaraResponseImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -99,7 +99,7 @@ class __$$TalkFreelyResponseImplCopyWithImpl<$Res>
     Object? isUserMessage = null,
     Object? isPlaceholder = null,
   }) {
-    return _then(_$TalkFreelyResponseImpl(
+    return _then(_$ElaraResponseImpl(
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -118,14 +118,14 @@ class __$$TalkFreelyResponseImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$TalkFreelyResponseImpl implements _TalkFreelyResponse {
-  const _$TalkFreelyResponseImpl(
+class _$ElaraResponseImpl implements _ElaraResponse {
+  const _$ElaraResponseImpl(
       {required this.message,
       this.isUserMessage = false,
       this.isPlaceholder = false});
 
-  factory _$TalkFreelyResponseImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TalkFreelyResponseImplFromJson(json);
+  factory _$ElaraResponseImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ElaraResponseImplFromJson(json);
 
   @override
   final String message;
@@ -138,14 +138,14 @@ class _$TalkFreelyResponseImpl implements _TalkFreelyResponse {
 
   @override
   String toString() {
-    return 'TalkFreelyResponse(message: $message, isUserMessage: $isUserMessage, isPlaceholder: $isPlaceholder)';
+    return 'ElaraResponse(message: $message, isUserMessage: $isUserMessage, isPlaceholder: $isPlaceholder)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TalkFreelyResponseImpl &&
+            other is _$ElaraResponseImpl &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.isUserMessage, isUserMessage) ||
                 other.isUserMessage == isUserMessage) &&
@@ -161,26 +161,25 @@ class _$TalkFreelyResponseImpl implements _TalkFreelyResponse {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$TalkFreelyResponseImplCopyWith<_$TalkFreelyResponseImpl> get copyWith =>
-      __$$TalkFreelyResponseImplCopyWithImpl<_$TalkFreelyResponseImpl>(
-          this, _$identity);
+  _$$ElaraResponseImplCopyWith<_$ElaraResponseImpl> get copyWith =>
+      __$$ElaraResponseImplCopyWithImpl<_$ElaraResponseImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TalkFreelyResponseImplToJson(
+    return _$$ElaraResponseImplToJson(
       this,
     );
   }
 }
 
-abstract class _TalkFreelyResponse implements TalkFreelyResponse {
-  const factory _TalkFreelyResponse(
+abstract class _ElaraResponse implements ElaraResponse {
+  const factory _ElaraResponse(
       {required final String message,
       final bool isUserMessage,
-      final bool isPlaceholder}) = _$TalkFreelyResponseImpl;
+      final bool isPlaceholder}) = _$ElaraResponseImpl;
 
-  factory _TalkFreelyResponse.fromJson(Map<String, dynamic> json) =
-      _$TalkFreelyResponseImpl.fromJson;
+  factory _ElaraResponse.fromJson(Map<String, dynamic> json) =
+      _$ElaraResponseImpl.fromJson;
 
   @override
   String get message;
@@ -190,6 +189,6 @@ abstract class _TalkFreelyResponse implements TalkFreelyResponse {
   bool get isPlaceholder;
   @override
   @JsonKey(ignore: true)
-  _$$TalkFreelyResponseImplCopyWith<_$TalkFreelyResponseImpl> get copyWith =>
+  _$$ElaraResponseImplCopyWith<_$ElaraResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../../di/repositories/user_datastore_repository/user_datastore_repository_provider.dart';
-import '../../domain/entities/talk_freely_response.dart';
+import '../../domain/entities/elara_response.dart';
 
 class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
   final Ref ref;
@@ -91,7 +91,7 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
 
   // Helper method to add a placeholder for the AI response
   void _addPlaceholderForAIResponse() {
-    const placeholderResponse = TalkFreelyResponse(
+    const placeholderResponse = ElaraResponse(
       message: '',
       isUserMessage: false,
       isPlaceholder: true,
@@ -113,8 +113,8 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
       state = state.copyWith(isLoading: true, isResponding: true);
 
       // Assuming you send the messageText here and await a response
-      final TalkFreelyResponse userMessage =
-          TalkFreelyResponse(message: messageText, isUserMessage: true);
+      final ElaraResponse userMessage =
+          ElaraResponse(message: messageText, isUserMessage: true);
 
       // Add the user's message to state
       state = state
@@ -129,7 +129,7 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
 
       if (result is Success) {
         // Remove the AI pending response placeholder
-        var newMessages = List<TalkFreelyResponse>.from(state.messageResponse)
+        var newMessages = List<ElaraResponse>.from(state.messageResponse)
           ..removeLast();
         // Add the actual AI response to the messages
         newMessages.add(result.resultData!);

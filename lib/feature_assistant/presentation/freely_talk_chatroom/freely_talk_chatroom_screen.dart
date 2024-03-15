@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:elarise/feature_assistant/domain/entities/talk_freely_response.dart';
+import 'package:elarise/feature_assistant/domain/entities/elara_response.dart';
 import 'package:elarise/feature_assistant/presentation/freely_talk_chatroom/freely_talk_chat_state_notifier.dart';
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
@@ -100,7 +100,7 @@ class _FreelyTalkChatroomScreenState
       );
     }
 
-    Widget buildMessages(TalkFreelyResponse message) {
+    Widget buildMessages(ElaraResponse message) {
       final userState = ref.watch(freelyTalkChatStateNotifierProvider);
       final fullName = userState.userPreferences?.name ?? "User";
       final userName = fullName.split(" ")[0];

@@ -1,4 +1,4 @@
-import 'package:elarise/feature_assistant/domain/entities/talk_freely_response.dart';
+import 'package:elarise/feature_assistant/domain/entities/elara_response.dart';
 
 import '../../../core/domain/entities/user_preferences.dart';
 
@@ -9,7 +9,7 @@ class FreelyTalkChatState {
   final bool isTyping;
   final bool isResponding;
 
-  final List<TalkFreelyResponse> messageResponse;
+  final List<ElaraResponse> messageResponse;
   final UserPreferences? userPreferences;
 
   FreelyTalkChatState({
@@ -24,7 +24,7 @@ class FreelyTalkChatState {
 
   FreelyTalkChatState copyWith({
     bool? isLoading,
-    List<TalkFreelyResponse>? messageResponse,
+    List<ElaraResponse>? messageResponse,
     UserPreferences? userPreferences,
     String? error,
     bool? isListening,
