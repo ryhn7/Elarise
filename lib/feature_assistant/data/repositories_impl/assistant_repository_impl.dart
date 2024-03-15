@@ -1,7 +1,7 @@
 import 'package:elarise/core/common/result_state.dart';
 import 'package:elarise/feature_assistant/data/remote/openai_service.dart';
 import 'package:elarise/feature_assistant/data/repositories/assistant_repository.dart';
-import 'package:elarise/feature_assistant/domain/entities/chatroom_voice_response.dart';
+import 'package:elarise/feature_assistant/domain/entities/chatroom_response.dart';
 import 'package:elarise/feature_assistant/domain/entities/get_all_talk_freely_response.dart';
 import 'package:elarise/feature_assistant/domain/entities/talk_freely_response.dart';
 
@@ -22,7 +22,7 @@ class AssistantRepositoryImpl implements AssistantRepository {
         _openAIService = openAIService;
 
   @override
-  Future<ResultState<ChatRoomVoiceResponse>> createFreelyTalkRoom() async {
+  Future<ResultState<ChatRoomResponse>> createFreelyTalkRoom() async {
     try {
       final userPreferences = await _userDatastoreRepository.getUser();
       final token = userPreferences.token ?? '';
@@ -63,8 +63,7 @@ class AssistantRepositoryImpl implements AssistantRepository {
   }
 
   @override
-  Future<ResultState<List<TalkFreelyChatRoom>>>
-      getAllFreelyTalkRooms() async {
+  Future<ResultState<List<TalkFreelyChatRoom>>> getAllFreelyTalkRooms() async {
     try {
       final userPreferences = await _userDatastoreRepository.getUser();
       final token = userPreferences.token ?? '';

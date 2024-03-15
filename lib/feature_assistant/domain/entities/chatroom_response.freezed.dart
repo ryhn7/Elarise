@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'chatroom_voice_response.dart';
+part of 'chatroom_response.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,13 +14,12 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-ChatRoomVoiceResponse _$ChatRoomVoiceResponseFromJson(
-    Map<String, dynamic> json) {
-  return _ChatRoomVoiceResponse.fromJson(json);
+ChatRoomResponse _$ChatRoomResponseFromJson(Map<String, dynamic> json) {
+  return _ChatRoomResponse.fromJson(json);
 }
 
 /// @nodoc
-mixin _$ChatRoomVoiceResponse {
+mixin _$ChatRoomResponse {
   String get chatRoomId => throw _privateConstructorUsedError;
   String get chatRoomName => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
@@ -28,25 +27,24 @@ mixin _$ChatRoomVoiceResponse {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ChatRoomVoiceResponseCopyWith<ChatRoomVoiceResponse> get copyWith =>
+  $ChatRoomResponseCopyWith<ChatRoomResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ChatRoomVoiceResponseCopyWith<$Res> {
-  factory $ChatRoomVoiceResponseCopyWith(ChatRoomVoiceResponse value,
-          $Res Function(ChatRoomVoiceResponse) then) =
-      _$ChatRoomVoiceResponseCopyWithImpl<$Res, ChatRoomVoiceResponse>;
+abstract class $ChatRoomResponseCopyWith<$Res> {
+  factory $ChatRoomResponseCopyWith(
+          ChatRoomResponse value, $Res Function(ChatRoomResponse) then) =
+      _$ChatRoomResponseCopyWithImpl<$Res, ChatRoomResponse>;
   @useResult
   $Res call(
       {String chatRoomId, String chatRoomName, String type, String message});
 }
 
 /// @nodoc
-class _$ChatRoomVoiceResponseCopyWithImpl<$Res,
-        $Val extends ChatRoomVoiceResponse>
-    implements $ChatRoomVoiceResponseCopyWith<$Res> {
-  _$ChatRoomVoiceResponseCopyWithImpl(this._value, this._then);
+class _$ChatRoomResponseCopyWithImpl<$Res, $Val extends ChatRoomResponse>
+    implements $ChatRoomResponseCopyWith<$Res> {
+  _$ChatRoomResponseCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -83,12 +81,11 @@ class _$ChatRoomVoiceResponseCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$ChatRoomVoiceResponseImplCopyWith<$Res>
-    implements $ChatRoomVoiceResponseCopyWith<$Res> {
-  factory _$$ChatRoomVoiceResponseImplCopyWith(
-          _$ChatRoomVoiceResponseImpl value,
-          $Res Function(_$ChatRoomVoiceResponseImpl) then) =
-      __$$ChatRoomVoiceResponseImplCopyWithImpl<$Res>;
+abstract class _$$ChatRoomResponseImplCopyWith<$Res>
+    implements $ChatRoomResponseCopyWith<$Res> {
+  factory _$$ChatRoomResponseImplCopyWith(_$ChatRoomResponseImpl value,
+          $Res Function(_$ChatRoomResponseImpl) then) =
+      __$$ChatRoomResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -96,12 +93,11 @@ abstract class _$$ChatRoomVoiceResponseImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$ChatRoomVoiceResponseImplCopyWithImpl<$Res>
-    extends _$ChatRoomVoiceResponseCopyWithImpl<$Res,
-        _$ChatRoomVoiceResponseImpl>
-    implements _$$ChatRoomVoiceResponseImplCopyWith<$Res> {
-  __$$ChatRoomVoiceResponseImplCopyWithImpl(_$ChatRoomVoiceResponseImpl _value,
-      $Res Function(_$ChatRoomVoiceResponseImpl) _then)
+class __$$ChatRoomResponseImplCopyWithImpl<$Res>
+    extends _$ChatRoomResponseCopyWithImpl<$Res, _$ChatRoomResponseImpl>
+    implements _$$ChatRoomResponseImplCopyWith<$Res> {
+  __$$ChatRoomResponseImplCopyWithImpl(_$ChatRoomResponseImpl _value,
+      $Res Function(_$ChatRoomResponseImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -112,7 +108,7 @@ class __$$ChatRoomVoiceResponseImplCopyWithImpl<$Res>
     Object? type = null,
     Object? message = null,
   }) {
-    return _then(_$ChatRoomVoiceResponseImpl(
+    return _then(_$ChatRoomResponseImpl(
       chatRoomId: null == chatRoomId
           ? _value.chatRoomId
           : chatRoomId // ignore: cast_nullable_to_non_nullable
@@ -135,15 +131,15 @@ class __$$ChatRoomVoiceResponseImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ChatRoomVoiceResponseImpl implements _ChatRoomVoiceResponse {
-  const _$ChatRoomVoiceResponseImpl(
+class _$ChatRoomResponseImpl implements _ChatRoomResponse {
+  const _$ChatRoomResponseImpl(
       {required this.chatRoomId,
       required this.chatRoomName,
       required this.type,
       required this.message});
 
-  factory _$ChatRoomVoiceResponseImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ChatRoomVoiceResponseImplFromJson(json);
+  factory _$ChatRoomResponseImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ChatRoomResponseImplFromJson(json);
 
   @override
   final String chatRoomId;
@@ -156,14 +152,14 @@ class _$ChatRoomVoiceResponseImpl implements _ChatRoomVoiceResponse {
 
   @override
   String toString() {
-    return 'ChatRoomVoiceResponse(chatRoomId: $chatRoomId, chatRoomName: $chatRoomName, type: $type, message: $message)';
+    return 'ChatRoomResponse(chatRoomId: $chatRoomId, chatRoomName: $chatRoomName, type: $type, message: $message)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ChatRoomVoiceResponseImpl &&
+            other is _$ChatRoomResponseImpl &&
             (identical(other.chatRoomId, chatRoomId) ||
                 other.chatRoomId == chatRoomId) &&
             (identical(other.chatRoomName, chatRoomName) ||
@@ -180,27 +176,27 @@ class _$ChatRoomVoiceResponseImpl implements _ChatRoomVoiceResponse {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ChatRoomVoiceResponseImplCopyWith<_$ChatRoomVoiceResponseImpl>
-      get copyWith => __$$ChatRoomVoiceResponseImplCopyWithImpl<
-          _$ChatRoomVoiceResponseImpl>(this, _$identity);
+  _$$ChatRoomResponseImplCopyWith<_$ChatRoomResponseImpl> get copyWith =>
+      __$$ChatRoomResponseImplCopyWithImpl<_$ChatRoomResponseImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ChatRoomVoiceResponseImplToJson(
+    return _$$ChatRoomResponseImplToJson(
       this,
     );
   }
 }
 
-abstract class _ChatRoomVoiceResponse implements ChatRoomVoiceResponse {
-  const factory _ChatRoomVoiceResponse(
+abstract class _ChatRoomResponse implements ChatRoomResponse {
+  const factory _ChatRoomResponse(
       {required final String chatRoomId,
       required final String chatRoomName,
       required final String type,
-      required final String message}) = _$ChatRoomVoiceResponseImpl;
+      required final String message}) = _$ChatRoomResponseImpl;
 
-  factory _ChatRoomVoiceResponse.fromJson(Map<String, dynamic> json) =
-      _$ChatRoomVoiceResponseImpl.fromJson;
+  factory _ChatRoomResponse.fromJson(Map<String, dynamic> json) =
+      _$ChatRoomResponseImpl.fromJson;
 
   @override
   String get chatRoomId;
@@ -212,6 +208,6 @@ abstract class _ChatRoomVoiceResponse implements ChatRoomVoiceResponse {
   String get message;
   @override
   @JsonKey(ignore: true)
-  _$$ChatRoomVoiceResponseImplCopyWith<_$ChatRoomVoiceResponseImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  _$$ChatRoomResponseImplCopyWith<_$ChatRoomResponseImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

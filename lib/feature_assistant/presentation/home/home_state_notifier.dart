@@ -43,7 +43,7 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
         state = state.copyWith(
           isLoading: false,
           isCreatingRoom: false,
-          chatRoomVoiceResponse: result.resultData,
+          chatRoomResponse: result.resultData,
         );
         // log("ChatRoom created successfully: ${result.resultData}");
         ref.read(routerProvider).goNamed(
@@ -55,7 +55,7 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
           isLoading: false,
           isCreatingRoom: false,
           error: result.errorMessage ?? 'An error occurred',
-          chatRoomVoiceResponse: null,
+          chatRoomResponse: null,
         );
       }
     } catch (e) {
@@ -63,7 +63,7 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
           isLoading: false,
           isCreatingRoom: false,
           error: e.toString(),
-          chatRoomVoiceResponse: null);
+          chatRoomResponse: null);
     }
   }
 

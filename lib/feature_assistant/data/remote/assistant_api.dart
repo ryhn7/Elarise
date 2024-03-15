@@ -1,5 +1,5 @@
 import 'package:elarise/core/data/remote/api_config.dart';
-import 'package:elarise/feature_assistant/domain/entities/chatroom_voice_response.dart';
+import 'package:elarise/feature_assistant/domain/entities/chatroom_response.dart';
 import 'package:elarise/feature_assistant/domain/entities/get_all_talk_freely_response.dart';
 import 'package:elarise/feature_assistant/domain/entities/talk_freely_response.dart';
 
@@ -8,17 +8,17 @@ class AssistantApi {
 
   AssistantApi({required this.apiConfig});
 
-  Future<ChatRoomVoiceResponse> createFreelyTalkRoom() async {
+  Future<ChatRoomResponse> createFreelyTalkRoom() async {
     try {
       var headers = {
         'Content-Type': 'application/json',
       };
 
-      final response = await apiConfig.postApiService<ChatRoomVoiceResponse>(
+      final response = await apiConfig.postApiService<ChatRoomResponse>(
           'chatroom-voice',
           headers: headers,
           body: {},
-          decoder: (json) => ChatRoomVoiceResponse.fromJson(json));
+          decoder: (json) => ChatRoomResponse.fromJson(json));
 
       return response;
     } catch (e) {
