@@ -36,9 +36,9 @@ class SignUpScreen extends ConsumerWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset("assets/images/dummy_logo_header.png",
+          Image.asset("assets/images/elarise_logo.png",
               width: 64, height: 64),
-          const SizedBox(height: 8),
+          const SizedBox(height: 24),
           Text(
             "Create your account",
             style: getGrotesqueSemiBoldStyle40(color: neutralFour),
@@ -107,7 +107,7 @@ class SignUpScreen extends ConsumerWidget {
           child: Column(
             children: [
               buildHeader(),
-              const SizedBox(height: 12),
+              const SizedBox(height: 40),
               ElariseAuthTextfield(
                   labelText: 'Name', controller: nameController),
               const SizedBox(height: 24),
@@ -116,12 +116,12 @@ class SignUpScreen extends ConsumerWidget {
                 controller: emailController,
                 isEmail: true,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
               ElariseAuthTextfield(
                   labelText: 'Password',
                   controller: passwordController,
                   obsecureText: true),
-              const SizedBox(height: 24),
+              const SizedBox(height: 48),
               ElariseAuthButton(
                 labelText: signUpState.isLoading ? "." : "Sign Up",
                 onPressed: () {
@@ -134,9 +134,9 @@ class SignUpScreen extends ConsumerWidget {
                 },
                 isLoading: signUpState.isLoading,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
               buildDividerSignUpAlternate(),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
               const GoogleAuthButton(labelText: "Continue with Google")
             ],
           ),

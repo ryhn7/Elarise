@@ -33,9 +33,8 @@ class LoginScreen extends ConsumerWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset("assets/images/dummy_logo_header.png",
-              width: 64, height: 64),
-          const SizedBox(height: 8),
+          Image.asset("assets/images/elarise_logo.png", width: 64, height: 64),
+          const SizedBox(height: 24),
           Text(
             "Login to your account",
             style: getGrotesqueSemiBoldStyle40(color: neutralFour),
@@ -120,19 +119,20 @@ class LoginScreen extends ConsumerWidget {
           child: Column(
             children: [
               buildHeader(),
-              const SizedBox(height: 12),
+              const SizedBox(height: 40),
               ElariseAuthTextfield(
                 labelText: 'Email',
                 controller: emailController,
                 isEmail: true,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
               ElariseAuthTextfield(
                   labelText: 'Password',
                   controller: passwordController,
                   obsecureText: true),
               const SizedBox(height: 16),
               buildForgotPasswordButton(),
+              const SizedBox(height: 24),
               ElariseAuthButton(
                 labelText: loginState.isLoading ? "" : "Login",
                 onPressed: () {
@@ -144,9 +144,9 @@ class LoginScreen extends ConsumerWidget {
                 },
                 isLoading: loginState.isLoading,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
               buildDividerLoginAlternate(),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
               const GoogleAuthButton(labelText: "Continue with Google")
             ],
           ),
