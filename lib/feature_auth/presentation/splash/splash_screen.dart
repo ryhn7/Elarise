@@ -54,15 +54,47 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     return Scaffold(
       body: Container(
-          decoration: BoxDecoration(
-            color: primary,
-          ),
-          child: Center(
-            child: Text(
-              'Elarise',
-              style: getGrotesqueSemiBoldStyle72(color: neutralFour),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/background_splash.png'),
+              fit: BoxFit.cover,
             ),
-          )),
+          ),
+          child: Stack(children: [
+            Align(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize:
+                    MainAxisSize.min, // Adjusted to min to wrap content
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/elarise_logo.png',
+                    width: 186,
+                    height: 186,
+                  ),
+                  const SizedBox(
+                    height: 64,
+                  ),
+                  Text(
+                    'Elarise',
+                    style: getGrotesqueSemiBoldStyle72(color: neutralFour),
+                  ),
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 106.0),
+                child: Text(
+                  'Shine Brightly in Your Speech \nLike The Stars',
+                  style: getSansFranciscoMedium20(color: silverFoil),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
+          ])),
     );
   }
 }

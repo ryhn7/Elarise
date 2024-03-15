@@ -80,6 +80,12 @@ TextStyle getSansFranciscoMedium18(
       FonttWeightManager.fontWeightMedium, color);
 }
 
+TextStyle getSansFranciscoMedium20(
+    {double fontSize = FontSize.s20, required Color color}) {
+  return _getTextStyle(fontSize, FontSansFrancisco.fontFamily,
+      FonttWeightManager.fontWeightMedium, color);
+}
+
 TextStyle getSansFranciscoSemiBold20(
     {double fontSize = FontSize.s20, required Color color}) {
   return _getTextStyle(fontSize, FontSansFrancisco.fontFamily,
