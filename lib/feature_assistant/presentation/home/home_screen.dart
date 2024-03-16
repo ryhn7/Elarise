@@ -15,6 +15,7 @@ import '../../../core/domain/entities/user_preferences.dart';
 import '../../../feature_account_setting/presentation/account_setting/manage_account/account_state_notifier.dart';
 import '../../domain/entities/get_all_talk_freely_response.dart';
 import '../freely_talk_chatroom/widget/chatroom_loading_screen.dart';
+import 'widget/feature_card.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -62,120 +63,66 @@ class HomeScreen extends ConsumerWidget {
         children: [
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    Text("Hello, $userName",
-                        style: getGrotesqueSemiBoldStyle24(color: neutralFour)),
-                    const SizedBox(
-                      height: 4.0,
+                    GestureDetector(
+                      onTap: () {
+                        ref.read(routerProvider).goNamed('setting');
+                      },
+                      child: CachedNetworkImage(
+                        imageUrl: photoUrl,
+                        imageBuilder: (context, imageProvider) => Container(
+                          width: 55,
+                          height: 55,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover),
+                          ),
+                        ),
+                        placeholder: (context, url) => Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            width: 55,
+                            height: 55,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey[300],
+                            ),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                      ),
                     ),
-                    Text(
-                      "Let's see what can i do for you",
-                      style: getSansFranciscoRegular14(color: neutralThree),
-                    )
+                    const SizedBox(
+                      width: 14.0,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Hello,",
+                            style: getSansFranciscoMedium24(color: silverFoil)),
+                        SizedBox(
+                          width: 200,
+                          child: Text(userName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: getGrotesqueSemiBoldStyle24(
+                                  color: neutralFour)),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-                GestureDetector(
-                  onTap: () {
-                    ref.read(routerProvider).goNamed('setting');
-                  },
-                  child: CachedNetworkImage(
-                    imageUrl: photoUrl,
-                    imageBuilder: (context, imageProvider) => Container(
-                      width: 55,
-                      height: 55,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            image: imageProvider, fit: BoxFit.cover),
-                      ),
-                    ),
-                    placeholder: (context, url) => Shimmer.fromColors(
-                      baseColor: Colors.grey[300]!,
-                      highlightColor: Colors.grey[100]!,
-                      child: Container(
-                        width: 55,
-                        height: 55,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey[300],
-                        ),
-                      ),
-                    ),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
-                  ),
-                )
+                Image.asset("assets/images/elarise_logo.png",
+                    width: 55, height: 55),
               ]),
           const SizedBox(
             height: 24.0,
-          ),
-          Text(
-            "Start a new chat with",
-            style: getGrotesqueSemiBoldStyle40(color: neutralFour),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ShaderMask(
-                shaderCallback: (Rect bounds) {
-                  return const LinearGradient(
-                    colors: <Color>[
-                      Color(0xFFffcf00), // primary color
-                      Color(0xFFE8A089), // tumbleweed color
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ).createShader(bounds);
-                },
-                blendMode: BlendMode
-                    .srcIn, // This blend mode applies the gradient only to the text
-                child: Text(
-                  "Elara AI",
-                  style: getGrotesqueSemiBoldStyle40(
-                      color: Colors.white), // Temporarily set to white
-                ),
-              ),
-              SizedBox(
-                width: 156,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () {
-                      ref
-                          .read(homeStateNotifierProvider.notifier)
-                          .createFreelyTalkRoom();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: primary,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(36),
-                          bottomLeft: Radius.circular(36),
-                          topRight: Radius.circular(36),
-                          bottomRight: Radius.circular(8),
-                        ))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Icon(
-                          Icons.add,
-                          size: 24,
-                          color: neutralFour,
-                        ),
-                        Text(
-                          "New Topic",
-                          style: getSansFranciscoBold16(color: neutralFour),
-                        ),
-                      ],
-                    )),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 32.0,
           ),
           Row(
             children: [
@@ -185,6 +132,106 @@ class HomeScreen extends ConsumerWidget {
                   height: 1,
                   thickness: 1,
                 ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 24.0,
+          ),
+          Text(
+            "Let's See What Can I Do For You?",
+            style: getGrotesqueSemiBoldStyle40(color: neutralFour),
+          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     ShaderMask(
+          //       shaderCallback: (Rect bounds) {
+          //         return const LinearGradient(
+          //           colors: <Color>[
+          //             Color(0xFFffcf00), // primary color
+          //             Color(0xFFE8A089), // tumbleweed color
+          //           ],
+          //           begin: Alignment.topCenter,
+          //           end: Alignment.bottomCenter,
+          //         ).createShader(bounds);
+          //       },
+          //       blendMode: BlendMode
+          //           .srcIn, // This blend mode applies the gradient only to the text
+          //       child: Text(
+          //         "Elara AI",
+          //         style: getGrotesqueSemiBoldStyle40(
+          //             color: Colors.white), // Temporarily set to white
+          //       ),
+          //     ),
+          //     SizedBox(
+          //       width: 156,
+          //       height: 50,
+          //       child: ElevatedButton(
+          //           onPressed: () {
+          //             ref
+          //                 .read(homeStateNotifierProvider.notifier)
+          //                 .createGrammarTalkRoom();
+          //           },
+          //           style: ElevatedButton.styleFrom(
+          //               backgroundColor: primary,
+          //               shape: const RoundedRectangleBorder(
+          //                   borderRadius: BorderRadius.only(
+          //                 topLeft: Radius.circular(36),
+          //                 bottomLeft: Radius.circular(36),
+          //                 topRight: Radius.circular(36),
+          //                 bottomRight: Radius.circular(8),
+          //               ))),
+          //           child: Row(
+          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //             children: [
+          //               Icon(
+          //                 Icons.add,
+          //                 size: 24,
+          //                 color: neutralFour,
+          //               ),
+          //               Text(
+          //                 "New Topic",
+          //                 style: getSansFranciscoBold16(color: neutralFour),
+          //               ),
+          //             ],
+          //           )),
+          //     ),
+          //   ],
+          // ),
+          const SizedBox(
+            height: 16.0,
+          ),
+          Row(
+            children: [
+              FeatureCard(
+                title: 'Talk Freely with Elara',
+                description: 'Friendly talk companion',
+                action: 'Just Speak',
+                image: 'assets/images/sunny_img.png',
+                color: ufoGreen,
+                fontColor: Colors.white,
+                onTap: () {
+                  ref
+                      .read(homeStateNotifierProvider.notifier)
+                      .createFreelyTalkRoom();
+                },
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+              FeatureCard(
+                title: 'Elara Grammar Guru',
+                description: 'Improve as you interact',
+                action: 'Grammarize Me',
+                image: 'assets/images/wind_img.png',
+                color: thistle,
+                fontColor: Colors.black,
+                onTap: () {
+                  ref
+                      .read(homeStateNotifierProvider.notifier)
+                      .createGrammarTalkRoom();
+                },
               ),
             ],
           ),
