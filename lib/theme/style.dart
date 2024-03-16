@@ -98,6 +98,18 @@ TextStyle getSansFranciscoBold20(
       FonttWeightManager.fontWeightBold, color);
 }
 
+TextStyle getSansFranciscoExtraBold20(
+    {double fontSize = FontSize.s20, required Color color}) {
+  return _getTextStyle(fontSize, FontSansFrancisco.fontFamily,
+      FonttWeightManager.fontWeightExtraBold, color);
+}
+
+TextStyle getSansFranciscoMedium24(
+    {double fontSize = FontSize.s24, required Color color}) {
+  return _getTextStyle(fontSize, FontSansFrancisco.fontFamily,
+      FonttWeightManager.fontWeightMedium, color);
+}
+
 TextStyle getSansFranciscoSemiBold24(
     {double fontSize = FontSize.s24, required Color color}) {
   return _getTextStyle(fontSize, FontSansFrancisco.fontFamily,
@@ -109,4 +121,3 @@ TextStyle getSansFranciscoBold24(
   return _getTextStyle(fontSize, FontSansFrancisco.fontFamily,
       FonttWeightManager.fontWeightBold, color);
 }
-

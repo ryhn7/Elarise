@@ -15,3 +15,5 @@ Color darkSilver = const Color(0xFF776F69);
 Color tan = const Color(0xFFe4ded9);
 Color tumbleweed = const Color(0xFFE8A089);
 Color silverFoil = const Color(0xFFAFAFAF);
+const Color ufoGreen = Color(0xFF3fcb80);
+const Color thistle = Color(0xFFefb4d4);
