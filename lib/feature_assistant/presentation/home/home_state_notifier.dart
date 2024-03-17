@@ -67,6 +67,42 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
     }
   }
 
+  Future<void> createGrammarTalkRoom() async {
+    try {
+      state = state.copyWith(isLoading: true, isCreatingRoom: true);
+
+      final useCase = ref.read(useCaseAssistantProvider);
+
+      var result = await useCase.createGrammarTalkRoom();
+
+      if (result is Success) {
+        state = state.copyWith(
+          isLoading: false,
+          isCreatingRoom: false,
+          chatRoomResponse: result.resultData,
+        );
+        // log("ChatRoom created successfully: ${result.resultData}");
+        ref.read(routerProvider).goNamed(
+              'grammar-talk',
+              extra: result.resultData?.chatRoomId,
+            );
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          isCreatingRoom: false,
+          error: result.errorMessage ?? 'An error occurred',
+          chatRoomResponse: null,
+        );
+      }
+    } catch (e) {
+      state = state.copyWith(
+          isLoading: false,
+          isCreatingRoom: false,
+          error: e.toString(),
+          chatRoomResponse: null);
+    }
+  }
+
   Future<void> getAllFreelyTalkRooms() async {
     try {
       state = state.copyWith(isLoading: true, isChatRoomLoading: true);
