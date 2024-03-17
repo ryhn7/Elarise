@@ -17,3 +17,4 @@ Color tumbleweed = const Color(0xFFE8A089);
 Color silverFoil = const Color(0xFFAFAFAF);
 const Color ufoGreen = Color(0xFF3fcb80);
 const Color thistle = Color(0xFFefb4d4);
+const Color earieBlack = Color(0xFF1E1E1E);

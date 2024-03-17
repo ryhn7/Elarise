@@ -8,7 +8,6 @@ import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/domain/entities/user_preferences.dart';
@@ -17,11 +16,19 @@ import '../../domain/entities/get_all_talk_freely_response.dart';
 import '../freely_talk_chatroom/widget/chatroom_loading_screen.dart';
 import 'widget/feature_card.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  List<String> dropdownItems = ['Talking', 'Grammar'];
+  String dropdownValue = 'Talking';
+
+  @override
+  Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(homeStateNotifierProvider.notifier).refreshUserPreferences();
     });
@@ -122,7 +129,7 @@ class HomeScreen extends ConsumerWidget {
                     width: 55, height: 55),
               ]),
           const SizedBox(
-            height: 24.0,
+            height: 12.0,
           ),
           Row(
             children: [
@@ -136,69 +143,12 @@ class HomeScreen extends ConsumerWidget {
             ],
           ),
           const SizedBox(
-            height: 24.0,
+            height: 16.0,
           ),
           Text(
-            "Let's See What Can I Do For You?",
-            style: getGrotesqueSemiBoldStyle40(color: neutralFour),
+            "Let's make every word count together",
+            style: getSansFranciscoSemiBold32(color: neutralFour),
           ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     ShaderMask(
-          //       shaderCallback: (Rect bounds) {
-          //         return const LinearGradient(
-          //           colors: <Color>[
-          //             Color(0xFFffcf00), // primary color
-          //             Color(0xFFE8A089), // tumbleweed color
-          //           ],
-          //           begin: Alignment.topCenter,
-          //           end: Alignment.bottomCenter,
-          //         ).createShader(bounds);
-          //       },
-          //       blendMode: BlendMode
-          //           .srcIn, // This blend mode applies the gradient only to the text
-          //       child: Text(
-          //         "Elara AI",
-          //         style: getGrotesqueSemiBoldStyle40(
-          //             color: Colors.white), // Temporarily set to white
-          //       ),
-          //     ),
-          //     SizedBox(
-          //       width: 156,
-          //       height: 50,
-          //       child: ElevatedButton(
-          //           onPressed: () {
-          //             ref
-          //                 .read(homeStateNotifierProvider.notifier)
-          //                 .createGrammarTalkRoom();
-          //           },
-          //           style: ElevatedButton.styleFrom(
-          //               backgroundColor: primary,
-          //               shape: const RoundedRectangleBorder(
-          //                   borderRadius: BorderRadius.only(
-          //                 topLeft: Radius.circular(36),
-          //                 bottomLeft: Radius.circular(36),
-          //                 topRight: Radius.circular(36),
-          //                 bottomRight: Radius.circular(8),
-          //               ))),
-          //           child: Row(
-          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //             children: [
-          //               Icon(
-          //                 Icons.add,
-          //                 size: 24,
-          //                 color: neutralFour,
-          //               ),
-          //               Text(
-          //                 "New Topic",
-          //                 style: getSansFranciscoBold16(color: neutralFour),
-          //               ),
-          //             ],
-          //           )),
-          //     ),
-          //   ],
-          // ),
           const SizedBox(
             height: 16.0,
           ),
@@ -250,13 +200,63 @@ class HomeScreen extends ConsumerWidget {
       );
     }
 
-    Widget buildChatRoomLoadingCard(int index) {
-      return ChatRoomLoadingCard(
-        index: index,
+    Widget buildChatRoomLoadingCard() {
+      return const ChatRoomLoadingCard();
+    }
+
+    Widget headerHistory() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(
+            height: 12.0,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("History",
+                  style: getSansFranciscoSemiBold24(color: neutralFour)),
+              Container(
+                width: 120,
+                height: 36,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+                decoration: BoxDecoration(
+                  color: neutralOneAlt,
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(color: neutralFour, width: 1),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: dropdownValue,
+                    icon: Icon(Icons.arrow_drop_down, color: neutralFour),
+                    elevation: 16,
+                    style: getSansFranciscoMedium16(color: neutralFour),
+                    onChanged: (String? newValue) {
+                      // Update the state to the new value
+                      setState(() {
+                        dropdownValue = newValue!;
+                      });
+                    },
+                    items: dropdownItems
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ],
       );
     }
 
-    Widget history() {
+    Widget historyCard() {
       final homeState = ref.watch(homeStateNotifierProvider);
 
       // list of chatrooms
@@ -266,36 +266,18 @@ class HomeScreen extends ConsumerWidget {
       // Determine how many loading cards to show, for example, 6.
       const loadingCardCount = 6;
 
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 24.0,
-          ),
-          Text("History",
-              style: getSansFranciscoSemiBold24(color: neutralFour)),
-          const SizedBox(
-            height: 24.0,
-          ),
-          MasonryGridView.builder(
-              mainAxisSpacing: 8.0,
-              crossAxisSpacing: 8.0,
-              shrinkWrap: true, // Use this to prevent scroll within scroll
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate:
-                  const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-              ), // Use this to prevent scroll within scroll
-              itemCount: isLoading ? loadingCardCount : chatRooms.length,
-              itemBuilder: (context, index) {
-                if (isLoading) {
-                  return buildChatRoomLoadingCard(index);
-                } else {
-                  final chatRoom = chatRooms[index];
-                  return buildChatRoomCard(chatRoom, index);
-                }
-              })
-        ],
+      return SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            if (isLoading) {
+              return buildChatRoomLoadingCard();
+            } else {
+              final chatRoom = chatRooms[index];
+              return buildChatRoomCard(chatRoom, index);
+            }
+          },
+          childCount: isLoading ? loadingCardCount : chatRooms.length,
+        ),
       );
     }
 
@@ -306,14 +288,42 @@ class HomeScreen extends ConsumerWidget {
           onRefresh: () async => ref
               .read(homeStateNotifierProvider.notifier)
               .getAllFreelyTalkRooms(),
-          child: SingleChildScrollView(
+          child: CustomScrollView(
             physics:
                 const AlwaysScrollableScrollPhysics(), // Ensure scrollability
-            padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 24.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [header(), history()],
-            ),
+            slivers: [
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 0.0),
+                sliver: SliverToBoxAdapter(
+                  child: header(),
+                ),
+              ),
+              SliverAppBar(
+                backgroundColor: neutralOneAlt,
+                surfaceTintColor: neutralOneAlt,
+                expandedHeight: 72,
+                collapsedHeight: 72,
+                floating: false,
+                pinned: true,
+                flexibleSpace: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    var top = constraints.biggest.height;
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        top: top == 72 ? 0 : 24, // adjust the value accordingly
+                        left: 16,
+                        right: 16,
+                      ),
+                      child: headerHistory(),
+                    );
+                  },
+                ),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                sliver: historyCard(),
+              ),
+            ],
           ),
         )));
   }

@@ -19,6 +19,12 @@ TextStyle getGrotesqueSemiBoldStyle24(
       FonttWeightManager.fontWeightBold, color);
 }
 
+TextStyle getGrotesqueSemiBoldStyle32(
+    {double fontSize = FontSize.s32, required Color color}) {
+  return _getTextStyle(fontSize, FontBricolageGrotesque.fontFamily,
+      FonttWeightManager.fontWeightBold, color);
+}
+
 TextStyle getGrotesqueSemiBoldStyle40(
     {double fontSize = FontSize.s40, required Color color}) {
   return _getTextStyle(fontSize, FontBricolageGrotesque.fontFamily,
@@ -120,4 +126,10 @@ TextStyle getSansFranciscoBold24(
     {double fontSize = FontSize.s24, required Color color}) {
   return _getTextStyle(fontSize, FontSansFrancisco.fontFamily,
       FonttWeightManager.fontWeightBold, color);
+}
+
+TextStyle getSansFranciscoSemiBold32(
+    {double fontSize = FontSize.s32, required Color color}) {
+  return _getTextStyle(fontSize, FontSansFrancisco.fontFamily,
+      FonttWeightManager.fontWeightSemiBold, color);
 }

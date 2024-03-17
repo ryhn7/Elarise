@@ -18,56 +18,75 @@ class ChatRoomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double adjustedHeight = (index % 3 == 0) ? 266 : 286;
+    Color backgroundColor = index % 2 == 0 ? earieBlack : primary;
+    Color textColor = index % 2 == 0 ? Colors.white : earieBlack;
+    Color iconColor = index % 2 == 0 ? primary : Colors.white;
 
-    return Container(
-      width: 202,
-      height: adjustedHeight,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 24,
-        vertical: 28,
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 8,
+        bottom: 8,
       ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(36),
-        border: Border.all(
-          color: neutralThree30,
-          width: 1,
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 178,
-            child: Text(
-              chatRoomName,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: getSansFranciscoBold16(color: primary),
-            ),
+      child: Container(
+          width: 380,
+          padding: const EdgeInsets.only(
+            left: 24,
+            right: 8,
+            top: 4,
+            bottom: 16,
           ),
-          const SizedBox(height: 14),
-          Expanded(
-            child: SizedBox(
-              width: 146,
-              child: Text(
-                latestResponse,
-                maxLines: 5,
-                overflow: TextOverflow.ellipsis,
-                style: getSansFranciscoRegular16(color: neutralThree),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(36),
+            color: backgroundColor,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 264,
+                    child: Text(
+                      chatRoomName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: getSansFranciscoBold16(color: textColor),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.arrow_forward,
+                      color: iconColor,
+                      size: 24,
+                    ),
+                  )
+                ],
               ),
-            ),
-          ),
-          const SizedBox(height: 11),
-          Opacity(
-            opacity: 0.7,
-            child: Text(date,
-                style: getSansFranciscoRegular14(color: neutralThree)),
-          ),
-        ],
-      ),
+              // const SizedBox(height: 12),
+              SizedBox(
+                width: 260,
+                child: Opacity(
+                  opacity: 0.7,
+                  child: Text(
+                    latestResponse,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: getSansFranciscoRegular16(color: textColor),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              Opacity(
+                opacity: 0.7,
+                child: Text(date,
+                    style: getSansFranciscoRegular14(color: textColor)),
+              ),
+            ],
+          )),
     );
   }
 }
