@@ -9,6 +9,6 @@ class CreateGrammarTalkRoom {
       : _assistantRepository = assistantRepository;
 
   Future<ResultState<ChatRoomResponse>> call() async {
-    return await _assistantRepository.createFreelyTalkRoom();
+    return await _assistantRepository.createGrammarTalkRoom();
   }
 }

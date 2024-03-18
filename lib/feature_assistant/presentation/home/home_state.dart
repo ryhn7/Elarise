@@ -1,5 +1,5 @@
 import 'package:elarise/feature_assistant/domain/entities/chatroom_response.dart';
-import 'package:elarise/feature_assistant/domain/entities/get_all_talk_freely_response.dart';
+import 'package:elarise/feature_assistant/domain/entities/get_all_chatroom_response.dart';
 
 import '../../../core/domain/entities/user_preferences.dart';
 
@@ -11,7 +11,7 @@ class HomeState {
 
   final UserPreferences? userPreferences;
   final ChatRoomResponse? chatRoomResponse;
-  final List<TalkFreelyChatRoom>? freelyTalkRooms;
+  final List<ChatRoom>? freelyTalkRooms;
 
   HomeState(
       {this.isLoading = false,
@@ -28,7 +28,7 @@ class HomeState {
     bool? isCreatingRoom,
     UserPreferences? userPreferences,
     ChatRoomResponse? chatRoomResponse,
-    List<TalkFreelyChatRoom>? freelyTalkRooms,
+    List<ChatRoom>? freelyTalkRooms,
     String? error,
   }) {
     return HomeState(

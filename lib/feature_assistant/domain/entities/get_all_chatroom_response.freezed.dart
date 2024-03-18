@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'get_all_talk_freely_response.dart';
+part of 'get_all_chatroom_response.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,35 +14,35 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-GetAllTalkFreelyResponse _$GetAllTalkFreelyResponseFromJson(
+GetAllChatroomResponse _$GetAllChatroomResponseFromJson(
     Map<String, dynamic> json) {
-  return _GetAllTalkFreelyResponse.fromJson(json);
+  return _GetAllChatroomResponse.fromJson(json);
 }
 
 /// @nodoc
-mixin _$GetAllTalkFreelyResponse {
-  List<TalkFreelyChatRoom> get data => throw _privateConstructorUsedError;
+mixin _$GetAllChatroomResponse {
+  List<ChatRoom> get data => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $GetAllTalkFreelyResponseCopyWith<GetAllTalkFreelyResponse> get copyWith =>
+  $GetAllChatroomResponseCopyWith<GetAllChatroomResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $GetAllTalkFreelyResponseCopyWith<$Res> {
-  factory $GetAllTalkFreelyResponseCopyWith(GetAllTalkFreelyResponse value,
-          $Res Function(GetAllTalkFreelyResponse) then) =
-      _$GetAllTalkFreelyResponseCopyWithImpl<$Res, GetAllTalkFreelyResponse>;
+abstract class $GetAllChatroomResponseCopyWith<$Res> {
+  factory $GetAllChatroomResponseCopyWith(GetAllChatroomResponse value,
+          $Res Function(GetAllChatroomResponse) then) =
+      _$GetAllChatroomResponseCopyWithImpl<$Res, GetAllChatroomResponse>;
   @useResult
-  $Res call({List<TalkFreelyChatRoom> data});
+  $Res call({List<ChatRoom> data});
 }
 
 /// @nodoc
-class _$GetAllTalkFreelyResponseCopyWithImpl<$Res,
-        $Val extends GetAllTalkFreelyResponse>
-    implements $GetAllTalkFreelyResponseCopyWith<$Res> {
-  _$GetAllTalkFreelyResponseCopyWithImpl(this._value, this._then);
+class _$GetAllChatroomResponseCopyWithImpl<$Res,
+        $Val extends GetAllChatroomResponse>
+    implements $GetAllChatroomResponseCopyWith<$Res> {
+  _$GetAllChatroomResponseCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -58,31 +58,31 @@ class _$GetAllTalkFreelyResponseCopyWithImpl<$Res,
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as List<TalkFreelyChatRoom>,
+              as List<ChatRoom>,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$GetAllTalkFreelyResponseImplCopyWith<$Res>
-    implements $GetAllTalkFreelyResponseCopyWith<$Res> {
-  factory _$$GetAllTalkFreelyResponseImplCopyWith(
-          _$GetAllTalkFreelyResponseImpl value,
-          $Res Function(_$GetAllTalkFreelyResponseImpl) then) =
-      __$$GetAllTalkFreelyResponseImplCopyWithImpl<$Res>;
+abstract class _$$GetAllChatroomResponseImplCopyWith<$Res>
+    implements $GetAllChatroomResponseCopyWith<$Res> {
+  factory _$$GetAllChatroomResponseImplCopyWith(
+          _$GetAllChatroomResponseImpl value,
+          $Res Function(_$GetAllChatroomResponseImpl) then) =
+      __$$GetAllChatroomResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<TalkFreelyChatRoom> data});
+  $Res call({List<ChatRoom> data});
 }
 
 /// @nodoc
-class __$$GetAllTalkFreelyResponseImplCopyWithImpl<$Res>
-    extends _$GetAllTalkFreelyResponseCopyWithImpl<$Res,
-        _$GetAllTalkFreelyResponseImpl>
-    implements _$$GetAllTalkFreelyResponseImplCopyWith<$Res> {
-  __$$GetAllTalkFreelyResponseImplCopyWithImpl(
-      _$GetAllTalkFreelyResponseImpl _value,
-      $Res Function(_$GetAllTalkFreelyResponseImpl) _then)
+class __$$GetAllChatroomResponseImplCopyWithImpl<$Res>
+    extends _$GetAllChatroomResponseCopyWithImpl<$Res,
+        _$GetAllChatroomResponseImpl>
+    implements _$$GetAllChatroomResponseImplCopyWith<$Res> {
+  __$$GetAllChatroomResponseImplCopyWithImpl(
+      _$GetAllChatroomResponseImpl _value,
+      $Res Function(_$GetAllChatroomResponseImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -90,28 +90,27 @@ class __$$GetAllTalkFreelyResponseImplCopyWithImpl<$Res>
   $Res call({
     Object? data = null,
   }) {
-    return _then(_$GetAllTalkFreelyResponseImpl(
+    return _then(_$GetAllChatroomResponseImpl(
       data: null == data
           ? _value._data
           : data // ignore: cast_nullable_to_non_nullable
-              as List<TalkFreelyChatRoom>,
+              as List<ChatRoom>,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$GetAllTalkFreelyResponseImpl implements _GetAllTalkFreelyResponse {
-  const _$GetAllTalkFreelyResponseImpl(
-      {required final List<TalkFreelyChatRoom> data})
+class _$GetAllChatroomResponseImpl implements _GetAllChatroomResponse {
+  const _$GetAllChatroomResponseImpl({required final List<ChatRoom> data})
       : _data = data;
 
-  factory _$GetAllTalkFreelyResponseImpl.fromJson(Map<String, dynamic> json) =>
-      _$$GetAllTalkFreelyResponseImplFromJson(json);
+  factory _$GetAllChatroomResponseImpl.fromJson(Map<String, dynamic> json) =>
+      _$$GetAllChatroomResponseImplFromJson(json);
 
-  final List<TalkFreelyChatRoom> _data;
+  final List<ChatRoom> _data;
   @override
-  List<TalkFreelyChatRoom> get data {
+  List<ChatRoom> get data {
     if (_data is EqualUnmodifiableListView) return _data;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_data);
@@ -119,14 +118,14 @@ class _$GetAllTalkFreelyResponseImpl implements _GetAllTalkFreelyResponse {
 
   @override
   String toString() {
-    return 'GetAllTalkFreelyResponse(data: $data)';
+    return 'GetAllChatroomResponse(data: $data)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GetAllTalkFreelyResponseImpl &&
+            other is _$GetAllChatroomResponseImpl &&
             const DeepCollectionEquality().equals(other._data, _data));
   }
 
@@ -138,40 +137,39 @@ class _$GetAllTalkFreelyResponseImpl implements _GetAllTalkFreelyResponse {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$GetAllTalkFreelyResponseImplCopyWith<_$GetAllTalkFreelyResponseImpl>
-      get copyWith => __$$GetAllTalkFreelyResponseImplCopyWithImpl<
-          _$GetAllTalkFreelyResponseImpl>(this, _$identity);
+  _$$GetAllChatroomResponseImplCopyWith<_$GetAllChatroomResponseImpl>
+      get copyWith => __$$GetAllChatroomResponseImplCopyWithImpl<
+          _$GetAllChatroomResponseImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$GetAllTalkFreelyResponseImplToJson(
+    return _$$GetAllChatroomResponseImplToJson(
       this,
     );
   }
 }
 
-abstract class _GetAllTalkFreelyResponse implements GetAllTalkFreelyResponse {
-  const factory _GetAllTalkFreelyResponse(
-          {required final List<TalkFreelyChatRoom> data}) =
-      _$GetAllTalkFreelyResponseImpl;
+abstract class _GetAllChatroomResponse implements GetAllChatroomResponse {
+  const factory _GetAllChatroomResponse({required final List<ChatRoom> data}) =
+      _$GetAllChatroomResponseImpl;
 
-  factory _GetAllTalkFreelyResponse.fromJson(Map<String, dynamic> json) =
-      _$GetAllTalkFreelyResponseImpl.fromJson;
+  factory _GetAllChatroomResponse.fromJson(Map<String, dynamic> json) =
+      _$GetAllChatroomResponseImpl.fromJson;
 
   @override
-  List<TalkFreelyChatRoom> get data;
+  List<ChatRoom> get data;
   @override
   @JsonKey(ignore: true)
-  _$$GetAllTalkFreelyResponseImplCopyWith<_$GetAllTalkFreelyResponseImpl>
+  _$$GetAllChatroomResponseImplCopyWith<_$GetAllChatroomResponseImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
-TalkFreelyChatRoom _$TalkFreelyChatRoomFromJson(Map<String, dynamic> json) {
-  return _TalkFreelyChatRoom.fromJson(json);
+ChatRoom _$ChatRoomFromJson(Map<String, dynamic> json) {
+  return _ChatRoom.fromJson(json);
 }
 
 /// @nodoc
-mixin _$TalkFreelyChatRoom {
+mixin _$ChatRoom {
   String get id => throw _privateConstructorUsedError;
   String get idUser => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
@@ -181,15 +179,14 @@ mixin _$TalkFreelyChatRoom {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $TalkFreelyChatRoomCopyWith<TalkFreelyChatRoom> get copyWith =>
+  $ChatRoomCopyWith<ChatRoom> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $TalkFreelyChatRoomCopyWith<$Res> {
-  factory $TalkFreelyChatRoomCopyWith(
-          TalkFreelyChatRoom value, $Res Function(TalkFreelyChatRoom) then) =
-      _$TalkFreelyChatRoomCopyWithImpl<$Res, TalkFreelyChatRoom>;
+abstract class $ChatRoomCopyWith<$Res> {
+  factory $ChatRoomCopyWith(ChatRoom value, $Res Function(ChatRoom) then) =
+      _$ChatRoomCopyWithImpl<$Res, ChatRoom>;
   @useResult
   $Res call(
       {String id,
@@ -201,9 +198,9 @@ abstract class $TalkFreelyChatRoomCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$TalkFreelyChatRoomCopyWithImpl<$Res, $Val extends TalkFreelyChatRoom>
-    implements $TalkFreelyChatRoomCopyWith<$Res> {
-  _$TalkFreelyChatRoomCopyWithImpl(this._value, this._then);
+class _$ChatRoomCopyWithImpl<$Res, $Val extends ChatRoom>
+    implements $ChatRoomCopyWith<$Res> {
+  _$ChatRoomCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -250,11 +247,11 @@ class _$TalkFreelyChatRoomCopyWithImpl<$Res, $Val extends TalkFreelyChatRoom>
 }
 
 /// @nodoc
-abstract class _$$TalkFreelyChatRoomImplCopyWith<$Res>
-    implements $TalkFreelyChatRoomCopyWith<$Res> {
-  factory _$$TalkFreelyChatRoomImplCopyWith(_$TalkFreelyChatRoomImpl value,
-          $Res Function(_$TalkFreelyChatRoomImpl) then) =
-      __$$TalkFreelyChatRoomImplCopyWithImpl<$Res>;
+abstract class _$$ChatRoomImplCopyWith<$Res>
+    implements $ChatRoomCopyWith<$Res> {
+  factory _$$ChatRoomImplCopyWith(
+          _$ChatRoomImpl value, $Res Function(_$ChatRoomImpl) then) =
+      __$$ChatRoomImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -267,11 +264,11 @@ abstract class _$$TalkFreelyChatRoomImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$TalkFreelyChatRoomImplCopyWithImpl<$Res>
-    extends _$TalkFreelyChatRoomCopyWithImpl<$Res, _$TalkFreelyChatRoomImpl>
-    implements _$$TalkFreelyChatRoomImplCopyWith<$Res> {
-  __$$TalkFreelyChatRoomImplCopyWithImpl(_$TalkFreelyChatRoomImpl _value,
-      $Res Function(_$TalkFreelyChatRoomImpl) _then)
+class __$$ChatRoomImplCopyWithImpl<$Res>
+    extends _$ChatRoomCopyWithImpl<$Res, _$ChatRoomImpl>
+    implements _$$ChatRoomImplCopyWith<$Res> {
+  __$$ChatRoomImplCopyWithImpl(
+      _$ChatRoomImpl _value, $Res Function(_$ChatRoomImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -284,7 +281,7 @@ class __$$TalkFreelyChatRoomImplCopyWithImpl<$Res>
     Object? type = null,
     Object? lastAIMessageText = freezed,
   }) {
-    return _then(_$TalkFreelyChatRoomImpl(
+    return _then(_$ChatRoomImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -315,8 +312,8 @@ class __$$TalkFreelyChatRoomImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$TalkFreelyChatRoomImpl implements _TalkFreelyChatRoom {
-  const _$TalkFreelyChatRoomImpl(
+class _$ChatRoomImpl implements _ChatRoom {
+  const _$ChatRoomImpl(
       {required this.id,
       required this.idUser,
       required this.createdAt,
@@ -324,8 +321,8 @@ class _$TalkFreelyChatRoomImpl implements _TalkFreelyChatRoom {
       required this.type,
       this.lastAIMessageText});
 
-  factory _$TalkFreelyChatRoomImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TalkFreelyChatRoomImplFromJson(json);
+  factory _$ChatRoomImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ChatRoomImplFromJson(json);
 
   @override
   final String id;
@@ -342,14 +339,14 @@ class _$TalkFreelyChatRoomImpl implements _TalkFreelyChatRoom {
 
   @override
   String toString() {
-    return 'TalkFreelyChatRoom(id: $id, idUser: $idUser, createdAt: $createdAt, chatRoomName: $chatRoomName, type: $type, lastAIMessageText: $lastAIMessageText)';
+    return 'ChatRoom(id: $id, idUser: $idUser, createdAt: $createdAt, chatRoomName: $chatRoomName, type: $type, lastAIMessageText: $lastAIMessageText)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TalkFreelyChatRoomImpl &&
+            other is _$ChatRoomImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.idUser, idUser) || other.idUser == idUser) &&
             (identical(other.createdAt, createdAt) ||
@@ -369,29 +366,28 @@ class _$TalkFreelyChatRoomImpl implements _TalkFreelyChatRoom {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$TalkFreelyChatRoomImplCopyWith<_$TalkFreelyChatRoomImpl> get copyWith =>
-      __$$TalkFreelyChatRoomImplCopyWithImpl<_$TalkFreelyChatRoomImpl>(
-          this, _$identity);
+  _$$ChatRoomImplCopyWith<_$ChatRoomImpl> get copyWith =>
+      __$$ChatRoomImplCopyWithImpl<_$ChatRoomImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TalkFreelyChatRoomImplToJson(
+    return _$$ChatRoomImplToJson(
       this,
     );
   }
 }
 
-abstract class _TalkFreelyChatRoom implements TalkFreelyChatRoom {
-  const factory _TalkFreelyChatRoom(
+abstract class _ChatRoom implements ChatRoom {
+  const factory _ChatRoom(
       {required final String id,
       required final String idUser,
       required final DateTime createdAt,
       required final String chatRoomName,
       required final String type,
-      final String? lastAIMessageText}) = _$TalkFreelyChatRoomImpl;
+      final String? lastAIMessageText}) = _$ChatRoomImpl;
 
-  factory _TalkFreelyChatRoom.fromJson(Map<String, dynamic> json) =
-      _$TalkFreelyChatRoomImpl.fromJson;
+  factory _ChatRoom.fromJson(Map<String, dynamic> json) =
+      _$ChatRoomImpl.fromJson;
 
   @override
   String get id;
@@ -407,6 +403,6 @@ abstract class _TalkFreelyChatRoom implements TalkFreelyChatRoom {
   String? get lastAIMessageText;
   @override
   @JsonKey(ignore: true)
-  _$$TalkFreelyChatRoomImplCopyWith<_$TalkFreelyChatRoomImpl> get copyWith =>
+  _$$ChatRoomImplCopyWith<_$ChatRoomImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
