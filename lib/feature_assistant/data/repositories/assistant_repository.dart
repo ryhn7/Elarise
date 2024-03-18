@@ -9,6 +9,7 @@ abstract interface class AssistantRepository {
   Future<ResultState<ChatRoomResponse>> createGrammarTalkRoom();
 
   Future<ResultState<List<ChatRoom>>> getAllFreelyTalkRooms();
+  Future<ResultState<List<ChatRoom>>> getAllGrammarTalkRooms();
 
   Future<ResultState<ElaraResponse>> freelyTalkChat({
     required String chatRoomId,
