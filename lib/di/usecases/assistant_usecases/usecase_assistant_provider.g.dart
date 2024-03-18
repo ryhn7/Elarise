@@ -6,7 +6,7 @@ part of 'usecase_assistant_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$useCaseAssistantHash() => r'063ccbcc1f19e979d3ea51e9d1d0a19a50fdba29';
+String _$useCaseAssistantHash() => r'6130425fea7afee9e1951efe333b568117855bd6';
 
 /// See also [useCaseAssistant].
 @ProviderFor(useCaseAssistant)
