@@ -239,6 +239,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       setState(() {
                         dropdownValue = newValue!;
                       });
+
+                      if (newValue == 'Talking') {
+                        ref
+                            .read(homeStateNotifierProvider.notifier)
+                            .getAllFreelyTalkRooms();
+                      } else if (newValue == 'Grammar') {
+                        ref
+                            .read(homeStateNotifierProvider.notifier)
+                            .getAllGrammarTalkRooms();
+                      }
                     },
                     items: dropdownItems
                         .map<DropdownMenuItem<String>>((String value) {
@@ -260,7 +270,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       final homeState = ref.watch(homeStateNotifierProvider);
 
       // list of chatrooms
-      final chatRooms = homeState.freelyTalkRooms ?? [];
+      final chatRooms = homeState.chatRooms ?? [];
       final isLoading = homeState.isChatRoomLoading;
 
       // Determine how many loading cards to show, for example, 6.
@@ -285,9 +295,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         backgroundColor: neutralOneAlt,
         body: SafeArea(
             child: RefreshIndicator(
-          onRefresh: () async => ref
-              .read(homeStateNotifierProvider.notifier)
-              .getAllFreelyTalkRooms(),
+          onRefresh: () async {
+            if (dropdownValue == 'Talking') {
+              await ref
+                  .read(homeStateNotifierProvider.notifier)
+                  .getAllFreelyTalkRooms();
+            } else if (dropdownValue == 'Grammar') {
+              await ref
+                  .read(homeStateNotifierProvider.notifier)
+                  .getAllGrammarTalkRooms();
+            }
+          },
           child: CustomScrollView(
             physics:
                 const AlwaysScrollableScrollPhysics(), // Ensure scrollability

@@ -107,8 +107,6 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
     try {
       state = state.copyWith(isLoading: true, isChatRoomLoading: true);
 
-      // await Future.delayed(const Duration(seconds: 5));
-
       final useCase = ref.read(useCaseAssistantProvider);
 
       var result = await useCase.getAllFreelyTalkRooms();
@@ -117,21 +115,52 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
         state = state.copyWith(
           isLoading: false,
           isChatRoomLoading: false,
-          freelyTalkRooms: result.resultData,
+          chatRooms: result.resultData,
         );
       } else {
         state = state.copyWith(
           isLoading: false,
           isChatRoomLoading: false,
           error: result.errorMessage ?? 'An error occurred',
-          freelyTalkRooms: null,
+          chatRooms: null,
         );
       }
     } catch (e) {
       state = state.copyWith(
           isLoading: false,
           error: e.toString(),
-          freelyTalkRooms: null,
+          chatRooms: null,
+          isChatRoomLoading: false);
+    }
+  }
+
+  Future<void> getAllGrammarTalkRooms() async {
+    try {
+      state = state.copyWith(isLoading: true, isChatRoomLoading: true);
+
+      final useCase = ref.read(useCaseAssistantProvider);
+
+      var result = await useCase.getAllGrammarTalkRooms();
+
+      if (result is Success) {
+        state = state.copyWith(
+          isLoading: false,
+          isChatRoomLoading: false,
+          chatRooms: result.resultData,
+        );
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          isChatRoomLoading: false,
+          error: result.errorMessage ?? 'An error occurred',
+          chatRooms: null,
+        );
+      }
+    } catch (e) {
+      state = state.copyWith(
+          isLoading: false,
+          error: e.toString(),
+          chatRooms: null,
           isChatRoomLoading: false);
     }
   }
