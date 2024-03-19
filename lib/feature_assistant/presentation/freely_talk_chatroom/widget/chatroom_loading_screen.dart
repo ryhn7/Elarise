@@ -17,9 +17,9 @@ class ChatroomLoadingScreen extends StatelessWidget {
       );
     }
 
-    Widget appBar() {
+    PreferredSizeWidget appBar() {
       return AppBar(
-        backgroundColor: darkGray,
+        backgroundColor: neutralOneAlt,
         shape: Border(bottom: BorderSide(color: primary, width: 1)),
         elevation: 0,
         leading: shimmerEffect(
@@ -31,23 +31,15 @@ class ChatroomLoadingScreen extends StatelessWidget {
             ),
           ),
         ),
-        title: Row(
-          children: [
-            shimmerEffect(
-              Image.asset("assets/images/dummy_logo_header.png",
-                  width: 40, height: 40),
-            ),
-            const SizedBox(width: 16),
-            shimmerEffect(Container(
-              width: 100,
-              height: 24,
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(8),
-              ),
-            )),
-          ],
-        ),
+        centerTitle: true,
+        title: shimmerEffect(Container(
+          width: 100,
+          height: 24,
+          decoration: BoxDecoration(
+            color: Colors.grey[100],
+            borderRadius: BorderRadius.circular(8),
+          ),
+        )),
       );
     }
 
@@ -162,9 +154,9 @@ class ChatroomLoadingScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: darkGray,
+      backgroundColor: neutralOneAlt,
+      appBar: appBar(),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        appBar(),
         Expanded(
             child: SingleChildScrollView(
           child: Column(children: [
