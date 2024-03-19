@@ -18,3 +18,5 @@ Color silverFoil = const Color(0xFFAFAFAF);
 const Color ufoGreen = Color(0xFF3fcb80);
 const Color thistle = Color(0xFFefb4d4);
 const Color earieBlack = Color(0xFF1E1E1E);
+const Color lightGray = Color(0xFFE4E4E4);
+const Color gray = Color(0xFF7E7E7E);
