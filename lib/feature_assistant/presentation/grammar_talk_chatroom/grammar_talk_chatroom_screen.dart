@@ -43,6 +43,11 @@ class _GrammarTalkChatroomScreenState
     if (messageText.isNotEmpty) {
       ref.read(grammarTalkChatStateNotifierProvider.notifier).sendMessage(text);
       messageController.clear();
+
+      // Also reset the typing state
+      ref
+          .read(grammarTalkChatStateNotifierProvider.notifier)
+          .updateTypingState(false);
     }
   }
 
@@ -54,49 +59,50 @@ class _GrammarTalkChatroomScreenState
 
   @override
   Widget build(BuildContext context) {
-    // Listen to the FreelyTalkChatState
-    final freelyTalkChatState = ref.watch(grammarTalkChatStateNotifierProvider);
+    // Listen to the grammarTalkChatState
+    final grammarTalkChatState =
+        ref.watch(grammarTalkChatStateNotifierProvider);
 
     // Handle errors (showing a SnackBar for simplicity)
-    if (freelyTalkChatState.error != null && !freelyTalkChatState.isLoading) {
+    if (grammarTalkChatState.error != null && !grammarTalkChatState.isLoading) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(freelyTalkChatState.error!)),
+          SnackBar(content: Text(grammarTalkChatState.error!)),
         );
       });
     }
 
-    Widget appBar() {
+    // if (!grammarTalkChatState.isTyping &&
+    //     messageController.text != grammarTalkChatState.currentSpokenWord) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     messageController.text = grammarTalkChatState.currentSpokenWord;
+    //     messageController.selection = TextSelection.fromPosition(
+    //         TextPosition(offset: messageController.text.length));
+    //   });
+    // }
+
+    PreferredSizeWidget appBar() {
       return AppBar(
-        backgroundColor: darkGray,
+        backgroundColor: neutralOneAlt,
         shape: Border(bottom: BorderSide(color: primary, width: 1)),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios_rounded, color: earieBlack),
           onPressed: () {
             ref.read(routerProvider).goNamed('home');
           },
         ),
         title: Row(
           children: [
-            Image.asset("assets/images/dummy_logo_header.png",
+            Image.asset("assets/images/elarise_logo.png",
                 width: 40, height: 40),
             const SizedBox(width: 16),
             Text(
               "Elara AI",
-              style: getSansFranciscoSemiBold20(color: Colors.white),
+              style: getSansFranciscoSemiBold20(color: earieBlack),
             )
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.more_vert,
-              color: Colors.white,
-            ),
-            onPressed: () {},
-          )
-        ],
       );
     }
 
@@ -118,12 +124,12 @@ class _GrammarTalkChatroomScreenState
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Image.asset("assets/images/dummy_logo.png",
+                  Image.asset("assets/images/elarise_logo_small.png",
                       width: 24, height: 24),
                   const SizedBox(width: 12),
                   Text(
                     "Elara AI",
-                    style: getSansFranciscoSemiBold16(color: Colors.white),
+                    style: getSansFranciscoSemiBold16(color: earieBlack),
                   )
                 ],
               ),
@@ -137,11 +143,11 @@ class _GrammarTalkChatroomScreenState
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 12),
                     decoration: BoxDecoration(
-                      color: blackOlive,
+                      color: primary,
                       borderRadius: const BorderRadius.all(Radius.circular(30)),
                     ),
                     child: JumpingDots(
-                      color: Colors.white,
+                      color: earieBlack,
                       radius: 8,
                       numberOfDots: 3,
                     )),
@@ -161,7 +167,7 @@ class _GrammarTalkChatroomScreenState
                     : MainAxisAlignment.start,
                 children: [
                   if (!isUserMessage)
-                    Image.asset("assets/images/dummy_logo.png",
+                    Image.asset("assets/images/elarise_logo_small.png",
                         width: 24, height: 24),
                   if (isUserMessage)
                     CachedNetworkImage(
@@ -193,7 +199,7 @@ class _GrammarTalkChatroomScreenState
                   const SizedBox(width: 12),
                   Text(
                     isUserMessage ? userName : "Elara AI",
-                    style: getSansFranciscoSemiBold16(color: Colors.white),
+                    style: getSansFranciscoSemiBold16(color: earieBlack),
                   )
                 ],
               ),
@@ -209,12 +215,12 @@ class _GrammarTalkChatroomScreenState
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
-                    color: isUserMessage ? Colors.white : blackOlive,
+                    color: isUserMessage ? blackOlive : primary,
                     borderRadius: const BorderRadius.all(Radius.circular(30)),
                   ),
                   child: Text(message.message,
                       style: getSansFranciscoRegular16(
-                          color: isUserMessage ? Colors.black : Colors.white)),
+                          color: isUserMessage ? Colors.white : earieBlack)),
                 ),
               ),
             ],
@@ -224,8 +230,8 @@ class _GrammarTalkChatroomScreenState
     }
 
     Widget chatSpace() {
-      // Listen to the FreelyTalkChatState
-      final freelyTalkChatState =
+      // Listen to the grammarTalkChatState
+      final grammarTalkChatState =
           ref.watch(grammarTalkChatStateNotifierProvider);
 
       return Container(
@@ -235,10 +241,10 @@ class _GrammarTalkChatroomScreenState
             children: [
               Container(
                 width: MediaQuery.of(context).size.width * 0.75,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                padding: const EdgeInsets.only(
+                    left: 24, right: 24, top: 4, bottom: 8),
                 decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: lightGray,
                   borderRadius: BorderRadius.all(Radius.circular(30)),
                 ),
                 child: Row(
@@ -257,8 +263,7 @@ class _GrammarTalkChatroomScreenState
                           maxLines: null,
                           decoration: InputDecoration(
                             hintText: "Type your message here...",
-                            hintStyle:
-                                getSansFranciscoRegular16(color: Colors.black),
+                            hintStyle: getSansFranciscoRegular16(color: gray),
                             border: InputBorder.none,
                           ),
                         ),
@@ -278,11 +283,11 @@ class _GrammarTalkChatroomScreenState
                   Positioned.fill(
                       child: Align(
                     alignment: Alignment.center,
-                    child: freelyTalkChatState.isTyping
+                    child: grammarTalkChatState.isTyping
                         ? InkWell(
                             onTap: () {
-                              if (messageController.text.isNotEmpty) {
-                                sendMessage(messageController.text);
+                              if (messageController.text.trim().isNotEmpty) {
+                                sendMessage(messageController.text.trim());
                               }
                             },
                             child: Image.asset(
@@ -292,7 +297,7 @@ class _GrammarTalkChatroomScreenState
                           )
                         : IconButton(
                             onPressed: () {
-                              if (freelyTalkChatState.isListening) {
+                              if (grammarTalkChatState.isListening) {
                                 ref
                                     .read(grammarTalkChatStateNotifierProvider
                                         .notifier)
@@ -305,7 +310,7 @@ class _GrammarTalkChatroomScreenState
                               }
                             },
                             icon: Icon(
-                              freelyTalkChatState.isListening
+                              grammarTalkChatState.isSpeaking
                                   ? Icons.mic
                                   : Icons.mic_off,
                               color: Colors.black,
@@ -319,20 +324,20 @@ class _GrammarTalkChatroomScreenState
     }
 
     return Scaffold(
-      backgroundColor: darkGray,
+      backgroundColor: neutralOneAlt,
+      appBar: appBar(),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        appBar(),
         Expanded(
           child: ListView.builder(
             padding: const EdgeInsets.only(bottom: 8),
             reverse: true,
-            itemCount: freelyTalkChatState.messageResponse.length,
+            itemCount: grammarTalkChatState.messageResponse.length,
             itemBuilder: ((context, index) {
               // This reverses the message list so that the latest message is at the bottom of the screen.
               int reversedIndex =
-                  freelyTalkChatState.messageResponse.length - 1 - index;
+                  grammarTalkChatState.messageResponse.length - 1 - index;
               return buildMessages(
-                  freelyTalkChatState.messageResponse[reversedIndex]);
+                  grammarTalkChatState.messageResponse[reversedIndex]);
             }),
           ),
         ),

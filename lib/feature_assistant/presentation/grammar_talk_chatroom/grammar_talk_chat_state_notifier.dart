@@ -12,7 +12,10 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
   String? _chatRoomId; // Hold the chatRoomId internally
   final SpeechToText speechToText = SpeechToText();
 
-  GrammarTalkChatStateNotifier(this.ref) : super(GrammarTalkChatState()) {
+  Function(String)? onSpeechResult;
+
+  GrammarTalkChatStateNotifier(this.ref, {this.onSpeechResult})
+      : super(GrammarTalkChatState()) {
     checkMicrophoneAvailability();
     _loadUserPreferences();
   }
@@ -51,7 +54,12 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
     if (!state.isListening) {
       speechToText.listen(
         onResult: (result) {
-          state = state.copyWith(isTyping: true);
+          state = state.copyWith(
+              isTyping: false, currentSpokenWord: result.recognizedWords);
+
+          // Use the callback to update the UI
+          onSpeechResult?.call(result.recognizedWords);
+
           if (result.finalResult) {
             sendMessage(result.recognizedWords);
             state = state.copyWith(isTyping: false);
@@ -61,14 +69,14 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
         listenFor: const Duration(seconds: 60),
         pauseFor: const Duration(seconds: 3),
       );
-      state = state.copyWith(isListening: true);
+      state = state.copyWith(isListening: true, isSpeaking: true);
     }
   }
 
   void stopListening() {
     if (state.isListening) {
       speechToText.stop();
-      state = state.copyWith(isListening: false);
+      state = state.copyWith(isListening: false, isSpeaking: false);
     }
   }
 
@@ -87,6 +95,8 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
 
     // After sending the message, add a placeholder response
     _addPlaceholderForAIResponse();
+    state = state.copyWith(isTyping: false, isSpeaking: false);
+    clearSpokenWord();
   }
 
   // Helper method to add a placeholder for the AI response
@@ -105,6 +115,10 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
 
   void clearChat() {
     state = state.copyWith(messageResponse: []);
+  }
+
+  void clearSpokenWord() {
+    state = state.copyWith(currentSpokenWord: '');
   }
 
   Future<void> grammarTalkChat(
