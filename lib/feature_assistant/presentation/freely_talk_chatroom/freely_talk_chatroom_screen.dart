@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'dart:ui';
 
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:elarise/feature_assistant/domain/entities/elara_response.dart';
 import 'package:elarise/feature_assistant/presentation/freely_talk_chatroom/freely_talk_chat_state_notifier.dart';
@@ -23,7 +25,7 @@ class FreelyTalkChatroomScreen extends ConsumerStatefulWidget {
 
 class _FreelyTalkChatroomScreenState
     extends ConsumerState<FreelyTalkChatroomScreen> {
-  final TextEditingController messageController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -38,17 +40,17 @@ class _FreelyTalkChatroomScreenState
     log(widget.chatRoomId);
   }
 
-  void sendMessage(String text) {
-    final messageText = messageController.text.trim();
-    if (messageText.isNotEmpty) {
-      ref.read(freelyTalkChatStateNotifierProvider.notifier).sendMessage(text);
-      messageController.clear();
-    }
+  void scrollToLastWord() {
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 
   @override
   void dispose() {
-    messageController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -56,6 +58,7 @@ class _FreelyTalkChatroomScreenState
   Widget build(BuildContext context) {
     // Listen to the FreelyTalkChatState
     final freelyTalkChatState = ref.watch(freelyTalkChatStateNotifierProvider);
+    final isListening = freelyTalkChatState.isListening;
 
     // Handle errors (showing a SnackBar for simplicity)
     if (freelyTalkChatState.error != null && !freelyTalkChatState.isLoading) {
@@ -66,38 +69,27 @@ class _FreelyTalkChatroomScreenState
       });
     }
 
-    Widget appBar() {
+    if (freelyTalkChatState.currentSpokenWord.isNotEmpty) {
+      // Calling scrollToLastWord after a delay to allow the UI to build
+      Future.delayed(Duration.zero, () => scrollToLastWord());
+    }
+
+    PreferredSizeWidget appBar() {
       return AppBar(
-        backgroundColor: darkGray,
-        shape: Border(bottom: BorderSide(color: primary, width: 1)),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-          onPressed: () {
-            ref.read(routerProvider).goNamed('home');
-          },
-        ),
-        title: Row(
-          children: [
-            Image.asset("assets/images/dummy_logo_header.png",
-                width: 40, height: 40),
-            const SizedBox(width: 16),
-            Text(
-              "Elara AI",
-              style: getSansFranciscoSemiBold20(color: Colors.white),
-            )
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.more_vert,
-              color: Colors.white,
-            ),
-            onPressed: () {},
-          )
-        ],
-      );
+          backgroundColor: neutralOneAlt,
+          shape: Border(bottom: BorderSide(color: primary, width: 1)),
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_rounded, color: earieBlack),
+            onPressed: () {
+              ref.read(routerProvider).goNamed('home');
+            },
+          ),
+          centerTitle: true,
+          title: Text(
+            "Talk with Elara",
+            style: getSansFranciscoSemiBold20(color: earieBlack),
+          ));
     }
 
     Widget buildMessages(ElaraResponse message) {
@@ -118,12 +110,12 @@ class _FreelyTalkChatroomScreenState
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Image.asset("assets/images/dummy_logo.png",
+                  Image.asset("assets/images/elarise_logo_small.png",
                       width: 24, height: 24),
                   const SizedBox(width: 12),
                   Text(
                     "Elara AI",
-                    style: getSansFranciscoSemiBold16(color: Colors.white),
+                    style: getSansFranciscoSemiBold16(color: earieBlack),
                   )
                 ],
               ),
@@ -137,11 +129,11 @@ class _FreelyTalkChatroomScreenState
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 12),
                     decoration: BoxDecoration(
-                      color: blackOlive,
+                      color: primary,
                       borderRadius: const BorderRadius.all(Radius.circular(30)),
                     ),
                     child: JumpingDots(
-                      color: Colors.white,
+                      color: earieBlack,
                       radius: 8,
                       numberOfDots: 3,
                     )),
@@ -161,7 +153,7 @@ class _FreelyTalkChatroomScreenState
                     : MainAxisAlignment.start,
                 children: [
                   if (!isUserMessage)
-                    Image.asset("assets/images/dummy_logo.png",
+                    Image.asset("assets/images/elarise_logo_small.png",
                         width: 24, height: 24),
                   if (isUserMessage)
                     CachedNetworkImage(
@@ -193,7 +185,7 @@ class _FreelyTalkChatroomScreenState
                   const SizedBox(width: 12),
                   Text(
                     isUserMessage ? userName : "Elara AI",
-                    style: getSansFranciscoSemiBold16(color: Colors.white),
+                    style: getSansFranciscoSemiBold16(color: earieBlack),
                   )
                 ],
               ),
@@ -209,12 +201,12 @@ class _FreelyTalkChatroomScreenState
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
-                    color: isUserMessage ? Colors.white : blackOlive,
+                    color: isUserMessage ? blackOlive : primary,
                     borderRadius: const BorderRadius.all(Radius.circular(30)),
                   ),
                   child: Text(message.message,
                       style: getSansFranciscoRegular16(
-                          color: isUserMessage ? Colors.black : Colors.white)),
+                          color: isUserMessage ? Colors.white : earieBlack)),
                 ),
               ),
             ],
@@ -223,105 +215,10 @@ class _FreelyTalkChatroomScreenState
       }
     }
 
-    Widget chatSpace() {
-      // Listen to the FreelyTalkChatState
-      final freelyTalkChatState =
-          ref.watch(freelyTalkChatStateNotifierProvider);
-
-      return Container(
-          margin: const EdgeInsets.only(bottom: 24, left: 16, right: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.75,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                ),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: messageController,
-                          onChanged: (text) {
-                            ref
-                                .read(freelyTalkChatStateNotifierProvider
-                                    .notifier)
-                                .updateTypingState(text.isNotEmpty);
-                          },
-                          textAlignVertical: TextAlignVertical.center,
-                          maxLines: null,
-                          decoration: InputDecoration(
-                            hintText: "Type your message here...",
-                            hintStyle:
-                                getSansFranciscoRegular16(color: Colors.black),
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    ]),
-              ),
-              Stack(
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: primary,
-                      borderRadius: const BorderRadius.all(Radius.circular(50)),
-                    ),
-                  ),
-                  Positioned.fill(
-                      child: Align(
-                    alignment: Alignment.center,
-                    child: freelyTalkChatState.isTyping
-                        ? InkWell(
-                            onTap: () {
-                              if (messageController.text.isNotEmpty) {
-                                sendMessage(messageController.text);
-                              }
-                            },
-                            child: Image.asset(
-                                "assets/icons/icon_send_black.png",
-                                width: 32,
-                                height: 32),
-                          )
-                        : IconButton(
-                            onPressed: () {
-                              if (freelyTalkChatState.isListening) {
-                                ref
-                                    .read(freelyTalkChatStateNotifierProvider
-                                        .notifier)
-                                    .stopListening();
-                              } else {
-                                ref
-                                    .read(freelyTalkChatStateNotifierProvider
-                                        .notifier)
-                                    .startListening();
-                              }
-                            },
-                            icon: Icon(
-                              freelyTalkChatState.isListening
-                                  ? Icons.mic
-                                  : Icons.mic_off,
-                              color: Colors.black,
-                              size: 32,
-                            )),
-                  ))
-                ],
-              )
-            ],
-          ));
-    }
-
     return Scaffold(
-      backgroundColor: darkGray,
+      backgroundColor: neutralOneAlt,
+      appBar: appBar(),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        appBar(),
         Expanded(
           child: ListView.builder(
             padding: const EdgeInsets.only(bottom: 8),
@@ -336,10 +233,77 @@ class _FreelyTalkChatroomScreenState
             }),
           ),
         ),
-        const SizedBox(height: 4),
-        chatSpace()
+        if (freelyTalkChatState.currentSpokenWord.isNotEmpty)
+          SizedBox(
+            height: 120,
+            child: ClipRRect(
+              // borderRadius: BorderRadius.circular(12),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                child: Container(
+                  alignment: Alignment.center,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      neutralOneAlt.withOpacity(0.5),
+                      Colors.transparent,
+                    ],
+                  )),
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    reverse: true,
+                    child: Text(
+                      freelyTalkChatState.currentSpokenWord,
+                      style: getSansFranciscoMedium20(color: earieBlack),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        const SizedBox(height: 140),
+        // chatSpace()
       ]),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 24),
+        child: AvatarGlow(
+          animate: isListening,
+          glowColor: primary,
+          duration: const Duration(milliseconds: 2000),
+          repeat: true,
+          child: GestureDetector(
+            onTap: () {
+              if (isListening) {
+                ref
+                    .read(freelyTalkChatStateNotifierProvider.notifier)
+                    .stopListening();
+              } else {
+                ref
+                    .read(freelyTalkChatStateNotifierProvider.notifier)
+                    .startListening();
+              }
+            },
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: primary,
+                borderRadius: const BorderRadius.all(Radius.circular(50)),
+              ),
+              child: Icon(
+                freelyTalkChatState.isListening ? Icons.mic : Icons.mic_off,
+                color: earieBlack,
+                size: 32,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
-

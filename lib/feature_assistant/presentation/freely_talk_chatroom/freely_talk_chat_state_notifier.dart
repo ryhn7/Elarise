@@ -51,24 +51,23 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
     if (!state.isListening) {
       speechToText.listen(
         onResult: (result) {
-          state = state.copyWith(isTyping: true);
+          state = state.copyWith(currentSpokenWord: result.recognizedWords);
           if (result.finalResult) {
             sendMessage(result.recognizedWords);
-            state = state.copyWith(isTyping: false);
             stopListening();
           }
         },
         listenFor: const Duration(seconds: 60),
         pauseFor: const Duration(seconds: 3),
       );
-      state = state.copyWith(isListening: true);
+      state = state.copyWith(isListening: true, isSpeaking: true);
     }
   }
 
   void stopListening() {
     if (state.isListening) {
       speechToText.stop();
-      state = state.copyWith(isListening: false);
+      state = state.copyWith(isListening: false, isSpeaking: false);
     }
   }
 
@@ -76,10 +75,12 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
     _chatRoomId = value;
   }
 
-  void sendMessage(String text) {
+  void sendMessage(String text) async {
     if (text.trim().isEmpty) {
       return; // Prevent sending empty messages
     }
+    // Introduce a delay
+    await Future.delayed(const Duration(seconds: 1));
     // call method to send message to the server
     ref
         .read(freelyTalkChatStateNotifierProvider.notifier)
@@ -87,6 +88,8 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
 
     // After sending the message, add a placeholder response
     _addPlaceholderForAIResponse();
+    state = state.copyWith(isSpeaking: false);
+    clearSpokenWord();
   }
 
   // Helper method to add a placeholder for the AI response
@@ -105,6 +108,10 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
 
   void clearChat() {
     state = state.copyWith(messageResponse: []);
+  }
+
+  void clearSpokenWord() {
+    state = state.copyWith(currentSpokenWord: '');
   }
 
   Future<void> freelyTalkChat(
@@ -154,10 +161,6 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
         messageResponse: null,
       );
     }
-  }
-
-  void updateTypingState(bool isTyping) {
-    state = state.copyWith(isTyping: isTyping);
   }
 
   @override

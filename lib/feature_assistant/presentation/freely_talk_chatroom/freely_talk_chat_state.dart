@@ -6,8 +6,9 @@ class FreelyTalkChatState {
   final bool isLoading;
   final String? error;
   final bool isListening;
-  final bool isTyping;
+  final bool isSpeaking;
   final bool isResponding;
+  final String currentSpokenWord;
 
   final List<ElaraResponse> messageResponse;
   final UserPreferences? userPreferences;
@@ -18,8 +19,9 @@ class FreelyTalkChatState {
     this.messageResponse = const [],
     this.userPreferences,
     this.isListening = false,
-    this.isTyping = false,
+    this.isSpeaking = false,
     this.isResponding = false,
+    this.currentSpokenWord = '',
   });
 
   FreelyTalkChatState copyWith({
@@ -28,15 +30,17 @@ class FreelyTalkChatState {
     UserPreferences? userPreferences,
     String? error,
     bool? isListening,
-    bool? isTyping,
+    bool? isSpeaking,
     bool? isResponding,
+    String? currentSpokenWord,
   }) {
     return FreelyTalkChatState(
       isLoading: isLoading ?? this.isLoading,
       messageResponse: messageResponse ?? this.messageResponse,
       userPreferences: userPreferences ?? this.userPreferences,
       isListening: isListening ?? this.isListening,
-      isTyping: isTyping ?? this.isTyping,
+      isSpeaking: isSpeaking ?? this.isSpeaking,
+      currentSpokenWord: currentSpokenWord ?? this.currentSpokenWord,
       isResponding: isResponding ?? this.isResponding,
       error: error ?? error,
     );
