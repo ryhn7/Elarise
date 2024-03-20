@@ -164,6 +164,71 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
           isChatRoomLoading: false);
     }
   }
+
+  Future<void> renameChatRoomName(
+      String chatRoomId, String chatRoomName) async {
+    try {
+      state = state.copyWith(isLoading: true, isRenamingChatRoomName: true);
+
+      final useCase = ref.read(useCaseAssistantProvider);
+
+      var result = await useCase.editChatRoom(
+          chatRoomId: chatRoomId, chatRoomName: chatRoomName);
+
+      if (result is Success) {
+        state = state.copyWith(
+          isLoading: false,
+          isRenamingChatRoomName: false,
+          chatRoomResponse: result.resultData,
+        );
+
+        if (result.resultData?.type == 'voice') {
+          await getAllFreelyTalkRooms();
+        } else if (result.resultData?.type == 'Text') {
+          await getAllGrammarTalkRooms();
+        }
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          isRenamingChatRoomName: false,
+          error: result.errorMessage ?? 'An error occurred',
+          chatRoomResponse: null,
+        );
+      }
+    } catch (e) {
+      state = state.copyWith(
+          isLoading: false,
+          error: e.toString(),
+          chatRoomResponse: null,
+          isRenamingChatRoomName: false);
+    }
+  }
+
+  Future<void> deleteChatRoom(String chatRoomId) async {
+    try {
+      state = state.copyWith(isLoading: true, isDeletingChatRoom: true);
+
+      final useCase = ref.read(useCaseAssistantProvider);
+
+      var result = await useCase.deleteChatRoom(chatRoomId: chatRoomId);
+
+      if (result is Success) {
+        state = state.copyWith(
+          isLoading: false,
+          isDeletingChatRoom: false,
+        );
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          isDeletingChatRoom: false,
+          error: result.errorMessage ?? 'An error occurred',
+        );
+      }
+    } catch (e) {
+      state = state.copyWith(
+          isLoading: false, error: e.toString(), isDeletingChatRoom: false);
+    }
+  }
 }
 
 final homeStateNotifierProvider =

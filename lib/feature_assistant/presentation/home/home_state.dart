@@ -8,6 +8,8 @@ class HomeState {
   final String? error;
   final bool isChatRoomLoading;
   final bool isCreatingRoom;
+  final bool isRenamingChatRoomName;
+  final bool isDeletingChatRoom;
 
   final UserPreferences? userPreferences;
   final ChatRoomResponse? chatRoomResponse;
@@ -17,6 +19,8 @@ class HomeState {
       {this.isLoading = false,
       this.isChatRoomLoading = false,
       this.isCreatingRoom = false,
+      this.isRenamingChatRoomName = false,
+      this.isDeletingChatRoom = false,
       this.error,
       this.userPreferences,
       this.chatRoomResponse,
@@ -26,6 +30,8 @@ class HomeState {
     bool? isLoading,
     bool? isChatRoomLoading,
     bool? isCreatingRoom,
+    bool? isRenamingChatRoomName,
+    bool? isDeletingChatRoom,
     UserPreferences? userPreferences,
     ChatRoomResponse? chatRoomResponse,
     List<ChatRoom>? chatRooms,
@@ -35,6 +41,9 @@ class HomeState {
       isLoading: isLoading ?? this.isLoading,
       isChatRoomLoading: isChatRoomLoading ?? this.isChatRoomLoading,
       isCreatingRoom: isCreatingRoom ?? this.isCreatingRoom,
+      isRenamingChatRoomName:
+          isRenamingChatRoomName ?? this.isRenamingChatRoomName,
+      isDeletingChatRoom: isDeletingChatRoom ?? this.isDeletingChatRoom,
       userPreferences: userPreferences ?? this.userPreferences,
       chatRoomResponse: chatRoomResponse ?? this.chatRoomResponse,
       chatRooms: chatRooms ?? this.chatRooms,

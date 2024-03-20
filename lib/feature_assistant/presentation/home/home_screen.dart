@@ -26,6 +26,184 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   List<String> dropdownItems = ['Talking', 'Grammar'];
   String dropdownValue = 'Talking';
+  final TextEditingController renameController = TextEditingController();
+
+  @override
+  void dispose() {
+    renameController.dispose();
+    super.dispose();
+  }
+
+  void _showChatRoomOptions(BuildContext context, ChatRoom chatRoom) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+              backgroundColor: neutralOneAlt,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0), // Dialog box radius
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(
+                        left: 16, top: 16, right: 16, bottom: 8), // Add padding
+                    child: Text(
+                      chatRoom.chatRoomName, // Use your chat room name variable
+                      style: getSansFranciscoBold20(color: earieBlack),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  ListTile(
+                    title: Text(
+                      'Edit ChatRoom Name',
+                      style: getSansFranciscoMedium16(color: earieBlack),
+                    ),
+                    onTap: () {
+                      // Close the modal first
+                      Navigator.pop(context);
+
+                      // Show the rename dialog
+                      _showRenameChatRoom(context, chatRoom);
+                    },
+                  ),
+                  ListTile(
+                    title: Text(
+                      'Delete',
+                      style: getSansFranciscoMedium16(color: red),
+                    ),
+                    onTap: () {
+                      // Close the modal first
+                      Navigator.pop(context);
+                      // Show the confirmation dialog
+                      _showDeleteConfirmation(context, chatRoom);
+                    },
+                  ),
+                ],
+              ));
+        });
+  }
+
+  void _showRenameChatRoom(BuildContext context, ChatRoom chatRoom) {
+    renameController.text = chatRoom.chatRoomName;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevent closing dialog by tapping outside
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: neutralOneAlt,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0), // Dialog box radius
+          ),
+          title: Text(
+            'Rename ChatRoom',
+            style: getSansFranciscoBold20(color: earieBlack),
+          ),
+          content: TextField(
+            controller: renameController,
+            decoration: InputDecoration(
+              hintText: 'Enter new chat room name',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Cancel',
+                style: getSansFranciscoMedium16(color: earieBlack),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Rename',
+                style: getSansFranciscoMedium16(
+                    color: ufoGreen), // Use your primary color
+              ),
+              onPressed: () {
+                // Implement renaming logic here
+                // Make sure to validate the input before processing
+                if (renameController.text.isNotEmpty) {
+                  ref
+                      .read(homeStateNotifierProvider.notifier)
+                      .renameChatRoomName(chatRoom.id, renameController.text);
+                }
+                Navigator.of(context)
+                    .pop(); // Dismiss the dialog after renaming
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showDeleteConfirmation(BuildContext context, ChatRoom chatRoom) {
+    showDialog(
+        context: context,
+        barrierDismissible: false, // Prevent closing dialog by tapping outside
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: neutralOneAlt,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              // Dialog box radius
+            ),
+            title: Text(
+              'Deletion confirmation',
+              style: getSansFranciscoBold20(color: earieBlack),
+            ),
+            content: Text(
+                'Deleted chat room can\'t be recovered. Are you sure you want to continue?',
+                style: getSansFranciscoMedium16(
+                    color: earieBlack.withOpacity(0.7))),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Cancel',
+                  style: getSansFranciscoMedium16(color: earieBlack),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  if (chatRoom.type == 'voice') {
+                    ref
+                        .read(homeStateNotifierProvider.notifier)
+                        .deleteChatRoom(chatRoom.id);
+
+                    ref
+                        .read(homeStateNotifierProvider.notifier)
+                        .getAllFreelyTalkRooms();
+                  } else if (chatRoom.type == 'Text') {
+                    ref
+                        .read(homeStateNotifierProvider.notifier)
+                        .deleteChatRoom(chatRoom.id);
+
+                    ref
+                        .read(homeStateNotifierProvider.notifier)
+                        .getAllGrammarTalkRooms();
+                  }
+                  Navigator.of(context)
+                      .pop(); // Dismiss the dialog after deletion
+                },
+                child: Text(
+                  'Delete',
+                  style: getSansFranciscoMedium16(color: red),
+                ),
+              ),
+            ],
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -192,11 +370,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     Widget buildChatRoomCard(ChatRoom chatRoom, int index) {
       final relativeTime = DateUtil().formatDateTime(chatRoom.createdAt);
 
-      return ChatRoomCard(
-        chatRoomName: chatRoom.chatRoomName,
-        latestResponse: chatRoom.lastAIMessageText ?? "No response yet",
-        date: relativeTime,
-        index: index,
+      return GestureDetector(
+        onLongPress: () {
+          _showChatRoomOptions(context, chatRoom);
+        },
+        child: ChatRoomCard(
+          chatRoomName: chatRoom.chatRoomName,
+          latestResponse: chatRoom.lastAIMessageText ?? "No response yet",
+          date: relativeTime,
+          index: index,
+        ),
       );
     }
 
