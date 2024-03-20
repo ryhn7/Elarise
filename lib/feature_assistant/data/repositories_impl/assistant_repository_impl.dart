@@ -136,4 +136,40 @@ class AssistantRepositoryImpl implements AssistantRepository {
       return ResultState.error(e.toString());
     }
   }
+
+  @override
+  Future<ResultState<ChatRoomResponse>> editChatRoom(
+      {required String chatRoomId, required String chatRoomName}) async {
+    try {
+      final userPreferences = await _userDatastoreRepository.getUser();
+      final token = userPreferences.token ?? '';
+
+      if (token.isEmpty) {
+        return const ResultState.error('Token is empty');
+      }
+
+      final response =
+          await _assistantApi.editChatRoomName(chatRoomId, chatRoomName);
+      return ResultState.success(response);
+    } catch (e) {
+      return ResultState.error(e.toString());
+    }
+  }
+
+  @override
+  Future<ResultState<void>> deleteChatRoom({required String chatRoomId}) async {
+    try {
+      final userPreferences = await _userDatastoreRepository.getUser();
+      final token = userPreferences.token ?? '';
+
+      if (token.isEmpty) {
+        return const ResultState.error('Token is empty');
+      }
+
+      final response = await _assistantApi.deleteChatRoom(chatRoomId);
+      return ResultState.success(response);
+    } catch (e) {
+      return ResultState.error(e.toString());
+    }
+  }
 }

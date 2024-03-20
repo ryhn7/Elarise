@@ -26,7 +26,7 @@ class AssistantApi {
     }
   }
 
-    Future<ChatRoomResponse> createGrammarTalkRoom() async {
+  Future<ChatRoomResponse> createGrammarTalkRoom() async {
     try {
       var headers = {
         'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ class AssistantApi {
     }
   }
 
-    Future<ElaraResponse> grammarTalkChat(
+  Future<ElaraResponse> grammarTalkChat(
       String chatRoomId, String messageText) async {
     try {
       var headers = {
@@ -102,8 +102,7 @@ class AssistantApi {
           decoder: (json) => GetAllChatroomResponse.fromJson(json));
 
       // Create a new modifiable list from the response data
-      List<ChatRoom> newResponse =
-          List<ChatRoom>.from(response.data);
+      List<ChatRoom> newResponse = List<ChatRoom>.from(response.data);
 
       // Sort the modifiable list by the createdAt field, newest first
       newResponse.sort((a, b) => b.createdAt.compareTo(a.createdAt));
@@ -119,7 +118,7 @@ class AssistantApi {
     }
   }
 
-    Future<List<ChatRoom>> getAllGrammarTalkRooms() async {
+  Future<List<ChatRoom>> getAllGrammarTalkRooms() async {
     try {
       var headers = {
         'Content-Type': 'application/json',
@@ -131,8 +130,7 @@ class AssistantApi {
           decoder: (json) => GetAllChatroomResponse.fromJson(json));
 
       // Create a new modifiable list from the response data
-      List<ChatRoom> newResponse =
-          List<ChatRoom>.from(response.data);
+      List<ChatRoom> newResponse = List<ChatRoom>.from(response.data);
 
       // Sort the modifiable list by the createdAt field, newest first
       newResponse.sort((a, b) => b.createdAt.compareTo(a.createdAt));
@@ -145,6 +143,84 @@ class AssistantApi {
       return newResponse;
     } catch (e) {
       throw Exception('Failed to get all freely talk chat rooms: $e');
+    }
+  }
+
+  Future<ChatRoomResponse> editChatRoomName(
+      String chatRoomId, String chatRoomName) async {
+    try {
+      var headers = {
+        'Content-Type': 'application/json',
+      };
+
+      var body = {'chatRoomName': chatRoomName};
+
+      final response = await apiConfig.putApiService<ChatRoomResponse>(
+          'chatroom/$chatRoomId',
+          headers: headers,
+          body: body,
+          decoder: (json) => ChatRoomResponse.fromJson(json));
+
+      return response;
+    } catch (e) {
+      throw Exception('Failed to edit chat room name: $e');
+    }
+  }
+
+  Future<void> deleteChatRoom(String chatRoomId) async {
+    try {
+      var headers = {
+        'Content-Type': 'application/json',
+      };
+
+      final response = await apiConfig.deleteApiService(
+          'chatroom/$chatRoomId',
+          headers: headers,
+          decoder: (json) => null);
+
+      return response;
+    } catch (e) {
+      throw Exception('Failed to delete chat room: $e');
+    }
+  }
+
+  Future<ElaraResponse> editChat(
+      String chatRoomId, String idMessage, String messageText) async {
+    try {
+      var headers = {
+        'Content-Type': 'application/json',
+      };
+
+      var body = {
+        'messageText': messageText,
+      };
+
+      final response = await apiConfig.putApiService<ElaraResponse>(
+          'chatroom/$chatRoomId/edit-text/$idMessage',
+          headers: headers,
+          body: body,
+          decoder: (json) => ElaraResponse.fromJson(json));
+
+      return response;
+    } catch (e) {
+      throw Exception('Failed to edit chat: $e');
+    }
+  }
+
+  Future<ElaraResponse> deleteChat(String chatRoomId, String idMessage) async {
+    try {
+      var headers = {
+        'Content-Type': 'application/json',
+      };
+
+      final response = await apiConfig.deleteApiService<ElaraResponse>(
+          'chatroom/$chatRoomId/delete-text/$idMessage',
+          headers: headers,
+          decoder: (json) => ElaraResponse.fromJson(json));
+
+      return response;
+    } catch (e) {
+      throw Exception('Failed to delete chat: $e');
     }
   }
 }
