@@ -1,5 +1,6 @@
 import 'package:elarise/firebase_options.dart';
 import 'package:elarise/router/router_provider.dart';
+import 'package:elarise/theme/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,6 +29,11 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
+        colorScheme:  ColorScheme.fromSeed(
+          seedColor: neutralOneAlt,
+          primary: primary,
+          secondary: earieBlack
+          ),
       ),
     );
   }
