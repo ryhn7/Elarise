@@ -128,4 +128,79 @@ class ApiConfig {
       throw Exception('Failed to fetch binary data');
     }
   }
+
+  Future<T> putApiService<T>(String path,
+      {Map<String, String>? headers,
+      Map<String, dynamic>? body,
+      T Function(Map<String, dynamic>)? decoder}) async {
+    // Add Authorization header with the token
+    final Map<String, String> authHeaders = {
+      'Authorization': 'Bearer ${Configuration.token}',
+    };
+    // Merge additional headers with authHeaders if any
+    headers?.forEach((key, value) {
+      authHeaders[key] = value;
+    });
+
+    try {
+      final response = await http.put(
+          Uri.parse('${Configuration.baseUrl}$path'),
+          headers: authHeaders,
+          body: jsonEncode(body));
+      alice.onHttpResponse(response);
+
+      if (response.statusCode == 200) {
+        final jsonResult = json.decode(response.body);
+        // Check if the response contains the 'data' key and the decoder is not null
+        if (jsonResult.containsKey('data') && decoder != null) {
+          // Pass only the 'data' part of the JSON to the decoder function
+          return decoder(jsonResult['data']);
+        }
+        // Case when JSON does not contain 'data' key but decoder is provided
+        else if (!jsonResult.containsKey('data') && decoder != null) {
+          return decoder(jsonResult);
+        } else {
+          throw Exception(
+              'Decoder is null or response JSON does not contain \'data\' key');
+        }
+      } else {
+        throw Exception('Failed to edit data');
+      }
+    } catch (e) {
+      log(e.toString(), name: 'ApiConfig');
+      throw Exception('Failed to edit data');
+    }
+  }
+
+  Future<T> deleteApiService<T>(String path,
+      {Map<String, String>? headers,
+      Object? body,
+      T Function(Map<String, dynamic>)? decoder}) async {
+    // Add Authorization header with the token
+    final Map<String, String> authHeaders = {
+      'Authorization': 'Bearer ${Configuration.token}',
+    };
+    // Merge additional headers with authHeaders if any
+    headers?.forEach((key, value) {
+      authHeaders[key] = value;
+    });
+
+    try {
+      final response = await http.delete(
+        Uri.parse('${Configuration.baseUrl}$path'),
+        headers: authHeaders,
+      );
+      alice.onHttpResponse(response);
+
+      if (response.statusCode == 200) {
+        // nothing to return
+        return null as T;
+      } else {
+        throw Exception('Failed to delete data');
+      }
+    } catch (e) {
+      log(e.toString(), name: 'ApiConfig');
+      throw Exception('Failed to delete data');
+    }
+  }
 }
