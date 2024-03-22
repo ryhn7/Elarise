@@ -13,7 +13,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../core/domain/entities/user_preferences.dart';
 import '../../../feature_account_setting/presentation/account_setting/manage_account/account_state_notifier.dart';
 import '../../domain/entities/get_all_chatroom_response.dart';
-import '../freely_talk_chatroom/widget/chatroom_loading_screen.dart';
+import '../widget/chatroom_loading_screen.dart';
 import 'widget/feature_card.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
