@@ -1,5 +1,6 @@
 import 'package:elarise/core/data/repositories/base_auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:google_sign_in/google_sign_in.dart';
 
 class BaseAuthRepositoryImpl implements BaseAuthRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
@@ -26,6 +27,16 @@ class BaseAuthRepositoryImpl implements BaseAuthRepository {
   @override
   Future<void> logout() async {
     try {
+      // Sign out from Google first if the user logged in using Google
+      firebase_auth.User? currentUser = _firebaseAuth.currentUser;
+      if (currentUser != null) {
+        final isGoogleUser = currentUser.providerData
+            .any((profile) => profile.providerId == 'google.com');
+        if (isGoogleUser) {
+          await GoogleSignIn().signOut();
+        }
+      }
+
       await _firebaseAuth.signOut();
       if (_firebaseAuth.currentUser == null) {
         return;
@@ -81,6 +92,21 @@ class BaseAuthRepositoryImpl implements BaseAuthRepository {
       } else {
         throw FirebaseAuthException('User not found');
       }
+    } catch (e) {
+      throw FirebaseAuthException(e.toString());
+    }
+  }
+
+  @override
+  Future<firebase_auth.User?> continueWithGoogle() async {
+    try {
+      final account = await GoogleSignIn().signIn();
+      final auth = await account?.authentication;
+      final credential = firebase_auth.GoogleAuthProvider.credential(
+          idToken: auth?.idToken, accessToken: auth?.accessToken);
+      final userCredential =
+          await _firebaseAuth.signInWithCredential(credential);
+      return userCredential.user;
     } catch (e) {
       throw FirebaseAuthException(e.toString());
     }

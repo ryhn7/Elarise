@@ -96,4 +96,28 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return ResultState.error(e.toString());
     }
   }
+
+  @override
+  Future<ResultState<User?>> continueWithGoogle() async {
+    try {
+      final firebaseUser =
+          await _baseAuthRepository.continueWithGoogle();
+
+      final user =
+          firebaseUser != null ? firebaseUserToUser(firebaseUser) : null;
+      final token = await _baseAuthRepository.getUserToken() ?? '';
+
+      // save user data to shared preferences
+      final userPreference = firebaseUser != null
+          ? firebaseUserToUserPreference(firebaseUser, token)
+          : null;
+      await _userDatastoreRepository.saveUser(userPreference!);
+
+      Configuration.token = token;
+
+      return ResultState.success(user);
+    } catch (e) {
+      return ResultState.error(e.toString());
+    }
+  }
 }

@@ -10,4 +10,5 @@ abstract class BaseAuthRepository {
   firebase_auth.User? getCurrentUser();
   Future<String?> getUserToken();
   Future<firebase_auth.User?> initProfile(String name);
+  Future<firebase_auth.User?> continueWithGoogle();
 }

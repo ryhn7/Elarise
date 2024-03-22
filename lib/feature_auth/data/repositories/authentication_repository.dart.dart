@@ -14,6 +14,7 @@ abstract interface class AuthenticationRepository {
     required String password,
   });
 
-
   Future<ResultState<User?>> getCurrentUser();
+
+  Future<ResultState<User?>> continueWithGoogle();
 }
