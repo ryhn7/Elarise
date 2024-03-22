@@ -173,10 +173,8 @@ class AssistantApi {
         'Content-Type': 'application/json',
       };
 
-      final response = await apiConfig.deleteApiService(
-          'chatroom/$chatRoomId',
-          headers: headers,
-          decoder: (json) => null);
+      final response = await apiConfig.deleteApiService('chatroom/$chatRoomId',
+          headers: headers, decoder: (json) => null);
 
       return response;
     } catch (e) {
@@ -207,17 +205,16 @@ class AssistantApi {
     }
   }
 
-  Future<ElaraResponse> deleteChat(String chatRoomId, String idMessage) async {
+  Future<void> deleteChat(String chatRoomId, String idMessage) async {
     try {
       var headers = {
         'Content-Type': 'application/json',
       };
 
-      final response = await apiConfig.deleteApiService<ElaraResponse>(
-          'chatroom/$chatRoomId/delete-text/$idMessage',
+      final response = await apiConfig.deleteApiService(
+          'chatroom/$chatRoomId/chat/$idMessage',
           headers: headers,
-          decoder: (json) => ElaraResponse.fromJson(json));
-
+          decoder: (json) => null);
       return response;
     } catch (e) {
       throw Exception('Failed to delete chat: $e');

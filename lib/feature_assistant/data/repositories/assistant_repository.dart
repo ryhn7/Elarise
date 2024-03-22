@@ -26,4 +26,9 @@ abstract interface class AssistantRepository {
     required String chatRoomId,
     required String messageText,
   });
+
+  Future<ResultState<void>> deleteChat({
+    required String chatRoomId,
+    required String idMessage,
+  });
 }
