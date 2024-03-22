@@ -1,5 +1,6 @@
 import 'package:elarise/di/repositories/assistant_repository/assistant_repository_provider.dart';
 import 'package:elarise/feature_assistant/domain/usecases/create_grammar_talk_room.dart';
+import 'package:elarise/feature_assistant/domain/usecases/delete_chat.dart';
 import 'package:elarise/feature_assistant/domain/usecases/edit_chatroom.dart';
 import 'package:elarise/feature_assistant/domain/usecases/freely_talk_chat.dart';
 import 'package:elarise/feature_assistant/domain/usecases/get_all_freely_talk_rooms.dart';
@@ -34,4 +35,6 @@ UseCaseAssistant useCaseAssistant(UseCaseAssistantRef ref) => UseCaseAssistant(
     editChatRoom: EditChatRoom(
         assistantRepository: ref.watch(assistantRepositoryProvider)),
     deleteChatRoom: DeleteChatRoom(
+        assistantRepository: ref.watch(assistantRepositoryProvider)),
+    deleteChat: DeleteChat(
         assistantRepository: ref.watch(assistantRepositoryProvider)));
