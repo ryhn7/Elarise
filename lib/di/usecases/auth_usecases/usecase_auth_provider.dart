@@ -1,3 +1,4 @@
+import 'package:elarise/feature_auth/domain/usecases/continue_with_google.dart';
 import 'package:elarise/feature_auth/domain/usecases/login_email_password.dart';
 import 'package:elarise/feature_auth/domain/usecases/usecase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -17,6 +18,9 @@ UseCaseAuth useCaseAuth(UseCaseAuthRef ref) => UseCaseAuth(
           authenticationRepository:
               ref.watch(authenticationRepositoryProvider)),
       getCurrentUser: GetCurrentUser(
+          authenticationRepository:
+              ref.watch(authenticationRepositoryProvider)),
+      continueWithGoogle: ContinueWithGoogle(
           authenticationRepository:
               ref.watch(authenticationRepositoryProvider)),
     );

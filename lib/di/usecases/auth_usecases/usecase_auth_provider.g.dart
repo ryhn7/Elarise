@@ -6,7 +6,7 @@ part of 'usecase_auth_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$useCaseAuthHash() => r'e657807614f84a747d436b66c3a47d3b0e1caeeb';
+String _$useCaseAuthHash() => r'60a6e078a4dad6ab26de02a41fde84ccb4e7ad3d';
 
 /// See also [useCaseAuth].
 @ProviderFor(useCaseAuth)
