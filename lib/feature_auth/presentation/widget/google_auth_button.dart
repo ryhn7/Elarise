@@ -3,8 +3,11 @@ import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
 
 class GoogleAuthButton extends StatelessWidget {
-  final String labelText;
-  const GoogleAuthButton({super.key, required this.labelText});
+  final VoidCallback? onPressed;
+  final bool continueWithGoogleLoading;
+
+  const GoogleAuthButton(
+      {super.key, this.onPressed, this.continueWithGoogleLoading = false});
 
   @override
   Widget build(BuildContext context) {
@@ -12,22 +15,27 @@ class GoogleAuthButton extends StatelessWidget {
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
             backgroundColor: tan,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(36))),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset("assets/images/google_logo.png", width: 24, height: 24),
-            const SizedBox(width: 12),
-            Text(
-              labelText,
-              style: getSansFranciscoBold16(color: neutralFour),
-            ),
-          ],
-        ),
+        child: continueWithGoogleLoading
+            ? CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(neutralFour),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset("assets/images/google_logo.png",
+                      width: 24, height: 24),
+                  const SizedBox(width: 12),
+                  Text(
+                    "Continue with Google",
+                    style: getSansFranciscoBold16(color: neutralFour),
+                  ),
+                ],
+              ),
       ),
     );
   }
