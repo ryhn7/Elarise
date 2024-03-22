@@ -20,6 +20,8 @@ ElaraResponse _$ElaraResponseFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ElaraResponse {
+  String get idMessage => throw _privateConstructorUsedError;
+  String get idAIMessage => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
   bool get isUserMessage => throw _privateConstructorUsedError;
   bool get isPlaceholder => throw _privateConstructorUsedError;
@@ -36,7 +38,12 @@ abstract class $ElaraResponseCopyWith<$Res> {
           ElaraResponse value, $Res Function(ElaraResponse) then) =
       _$ElaraResponseCopyWithImpl<$Res, ElaraResponse>;
   @useResult
-  $Res call({String message, bool isUserMessage, bool isPlaceholder});
+  $Res call(
+      {String idMessage,
+      String idAIMessage,
+      String message,
+      bool isUserMessage,
+      bool isPlaceholder});
 }
 
 /// @nodoc
@@ -52,11 +59,21 @@ class _$ElaraResponseCopyWithImpl<$Res, $Val extends ElaraResponse>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? idMessage = null,
+    Object? idAIMessage = null,
     Object? message = null,
     Object? isUserMessage = null,
     Object? isPlaceholder = null,
   }) {
     return _then(_value.copyWith(
+      idMessage: null == idMessage
+          ? _value.idMessage
+          : idMessage // ignore: cast_nullable_to_non_nullable
+              as String,
+      idAIMessage: null == idAIMessage
+          ? _value.idAIMessage
+          : idAIMessage // ignore: cast_nullable_to_non_nullable
+              as String,
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -81,7 +98,12 @@ abstract class _$$ElaraResponseImplCopyWith<$Res>
       __$$ElaraResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message, bool isUserMessage, bool isPlaceholder});
+  $Res call(
+      {String idMessage,
+      String idAIMessage,
+      String message,
+      bool isUserMessage,
+      bool isPlaceholder});
 }
 
 /// @nodoc
@@ -95,11 +117,21 @@ class __$$ElaraResponseImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? idMessage = null,
+    Object? idAIMessage = null,
     Object? message = null,
     Object? isUserMessage = null,
     Object? isPlaceholder = null,
   }) {
     return _then(_$ElaraResponseImpl(
+      idMessage: null == idMessage
+          ? _value.idMessage
+          : idMessage // ignore: cast_nullable_to_non_nullable
+              as String,
+      idAIMessage: null == idAIMessage
+          ? _value.idAIMessage
+          : idAIMessage // ignore: cast_nullable_to_non_nullable
+              as String,
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -120,13 +152,21 @@ class __$$ElaraResponseImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ElaraResponseImpl implements _ElaraResponse {
   const _$ElaraResponseImpl(
-      {required this.message,
+      {this.idMessage = '',
+      this.idAIMessage = '',
+      required this.message,
       this.isUserMessage = false,
       this.isPlaceholder = false});
 
   factory _$ElaraResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$ElaraResponseImplFromJson(json);
 
+  @override
+  @JsonKey()
+  final String idMessage;
+  @override
+  @JsonKey()
+  final String idAIMessage;
   @override
   final String message;
   @override
@@ -138,7 +178,7 @@ class _$ElaraResponseImpl implements _ElaraResponse {
 
   @override
   String toString() {
-    return 'ElaraResponse(message: $message, isUserMessage: $isUserMessage, isPlaceholder: $isPlaceholder)';
+    return 'ElaraResponse(idMessage: $idMessage, idAIMessage: $idAIMessage, message: $message, isUserMessage: $isUserMessage, isPlaceholder: $isPlaceholder)';
   }
 
   @override
@@ -146,6 +186,10 @@ class _$ElaraResponseImpl implements _ElaraResponse {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ElaraResponseImpl &&
+            (identical(other.idMessage, idMessage) ||
+                other.idMessage == idMessage) &&
+            (identical(other.idAIMessage, idAIMessage) ||
+                other.idAIMessage == idAIMessage) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.isUserMessage, isUserMessage) ||
                 other.isUserMessage == isUserMessage) &&
@@ -155,8 +199,8 @@ class _$ElaraResponseImpl implements _ElaraResponse {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, message, isUserMessage, isPlaceholder);
+  int get hashCode => Object.hash(runtimeType, idMessage, idAIMessage, message,
+      isUserMessage, isPlaceholder);
 
   @JsonKey(ignore: true)
   @override
@@ -174,13 +218,19 @@ class _$ElaraResponseImpl implements _ElaraResponse {
 
 abstract class _ElaraResponse implements ElaraResponse {
   const factory _ElaraResponse(
-      {required final String message,
+      {final String idMessage,
+      final String idAIMessage,
+      required final String message,
       final bool isUserMessage,
       final bool isPlaceholder}) = _$ElaraResponseImpl;
 
   factory _ElaraResponse.fromJson(Map<String, dynamic> json) =
       _$ElaraResponseImpl.fromJson;
 
+  @override
+  String get idMessage;
+  @override
+  String get idAIMessage;
   @override
   String get message;
   @override

@@ -7,6 +7,8 @@ part 'elara_response.g.dart';
 class ElaraResponse with _$ElaraResponse {
 
   const factory ElaraResponse({
+    @Default('') String idMessage,
+    @Default('') String idAIMessage,
     required String message,
     @Default(false) bool isUserMessage,
     @Default(false) bool isPlaceholder,
