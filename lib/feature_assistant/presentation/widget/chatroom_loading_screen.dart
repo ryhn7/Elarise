@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../../../theme/colors.dart';
-import '../../../../theme/style.dart';
+import '../../../theme/colors.dart';
+import '../../../theme/style.dart';
 
 class ChatroomLoadingScreen extends StatelessWidget {
   const ChatroomLoadingScreen({super.key});
