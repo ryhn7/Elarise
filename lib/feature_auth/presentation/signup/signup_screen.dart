@@ -36,8 +36,7 @@ class SignUpScreen extends ConsumerWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset("assets/images/elarise_logo.png",
-              width: 64, height: 64),
+          Image.asset("assets/images/elarise_logo.png", width: 64, height: 64),
           const SizedBox(height: 24),
           Text(
             "Create your account",
@@ -137,7 +136,15 @@ class SignUpScreen extends ConsumerWidget {
               const SizedBox(height: 32),
               buildDividerSignUpAlternate(),
               const SizedBox(height: 32),
-              const GoogleAuthButton(labelText: "Continue with Google")
+              GoogleAuthButton(
+                onPressed: () {
+                  ref
+                      .read(signUpStateNotifierProvider.notifier)
+                      .continueWithGoogle();
+                },
+                continueWithGoogleLoading:
+                    signUpState.continueWithGoogleLoading,
+              )
             ],
           ),
         ),

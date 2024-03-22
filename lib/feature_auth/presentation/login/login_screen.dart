@@ -147,7 +147,14 @@ class LoginScreen extends ConsumerWidget {
               const SizedBox(height: 32),
               buildDividerLoginAlternate(),
               const SizedBox(height: 32),
-              const GoogleAuthButton(labelText: "Continue with Google")
+              GoogleAuthButton(
+                onPressed: () {
+                  ref
+                      .read(loginStateNotifierProvider.notifier)
+                      .continueWithGoogle();
+                },
+                continueWithGoogleLoading: loginState.continueWithGoogleLoading,
+              )
             ],
           ),
         ),

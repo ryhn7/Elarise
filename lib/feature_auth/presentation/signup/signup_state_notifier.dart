@@ -54,6 +54,29 @@ class SignUpStateNotifier extends StateNotifier<SignUpState> {
       state = state.copyWith(error: e.toString(), isLoading: false, user: null);
     }
   }
+
+  Future<void> continueWithGoogle() async {
+    try {
+      state = state.copyWith(continueWithGoogleLoading: true, user: null, error: null);
+
+      final useCase = ref.read(useCaseAuthProvider);
+
+      var result = await useCase.continueWithGoogle();
+
+      if (result is Success) {
+        state = state.copyWith(
+            user: result.resultData, continueWithGoogleLoading: false, error: null);
+      } else {
+        state = state.copyWith(
+            error: result.errorMessage ?? 'Failed to login',
+            continueWithGoogleLoading: false,
+            user: null);
+      }
+    } catch (e) {
+      state = state.copyWith(error: e.toString(), continueWithGoogleLoading: false, user: null);
+    }
+  
+  }
 }
 
 final signUpStateNotifierProvider =
