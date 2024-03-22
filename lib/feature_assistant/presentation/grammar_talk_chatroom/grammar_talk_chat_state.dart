@@ -13,11 +13,13 @@ class GrammarTalkChatState {
 
   final List<ElaraResponse> messageResponse;
   final UserPreferences? userPreferences;
+  final Map<String, String> userMessageIds;
 
   GrammarTalkChatState({
     this.isLoading = false,
     this.error,
     this.messageResponse = const [],
+    this.userMessageIds = const {},
     this.userPreferences,
     this.isListening = false,
     this.isSpeaking = false,
@@ -29,6 +31,7 @@ class GrammarTalkChatState {
   GrammarTalkChatState copyWith({
     bool? isLoading,
     List<ElaraResponse>? messageResponse,
+    Map<String, String>? userMessageIds,
     UserPreferences? userPreferences,
     String? error,
     bool? isListening,
@@ -41,6 +44,7 @@ class GrammarTalkChatState {
       isLoading: isLoading ?? this.isLoading,
       messageResponse: messageResponse ?? this.messageResponse,
       userPreferences: userPreferences ?? this.userPreferences,
+      userMessageIds: userMessageIds ?? this.userMessageIds,
       isListening: isListening ?? this.isListening,
       isSpeaking: isSpeaking ?? this.isSpeaking,
       isTyping: isTyping ?? this.isTyping,

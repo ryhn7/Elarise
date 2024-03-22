@@ -148,10 +148,16 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
         // Add the actual AI response to the messages
         newMessages.add(result.resultData!);
 
+        // Update userMessageIds with the idMessage from the response
+        final userMessageId = result.resultData!.idMessage;
+        final newUserMessageIds = Map<String, String>.from(state.userMessageIds)
+          ..[messageText] = userMessageId;
+
         state = state.copyWith(
           isLoading: false,
           messageResponse: newMessages,
           isResponding: false,
+          userMessageIds: newUserMessageIds,
         );
       } else {
         state = state.copyWith(
