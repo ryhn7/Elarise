@@ -9,6 +9,7 @@ class GrammarTalkChatState {
   final bool isSpeaking;
   final bool isTyping;
   final bool isResponding;
+  final bool isDeleteChat;
   final String currentSpokenWord;
 
   final List<ElaraResponse> messageResponse;
@@ -25,6 +26,7 @@ class GrammarTalkChatState {
     this.isSpeaking = false,
     this.isTyping = false,
     this.isResponding = false,
+    this.isDeleteChat = false,
     this.currentSpokenWord = '',
   });
 
@@ -38,6 +40,7 @@ class GrammarTalkChatState {
     bool? isSpeaking,
     bool? isTyping,
     bool? isResponding,
+    bool? isDeleteChat,
     String? currentSpokenWord,
   }) {
     return GrammarTalkChatState(
@@ -49,6 +52,7 @@ class GrammarTalkChatState {
       isSpeaking: isSpeaking ?? this.isSpeaking,
       isTyping: isTyping ?? this.isTyping,
       isResponding: isResponding ?? this.isResponding,
+      isDeleteChat: isDeleteChat ?? this.isDeleteChat,
       currentSpokenWord: currentSpokenWord ?? this.currentSpokenWord,
       error: error ?? error,
     );

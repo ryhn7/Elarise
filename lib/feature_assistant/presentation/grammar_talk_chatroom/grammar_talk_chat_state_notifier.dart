@@ -180,6 +180,68 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
     state = state.copyWith(isTyping: isTyping);
   }
 
+  Future<void> deleteChat(String idMessage) async {
+    try {
+      state = state.copyWith(isLoading: true, isDeleteChat: true);
+
+      final usecase = ref.read(useCaseAssistantProvider);
+
+      var result = await usecase.deleteChat(
+          chatRoomId: _chatRoomId!, idMessage: idMessage);
+
+      if (result is Success) {
+        // Remove the deleted message from the list the message before
+        // var newMessages = List<ElaraResponse>.from(state.messageResponse)
+        //   ..removeWhere((element) => element.idMessage == idMessage);
+
+        // Find the index of the message to be deleted
+        final indexToDelete = state.messageResponse
+            .indexWhere((element) => element.idMessage == idMessage);
+
+        if (indexToDelete != -1) {
+          // Remove the deleted message from the list
+          var newMessages = List<ElaraResponse>.from(state.messageResponse);
+          newMessages.removeAt(indexToDelete);
+
+          // Check if the deleted message is a user message
+          if (indexToDelete > 0 &&
+              state.messageResponse[indexToDelete - 1].isUserMessage) {
+            // If it's a user message, delete it
+            newMessages.removeAt(indexToDelete - 1);
+          } else if (indexToDelete < state.messageResponse.length - 1 &&
+              !state.messageResponse[indexToDelete + 1].isUserMessage) {
+            // If it's an AI response, and there's a user message after it, delete it
+            newMessages.removeAt(indexToDelete + 1);
+          }
+
+          state = state.copyWith(
+            isLoading: false,
+            messageResponse: newMessages,
+            isDeleteChat: false,
+          );
+        } else {
+          state = state.copyWith(
+            isLoading: false,
+            error: 'Message not found',
+            isDeleteChat: false,
+          );
+        }
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          error: result.errorMessage ?? 'An error occurred',
+          isDeleteChat: false,
+        );
+      }
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: 'An error occurred',
+        isDeleteChat: false,
+      );
+    }
+  }
+
   @override
   void dispose() {
     speechToText.stop();
