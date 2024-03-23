@@ -27,6 +27,12 @@ abstract interface class AssistantRepository {
     required String messageText,
   });
 
+  Future<ResultState<ElaraResponse>> editChat({
+    required String chatRoomId,
+    required String idMessage,
+    required String messageText,
+  });
+
   Future<ResultState<void>> deleteChat({
     required String chatRoomId,
     required String idMessage,
