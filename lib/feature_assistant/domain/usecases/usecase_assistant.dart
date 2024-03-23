@@ -2,6 +2,7 @@ import 'package:elarise/feature_assistant/domain/usecases/create_freely_talk_roo
 import 'package:elarise/feature_assistant/domain/usecases/create_grammar_talk_room.dart';
 import 'package:elarise/feature_assistant/domain/usecases/delete_chat.dart';
 import 'package:elarise/feature_assistant/domain/usecases/delete_chatroom.dart';
+import 'package:elarise/feature_assistant/domain/usecases/edit_chat.dart';
 import 'package:elarise/feature_assistant/domain/usecases/edit_chatroom.dart';
 import 'package:elarise/feature_assistant/domain/usecases/freely_talk_chat.dart';
 import 'package:elarise/feature_assistant/domain/usecases/get_all_freely_talk_rooms.dart';
@@ -17,6 +18,7 @@ class UseCaseAssistant {
   final GetAllGrammarTalkRooms getAllGrammarTalkRooms;
   final EditChatRoom editChatRoom;
   final DeleteChatRoom deleteChatRoom;
+  final EditChat editChat;
   final DeleteChat deleteChat;
 
   UseCaseAssistant(
@@ -28,6 +30,7 @@ class UseCaseAssistant {
       required this.getAllGrammarTalkRooms,
       required this.editChatRoom,
       required this.deleteChatRoom,
+      required this.editChat,
       required this.deleteChat
       });
 }
