@@ -190,10 +190,6 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
           chatRoomId: _chatRoomId!, idMessage: idMessage);
 
       if (result is Success) {
-        // Remove the deleted message from the list the message before
-        // var newMessages = List<ElaraResponse>.from(state.messageResponse)
-        //   ..removeWhere((element) => element.idMessage == idMessage);
-
         // Find the index of the message to be deleted
         final indexToDelete = state.messageResponse
             .indexWhere((element) => element.idMessage == idMessage);
@@ -238,6 +234,61 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
         isLoading: false,
         error: 'An error occurred',
         isDeleteChat: false,
+      );
+    }
+  }
+
+  Future<void> editChat(String idMessage, String messageText) async {
+    try {
+      state = state.copyWith(isLoading: true);
+
+      final usecase = ref.read(useCaseAssistantProvider);
+
+      var result = await usecase.editChat(
+          chatRoomId: _chatRoomId!,
+          idMessage: idMessage,
+          messageText: messageText);
+
+      if (result is Success) {
+        // Find the index of the message to be edited
+        final indexToEdit = state.messageResponse
+            .indexWhere((element) => element.idMessage == idMessage);
+
+        if (indexToEdit != -1) {
+          // Update the message with the new text
+          var newMessages = List<ElaraResponse>.from(state.messageResponse);
+          newMessages[indexToEdit] = ElaraResponse(
+              message: result.resultData!.message,
+              isUserMessage: false);
+
+              // i want to update the user message also
+          if (indexToEdit > 0 && state.messageResponse[indexToEdit - 1].isUserMessage) {
+            newMessages[indexToEdit - 1] = ElaraResponse(
+              message: messageText,
+              isUserMessage: true,
+            );
+          }
+
+          state = state.copyWith(
+            isLoading: false,
+            messageResponse: newMessages,
+          );
+        } else {
+          state = state.copyWith(
+            isLoading: false,
+            error: 'Message not found',
+          );
+        }
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          error: result.errorMessage ?? 'An error occurred',
+        );
+      }
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: 'An error occurred',
       );
     }
   }

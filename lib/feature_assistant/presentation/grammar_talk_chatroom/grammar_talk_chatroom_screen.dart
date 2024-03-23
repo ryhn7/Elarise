@@ -24,6 +24,7 @@ class GrammarTalkChatroomScreen extends ConsumerStatefulWidget {
 class _GrammarTalkChatroomScreenState
     extends ConsumerState<GrammarTalkChatroomScreen> {
   final TextEditingController messageController = TextEditingController();
+  final TextEditingController editMessageController = TextEditingController();
 
   @override
   void initState() {
@@ -54,11 +55,12 @@ class _GrammarTalkChatroomScreenState
   @override
   void dispose() {
     messageController.dispose();
+    editMessageController.dispose();
     super.dispose();
   }
 
-  void _showChatOptions(
-      BuildContext context, RelativeRect position, String idMessage) {
+  void _showChatOptions(BuildContext context, RelativeRect position,
+      String idMessage, String userMessage) {
     // use popupMenuButton
     showMenu(
       context: context,
@@ -74,6 +76,9 @@ class _GrammarTalkChatroomScreenState
             onTap: () {
               // Close the modal first
               Navigator.pop(context);
+
+              // Show the edit dialog
+              _showEditChat(context, idMessage, userMessage);
             },
           ),
         ),
@@ -87,11 +92,75 @@ class _GrammarTalkChatroomScreenState
               ref
                   .read(grammarTalkChatStateNotifierProvider.notifier)
                   .deleteChat(idMessage);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    content: Text("Chat deleted"),
+                    duration: Duration(seconds: 2)),
+              );
               Navigator.of(context).pop(); // Dismiss the dialog after deletion
             },
           ),
         ),
       ],
+    );
+  }
+
+  void _showEditChat(
+      BuildContext context, String idMessage, String userMessage) {
+    editMessageController.text = userMessage;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevent closing dialog by tapping outside
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: neutralOneAlt,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0), // Dialog box radius
+          ),
+          title: Text(
+            'Edit Chat',
+            style: getSansFranciscoBold20(color: earieBlack),
+          ),
+          content: TextField(
+            controller: editMessageController,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Cancel',
+                style: getSansFranciscoMedium16(color: earieBlack),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Edit',
+                style: getSansFranciscoMedium16(
+                    color: ufoGreen), // Use your primary color
+              ),
+              onPressed: () {
+                // Implement renaming logic here
+                // Make sure to validate the input before processing
+                if (editMessageController.text.isNotEmpty) {
+                  ref
+                      .read(grammarTalkChatStateNotifierProvider.notifier)
+                      .editChat(idMessage, editMessageController.text);
+                }
+                Navigator.of(context)
+                    .pop(); // Dismiss the dialog after renaming
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -211,8 +280,10 @@ class _GrammarTalkChatroomScreenState
             );
             if (isUserMessage) {
               final userMessageId = userState.userMessageIds[message.message];
-              _showChatOptions(context, position, userMessageId!);
+              _showChatOptions(
+                  context, position, userMessageId!, message.message);
               log("idUser: $userMessageId");
+              log("userMessage: ${message.message}");
             }
           },
           child: Container(
