@@ -214,6 +214,7 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
             isLoading: false,
             messageResponse: newMessages,
             isDeleteChat: false,
+            isContextualAppBarEnabled: false,
           );
         } else {
           state = state.copyWith(
@@ -258,11 +259,11 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
           // Update the message with the new text
           var newMessages = List<ElaraResponse>.from(state.messageResponse);
           newMessages[indexToEdit] = ElaraResponse(
-              message: result.resultData!.message,
-              isUserMessage: false);
+              message: result.resultData!.message, isUserMessage: false);
 
-              // i want to update the user message also
-          if (indexToEdit > 0 && state.messageResponse[indexToEdit - 1].isUserMessage) {
+          // i want to update the user message also
+          if (indexToEdit > 0 &&
+              state.messageResponse[indexToEdit - 1].isUserMessage) {
             newMessages[indexToEdit - 1] = ElaraResponse(
               message: messageText,
               isUserMessage: true,
@@ -272,6 +273,7 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
           state = state.copyWith(
             isLoading: false,
             messageResponse: newMessages,
+            isContextualAppBarEnabled: false,
           );
         } else {
           state = state.copyWith(
@@ -291,6 +293,30 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
         error: 'An error occurred',
       );
     }
+  }
+
+  void enableContextualAppBar(String idMessage, String userMessage) {
+    state = state.copyWith(
+      isContextualAppBarEnabled: true,
+      selectedMessageId: idMessage,
+      selectedUserMessage: userMessage,
+    );
+  }
+
+  void disableContextualAppBar() {
+    state = state.copyWith(
+      isContextualAppBarEnabled: false,
+      selectedMessageId: '',
+      selectedUserMessage: '',
+    );
+  }
+
+  void highlightMessage(String idMessage) {
+    state = state.copyWith(highlightedMessageId: idMessage);
+  }
+
+  void clearMessageHighlight() {
+    state = state.copyWith(highlightedMessageId: '');
   }
 
   @override

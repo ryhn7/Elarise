@@ -52,57 +52,20 @@ class _GrammarTalkChatroomScreenState
     }
   }
 
-  @override
-  void dispose() {
-    messageController.dispose();
-    editMessageController.dispose();
-    super.dispose();
+  void enableContextualAppBar(String idMessage, String userMessage) {
+    final grammarTalkChatState =
+        ref.read(grammarTalkChatStateNotifierProvider.notifier);
+
+    grammarTalkChatState.enableContextualAppBar(idMessage, userMessage);
+    grammarTalkChatState.highlightMessage(idMessage);
   }
 
-  void _showChatOptions(BuildContext context, RelativeRect position,
-      String idMessage, String userMessage) {
-    // use popupMenuButton
-    showMenu(
-      context: context,
-      position: position,
-      color: neutralOneAlt,
-      items: [
-        PopupMenuItem(
-          child: ListTile(
-            title: Text(
-              'Edit Chat',
-              style: getSansFranciscoMedium16(color: earieBlack),
-            ),
-            onTap: () {
-              // Close the modal first
-              Navigator.pop(context);
+  void disableContextualAppBar() {
+    final grammarTalkChatState =
+        ref.read(grammarTalkChatStateNotifierProvider.notifier);
 
-              // Show the edit dialog
-              _showEditChat(context, idMessage, userMessage);
-            },
-          ),
-        ),
-        PopupMenuItem(
-          child: ListTile(
-            title: Text(
-              'Delete',
-              style: getSansFranciscoMedium16(color: red),
-            ),
-            onTap: () {
-              ref
-                  .read(grammarTalkChatStateNotifierProvider.notifier)
-                  .deleteChat(idMessage);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                    content: Text("Chat deleted"),
-                    duration: Duration(seconds: 2)),
-              );
-              Navigator.of(context).pop(); // Dismiss the dialog after deletion
-            },
-          ),
-        ),
-      ],
-    );
+    grammarTalkChatState.disableContextualAppBar();
+    grammarTalkChatState.clearMessageHighlight();
   }
 
   void _showEditChat(
@@ -164,6 +127,56 @@ class _GrammarTalkChatroomScreenState
     );
   }
 
+  void _showEditOrDeleteOption(BuildContext context) {
+    final grammarTalkChatState =
+        ref.watch(grammarTalkChatStateNotifierProvider);
+    showMenu(
+      context: context,
+      position: const RelativeRect.fromLTRB(100, 100, 0, 0),
+      color: neutralOneAlt,
+      items: [
+        PopupMenuItem(
+          child: ListTile(
+            title: Text(
+              'Edit Chat',
+              style: getSansFranciscoMedium16(color: earieBlack),
+            ),
+            onTap: () {
+              // Close the modal first
+              Navigator.pop(context);
+
+              // Show the edit dialog
+              _showEditChat(context, grammarTalkChatState.selectedMessageId,
+                  grammarTalkChatState.selectedUserMessage);
+
+              disableContextualAppBar();
+            },
+          ),
+        ),
+        PopupMenuItem(
+          child: ListTile(
+            title: Text(
+              'Delete',
+              style: getSansFranciscoMedium16(color: red),
+            ),
+            onTap: () {
+              ref
+                  .read(grammarTalkChatStateNotifierProvider.notifier)
+                  .deleteChat(grammarTalkChatState.selectedMessageId);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    content: Text("Chat deleted"),
+                    duration: Duration(seconds: 2)),
+              );
+              Navigator.of(context).pop(); // Dismiss the dialog after deletion
+              disableContextualAppBar();
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Listen to the grammarTalkChatState
@@ -189,34 +202,58 @@ class _GrammarTalkChatroomScreenState
     // }
 
     PreferredSizeWidget appBar() {
-      return AppBar(
-        backgroundColor: neutralOneAlt,
-        shape: Border(bottom: BorderSide(color: primary, width: 1)),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded, color: earieBlack),
-          onPressed: () {
-            ref.read(routerProvider).goNamed('home');
-          },
-        ),
-        title: Row(
-          children: [
-            Image.asset("assets/images/elarise_logo.png",
-                width: 40, height: 40),
-            const SizedBox(width: 16),
-            Text(
-              "Elara AI",
-              style: getSansFranciscoSemiBold20(color: earieBlack),
-            )
+      final grammarTalkChatState =
+          ref.watch(grammarTalkChatStateNotifierProvider);
+      if (grammarTalkChatState.isContextualAppBarEnabled) {
+        return AppBar(
+          backgroundColor: neutralOneAlt,
+          shape: Border(bottom: BorderSide(color: primary, width: 1)),
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_rounded, color: earieBlack),
+            onPressed: disableContextualAppBar,
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.more_vert, color: earieBlack),
+              onPressed: () {
+                _showEditOrDeleteOption(context);
+              },
+            ),
           ],
-        ),
-      );
+        );
+      } else {
+        return AppBar(
+          backgroundColor: neutralOneAlt,
+          shape: Border(bottom: BorderSide(color: primary, width: 1)),
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_rounded, color: earieBlack),
+            onPressed: () {
+              ref.read(routerProvider).goNamed('home');
+            },
+          ),
+          title: Row(
+            children: [
+              Image.asset("assets/images/elarise_logo.png",
+                  width: 40, height: 40),
+              const SizedBox(width: 16),
+              Text(
+                "Elara AI",
+                style: getSansFranciscoSemiBold20(color: earieBlack),
+              )
+            ],
+          ),
+        );
+      }
     }
 
     Widget buildMessages(ElaraResponse message) {
       final userState = ref.watch(grammarTalkChatStateNotifierProvider);
       final fullName = userState.userPreferences?.name ?? "User";
       final userName = fullName.split(" ")[0];
+      final isHighlighted = userState.highlightedMessageId ==
+          userState.userMessageIds[message.message];
 
       final userPhoto = userState.userPreferences?.photoProfile ??
           "https://firebasestorage.googleapis.com/v0/b/elarise-1d057.appspot.com/o/profileImage%2Fuser_placeholder.png?alt=media&token=edfb4a25-2f56-479c-9ed3-f58e90ca8ce5";
@@ -264,31 +301,18 @@ class _GrammarTalkChatroomScreenState
         );
       } else {
         return GestureDetector(
-          onLongPressStart: (details) {
-            final RenderBox messageBox =
-                context.findRenderObject() as RenderBox;
-            final RenderBox overlay =
-                Overlay.of(context).context.findRenderObject() as RenderBox;
-            final RelativeRect position = RelativeRect.fromRect(
-              Rect.fromPoints(
-                messageBox.localToGlobal(details.globalPosition,
-                    ancestor: overlay),
-                messageBox.localToGlobal(details.globalPosition,
-                    ancestor: overlay),
-              ),
-              Offset.zero & overlay.size,
-            );
+          onLongPress: () {
             if (isUserMessage) {
               final userMessageId = userState.userMessageIds[message.message];
-              _showChatOptions(
-                  context, position, userMessageId!, message.message);
+
+              enableContextualAppBar(userMessageId!, message.message);
               log("idUser: $userMessageId");
               log("userMessage: ${message.message}");
             }
           },
           child: Container(
             margin: EdgeInsets.only(
-                top: isUserMessage ? 40 : 0, right: 16, left: 16),
+                top: isUserMessage ? 40 : 12, right: 16, left: 16),
             child: Column(
               children: [
                 Row(
@@ -334,25 +358,35 @@ class _GrammarTalkChatroomScreenState
                   ],
                 ),
                 const SizedBox(height: 12),
-                Align(
-                  alignment: isUserMessage
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft,
-                  child: Container(
-                    constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.7,
+                Ink(
+                  color: isHighlighted
+                      ? primary.withOpacity(0.5)
+                      : Colors.transparent,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Align(
+                      alignment: isUserMessage
+                          ? Alignment.centerRight
+                          : Alignment.centerLeft,
+                      child: Container(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.7,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: isUserMessage ? blackOlive : primary,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(30)),
+                        ),
+                        child: Text(message.message,
+                            style: getSansFranciscoRegular16(
+                                color:
+                                    isUserMessage ? Colors.white : earieBlack)),
+                      ),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: isUserMessage ? blackOlive : primary,
-                      borderRadius: const BorderRadius.all(Radius.circular(30)),
-                    ),
-                    child: Text(message.message,
-                        style: getSansFranciscoRegular16(
-                            color: isUserMessage ? Colors.white : earieBlack)),
                   ),
-                ),
+                )
               ],
             ),
           ),
@@ -454,27 +488,34 @@ class _GrammarTalkChatroomScreenState
           ));
     }
 
-    return Scaffold(
-      backgroundColor: neutralOneAlt,
-      appBar: appBar(),
-      body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.only(bottom: 8),
-            reverse: true,
-            itemCount: grammarTalkChatState.messageResponse.length,
-            itemBuilder: ((context, index) {
-              // This reverses the message list so that the latest message is at the bottom of the screen.
-              int reversedIndex =
-                  grammarTalkChatState.messageResponse.length - 1 - index;
-              return buildMessages(
-                  grammarTalkChatState.messageResponse[reversedIndex]);
-            }),
+    return GestureDetector(
+      onTap: () {
+        // Hide the keyboard when the user taps outside of the TextField
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Scaffold(
+        backgroundColor: neutralOneAlt,
+        appBar: appBar(),
+        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.only(bottom: 8),
+              reverse: true,
+              itemCount: grammarTalkChatState.messageResponse.length,
+              itemBuilder: ((context, index) {
+                // This reverses the message list so that the latest message is at the bottom of the screen.
+                int reversedIndex =
+                    grammarTalkChatState.messageResponse.length - 1 - index;
+                return buildMessages(
+                    grammarTalkChatState.messageResponse[reversedIndex]);
+              }),
+            ),
           ),
-        ),
-        const SizedBox(height: 4),
-        chatSpace()
-      ]),
+          const SizedBox(height: 4),
+          chatSpace()
+        ]),
+      ),
     );
   }
 }
+

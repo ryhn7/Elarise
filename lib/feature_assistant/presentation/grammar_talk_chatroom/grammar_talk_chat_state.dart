@@ -11,6 +11,10 @@ class GrammarTalkChatState {
   final bool isResponding;
   final bool isDeleteChat;
   final String currentSpokenWord;
+  final bool isContextualAppBarEnabled;
+  final String selectedMessageId;
+  final String selectedUserMessage;
+  final String highlightedMessageId;
 
   final List<ElaraResponse> messageResponse;
   final UserPreferences? userPreferences;
@@ -28,6 +32,10 @@ class GrammarTalkChatState {
     this.isResponding = false,
     this.isDeleteChat = false,
     this.currentSpokenWord = '',
+    this.isContextualAppBarEnabled = false,
+    this.selectedMessageId = '',
+    this.selectedUserMessage = '',
+    this.highlightedMessageId = '',
   });
 
   GrammarTalkChatState copyWith({
@@ -42,6 +50,10 @@ class GrammarTalkChatState {
     bool? isResponding,
     bool? isDeleteChat,
     String? currentSpokenWord,
+    bool? isContextualAppBarEnabled,
+    String? selectedMessageId,
+    String? selectedUserMessage,
+    String? highlightedMessageId,
   }) {
     return GrammarTalkChatState(
       isLoading: isLoading ?? this.isLoading,
@@ -54,6 +66,11 @@ class GrammarTalkChatState {
       isResponding: isResponding ?? this.isResponding,
       isDeleteChat: isDeleteChat ?? this.isDeleteChat,
       currentSpokenWord: currentSpokenWord ?? this.currentSpokenWord,
+      isContextualAppBarEnabled:
+          isContextualAppBarEnabled ?? this.isContextualAppBarEnabled,
+      selectedMessageId: selectedMessageId ?? this.selectedMessageId,
+      selectedUserMessage: selectedUserMessage ?? this.selectedUserMessage,
+      highlightedMessageId: highlightedMessageId ?? this.highlightedMessageId,
       error: error ?? error,
     );
   }
