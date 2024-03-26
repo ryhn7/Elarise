@@ -311,81 +311,104 @@ class _GrammarTalkChatroomScreenState
             }
           },
           child: Container(
-            margin: EdgeInsets.only(
-                top: isUserMessage ? 40 : 12, right: 16, left: 16),
+            margin: isHighlighted
+                ? EdgeInsets.only(
+                    top: isUserMessage
+                        ? 40
+                        : 12, // Keep the top margin as it was
+                    right: 0, // Remove right margin when highlighted
+                    left: 0, // Remove left margin when highlighted
+                  )
+                : EdgeInsets.only(
+                    top: isUserMessage ? 40 : 12,
+                    right: 16,
+                    left: 16,
+                  ),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: isUserMessage
-                      ? MainAxisAlignment.end
-                      : MainAxisAlignment.start,
-                  children: [
-                    if (!isUserMessage)
-                      Image.asset("assets/images/elarise_logo_small.png",
-                          width: 24, height: 24),
-                    if (isUserMessage)
-                      CachedNetworkImage(
-                        imageUrl: userPhoto,
-                        imageBuilder: (context, imageProvider) => Container(
-                          width: 24,
-                          height: 24,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image: imageProvider, fit: BoxFit.cover),
-                          ),
-                        ),
-                        placeholder: (context, url) => Shimmer.fromColors(
-                          baseColor: Colors.grey[300]!,
-                          highlightColor: Colors.grey[100]!,
-                          child: Container(
-                            width: 55,
-                            height: 55,
+                Container(
+                  margin: EdgeInsets.only(right: isHighlighted ? 16 : 0),
+                  child: Row(
+                    mainAxisAlignment: isUserMessage
+                        ? MainAxisAlignment.end
+                        : MainAxisAlignment.start,
+                    children: [
+                      if (!isUserMessage)
+                        Image.asset("assets/images/elarise_logo_small.png",
+                            width: 24, height: 24),
+                      if (isUserMessage)
+                        CachedNetworkImage(
+                          imageUrl: userPhoto,
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 24,
+                            height: 24,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors.grey[300],
+                              image: DecorationImage(
+                                  image: imageProvider, fit: BoxFit.cover),
+                            ),
+                          ),
+                          placeholder: (context, url) => Shimmer.fromColors(
+                            baseColor: Colors.grey[300]!,
+                            highlightColor: Colors.grey[100]!,
+                            child: Container(
+                              width: 55,
+                              height: 55,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey[300],
+                              ),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        ),
+                      const SizedBox(width: 12),
+                      Text(
+                        isUserMessage ? userName : "Elara AI",
+                        style: getSansFranciscoSemiBold16(color: earieBlack),
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Align(
+                        alignment: isUserMessage
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
+                        child: Container(
+                          margin: EdgeInsets.only(right: isHighlighted ? 16 : 0),
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.7,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: isUserMessage ? blackOlive : primary,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(30)),
+                          ),
+                          child: Text(
+                            message.message,
+                            style: getSansFranciscoRegular16(
+                              color: isUserMessage ? Colors.white : earieBlack,
                             ),
                           ),
                         ),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                      ),
-                    const SizedBox(width: 12),
-                    Text(
-                      isUserMessage ? userName : "Elara AI",
-                      style: getSansFranciscoSemiBold16(color: earieBlack),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Ink(
-                  color: isHighlighted
-                      ? primary.withOpacity(0.5)
-                      : Colors.transparent,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: Align(
-                      alignment: isUserMessage
-                          ? Alignment.centerRight
-                          : Alignment.centerLeft,
-                      child: Container(
-                        constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width * 0.7,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
-                        decoration: BoxDecoration(
-                          color: isUserMessage ? blackOlive : primary,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(30)),
-                        ),
-                        child: Text(message.message,
-                            style: getSansFranciscoRegular16(
-                                color:
-                                    isUserMessage ? Colors.white : earieBlack)),
                       ),
                     ),
-                  ),
+                    if (isHighlighted)
+                      // Overlay that covers the entire Stack
+                      Positioned.fill(
+                          child: Container(
+                              decoration: BoxDecoration(
+                        color: primary.withOpacity(0.5),
+                      ))),
+                  ],
                 )
               ],
             ),
@@ -518,4 +541,3 @@ class _GrammarTalkChatroomScreenState
     );
   }
 }
-
