@@ -381,7 +381,8 @@ class _GrammarTalkChatroomScreenState
                             ? Alignment.centerRight
                             : Alignment.centerLeft,
                         child: Container(
-                          margin: EdgeInsets.only(right: isHighlighted ? 16 : 0),
+                          margin:
+                              EdgeInsets.only(right: isHighlighted ? 16 : 0),
                           constraints: BoxConstraints(
                             maxWidth: MediaQuery.of(context).size.width * 0.7,
                           ),
