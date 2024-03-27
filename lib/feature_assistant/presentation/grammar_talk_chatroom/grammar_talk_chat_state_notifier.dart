@@ -258,23 +258,38 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
         if (indexToEdit != -1) {
           // Update the message with the new text
           var newMessages = List<ElaraResponse>.from(state.messageResponse);
-          newMessages[indexToEdit] = ElaraResponse(
+          newMessages[indexToEdit] = newMessages[indexToEdit].copyWith(
               message: result.resultData!.message, isUserMessage: false);
 
           // i want to update the user message also
           if (indexToEdit > 0 &&
               state.messageResponse[indexToEdit - 1].isUserMessage) {
-            newMessages[indexToEdit - 1] = ElaraResponse(
+            final oldUserMessage =
+                state.messageResponse[indexToEdit - 1].message;
+            final newUserMessageIds = Map<String, String>.from(
+                state.userMessageIds)
+              ..remove(oldUserMessage) // Remove the old entry
+              ..[messageText] =
+                  idMessage; // Add the new entry with the updated message text
+
+            newMessages[indexToEdit - 1] =
+                newMessages[indexToEdit - 1].copyWith(
               message: messageText,
               isUserMessage: true,
             );
+            state = state.copyWith(
+              isLoading: false,
+              messageResponse: newMessages,
+              userMessageIds: newUserMessageIds,
+              isContextualAppBarEnabled: false,
+            );
+          } else {
+            state = state.copyWith(
+              isLoading: false,
+              messageResponse: newMessages,
+              isContextualAppBarEnabled: false,
+            );
           }
-
-          state = state.copyWith(
-            isLoading: false,
-            messageResponse: newMessages,
-            isContextualAppBarEnabled: false,
-          );
         } else {
           state = state.copyWith(
             isLoading: false,
