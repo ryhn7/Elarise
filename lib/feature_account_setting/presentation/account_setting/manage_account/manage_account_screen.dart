@@ -22,7 +22,7 @@ class ManageAccountScreen extends ConsumerWidget {
       }
     });
 
-    Widget appBar() {
+    PreferredSizeWidget appBar() {
       return AppBar(
         backgroundColor: neutralOneAlt,
         elevation: 0,
@@ -65,10 +65,11 @@ class ManageAccountScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: neutralOneAlt,
+      appBar: appBar(),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [appBar(), const SizedBox(height: 16), options()],
+          children: [const SizedBox(height: 16), options()],
         ),
       ),
     );

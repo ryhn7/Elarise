@@ -47,7 +47,7 @@ class AccountSettingScreen extends ConsumerWidget {
     final photoUrl = userPreferences.photoProfile ??
         "https://firebasestorage.googleapis.com/v0/b/elarise-1d057.appspot.com/o/profileImage%2Fuser_placeholder.png?alt=media&token=edfb4a25-2f56-479c-9ed3-f58e90ca8ce5";
 
-    Widget appBar() {
+    PreferredSizeWidget appBar() {
       return AppBar(
         backgroundColor: neutralOneAlt,
         elevation: 0,
@@ -149,12 +149,12 @@ class AccountSettingScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: neutralOneAlt,
+      appBar: appBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              appBar(),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(

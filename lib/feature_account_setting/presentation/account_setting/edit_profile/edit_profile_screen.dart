@@ -91,7 +91,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       imageProvider = NetworkImage(photoUrl);
     }
 
-    Widget appBar() {
+    PreferredSizeWidget appBar() {
       return AppBar(
         backgroundColor: neutralOneAlt,
         elevation: 0,
@@ -315,9 +315,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
     return Scaffold(
         backgroundColor: neutralOneAlt,
+        appBar: appBar(),
         body: Column(
           children: [
-            appBar(),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Form(
