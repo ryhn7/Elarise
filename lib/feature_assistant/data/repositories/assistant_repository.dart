@@ -14,8 +14,7 @@ abstract interface class AssistantRepository {
   Future<ResultState<ChatRoomResponse>> editChatRoom(
       {required String chatRoomId, required String chatRoomName});
 
-  Future<ResultState<void>> deleteChatRoom(
-      {required String chatRoomId});
+  Future<ResultState<void>> deleteChatRoom({required String chatRoomId});
 
   Future<ResultState<ElaraResponse>> freelyTalkChat({
     required String chatRoomId,
@@ -36,5 +35,9 @@ abstract interface class AssistantRepository {
   Future<ResultState<void>> deleteChat({
     required String chatRoomId,
     required String idMessage,
+  });
+
+  Future<ResultState<List<ElaraResponse>>> getDetailChatRoom({
+    required String chatRoomId,
   });
 }

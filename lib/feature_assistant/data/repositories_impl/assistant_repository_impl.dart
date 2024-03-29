@@ -211,4 +211,22 @@ class AssistantRepositoryImpl implements AssistantRepository {
       return ResultState.error(e.toString());
     }
   }
+
+  @override
+  Future<ResultState<List<ElaraResponse>>> getDetailChatRoom(
+      {required String chatRoomId}) async {
+    try {
+      final userPreferences = await _userDatastoreRepository.getUser();
+      final token = userPreferences.token ?? '';
+
+      if (token.isEmpty) {
+        return const ResultState.error('Token is empty');
+      }
+
+      final response = await _assistantApi.getDetailChatRoom(chatRoomId);
+      return ResultState.success(response);
+    } catch (e) {
+      return ResultState.error(e.toString());
+    }
+  }
 }

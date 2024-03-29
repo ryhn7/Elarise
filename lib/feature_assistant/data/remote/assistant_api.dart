@@ -1,7 +1,8 @@
 import 'package:elarise/core/data/remote/api_config.dart';
 import 'package:elarise/feature_assistant/domain/entities/chatroom_response.dart';
-import 'package:elarise/feature_assistant/domain/entities/get_all_chatroom_response.dart';
 import 'package:elarise/feature_assistant/domain/entities/elara_response.dart';
+import 'package:elarise/feature_assistant/domain/entities/get_all_chatroom_response.dart';
+import 'package:elarise/feature_assistant/domain/entities/get_detail_chatroom_response.dart';
 
 class AssistantApi {
   final ApiConfig apiConfig;
@@ -218,6 +219,23 @@ class AssistantApi {
       return response;
     } catch (e) {
       throw Exception('Failed to delete chat: $e');
+    }
+  }
+
+  Future<List<ElaraResponse>> getDetailChatRoom(String chatRoomId) async {
+    try {
+      var headers = {
+        'Content-Type': 'application/json',
+      };
+
+      final response = await apiConfig.getApiService<GetDetailChatroomResponse>(
+          'chatroom/$chatRoomId',
+          headers: headers,
+          decoder: (json) => GetDetailChatroomResponse.fromJson(json));
+
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to get detail chat room: $e');
     }
   }
 }
