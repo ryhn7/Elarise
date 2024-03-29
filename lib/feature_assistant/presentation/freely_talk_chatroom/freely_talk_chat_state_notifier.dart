@@ -163,6 +163,33 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
     }
   }
 
+  Future<void> fetchTalkHistory() async {
+    try {
+      state = state.copyWith(isLoading: true);
+
+      final useCase = ref.read(useCaseAssistantProvider);
+
+      var result = await useCase.getDetailChatRoom(chatRoomId: _chatRoomId!);
+
+      if (result is Success) {
+        state = state.copyWith(
+          isLoading: false,
+          messageResponse: result.resultData!,
+        );
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          error: result.errorMessage ?? 'An error occurred',
+        );
+      }
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: 'An error occurred',
+      );
+    }
+  }
+
   @override
   void dispose() {
     speechToText.stop();

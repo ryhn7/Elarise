@@ -367,10 +367,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       );
     }
 
-    Widget buildChatRoomCard(ChatRoom chatRoom, int index) {
+    Widget buildChatRoomCard(
+        ChatRoom chatRoom, int index, String dropdownValue) {
       final relativeTime = DateUtil().formatDateTime(chatRoom.createdAt);
 
       return GestureDetector(
+        onTap: () {
+          if (dropdownValue == 'Talking') {
+            ref.read(routerProvider).goNamed(
+                  'talk-freely-detail',
+                  extra: chatRoom.id,
+                );
+          } else if (dropdownValue == 'Grammar') {
+            ref.read(routerProvider).goNamed(
+                  'grammar-talk-detail',
+                  extra: chatRoom.id,
+                );
+          }
+        },
         onLongPress: () {
           _showChatRoomOptions(context, chatRoom);
         },
@@ -466,7 +480,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               return buildChatRoomLoadingCard();
             } else {
               final chatRoom = chatRooms[index];
-              return buildChatRoomCard(chatRoom, index);
+              return buildChatRoomCard(chatRoom, index, dropdownValue);
             }
           },
           childCount: isLoading ? loadingCardCount : chatRooms.length,

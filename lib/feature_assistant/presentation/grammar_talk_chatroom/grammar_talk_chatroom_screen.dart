@@ -14,7 +14,10 @@ import '../../domain/entities/elara_response.dart';
 
 class GrammarTalkChatroomScreen extends ConsumerStatefulWidget {
   final String chatRoomId;
-  const GrammarTalkChatroomScreen(this.chatRoomId, {super.key});
+  final bool isNewChatRoom;
+
+  const GrammarTalkChatroomScreen(this.chatRoomId,
+      {super.key, this.isNewChatRoom = false});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -29,12 +32,22 @@ class _GrammarTalkChatroomScreenState
   @override
   void initState() {
     super.initState();
-    ref.read(grammarTalkChatStateNotifierProvider.notifier).chatRoomId =
-        widget.chatRoomId;
+    final notifier = ref.read(grammarTalkChatStateNotifierProvider.notifier);
+    notifier.chatRoomId = widget.chatRoomId;
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(grammarTalkChatStateNotifierProvider.notifier).clearChat();
-    }); // Clear the chat when entering a new room
+    if (widget.isNewChatRoom) {
+      // If it's a new chat room, clear any previous chat state
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifier.clearChat();
+      });
+    } else {
+      // Otherwise, fetch the chat history for the given chatRoomId
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifier.fetchChatHistory();
+      });
+    }
+
+// Clear the chat when entering a new room
 
     log(widget.chatRoomId);
   }

@@ -16,7 +16,10 @@ import '../../../router/router_provider.dart';
 
 class FreelyTalkChatroomScreen extends ConsumerStatefulWidget {
   final String chatRoomId;
-  const FreelyTalkChatroomScreen(this.chatRoomId, {super.key});
+  final bool isNewChatRoom;
+
+  const FreelyTalkChatroomScreen(this.chatRoomId,
+      {super.key, this.isNewChatRoom = false});
 
   @override
   ConsumerState<FreelyTalkChatroomScreen> createState() =>
@@ -30,12 +33,20 @@ class _FreelyTalkChatroomScreenState
   @override
   void initState() {
     super.initState();
-    ref.read(freelyTalkChatStateNotifierProvider.notifier).chatRoomId =
-        widget.chatRoomId;
+    final notifier = ref.read(freelyTalkChatStateNotifierProvider.notifier);
+    notifier.chatRoomId = widget.chatRoomId;
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(freelyTalkChatStateNotifierProvider.notifier).clearChat();
-    }); // Clear the chat when entering a new room
+    if (widget.isNewChatRoom) {
+      // If it's a new chat room, clear any previous chat state
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifier.clearChat();
+      });
+    } else {
+      // Otherwise, fetch the talk history for the given chatRoomId
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifier.fetchTalkHistory();
+      });
+    }
 
     log(widget.chatRoomId);
   }

@@ -252,8 +252,8 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
 
       if (result is Success) {
         // Find the index of the message to be edited
-        final indexToEdit = state.messageResponse
-            .indexWhere((element) => element.idMessage == idMessage);
+        final indexToEdit = state.messageResponse.indexWhere((element) =>
+            element.idMessage == idMessage && element.isUserMessage == false);
 
         if (indexToEdit != -1) {
           // Update the message with the new text
@@ -306,6 +306,47 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
       state = state.copyWith(
         isLoading: false,
         error: 'An error occurred',
+      );
+    }
+  }
+
+  Future<void> fetchChatHistory() async {
+    try {
+      state = state.copyWith(isLoading: true);
+
+      final useCase = ref.read(useCaseAssistantProvider);
+
+      var result = await useCase.getDetailChatRoom(chatRoomId: _chatRoomId!);
+
+      if (result is Success) {
+        List<ElaraResponse> chatHistory = result.resultData!;
+        Map<String, String> newUserMessageIds = {};
+
+        // Iterate through the chat history to populate newUserMessageIds
+        for (var message in chatHistory) {
+          if (message.isUserMessage) {
+            // Assuming each message object has a 'text' and 'idMessage' property
+            newUserMessageIds[message.message] = message.idMessage;
+          }
+        }
+
+        state = state.copyWith(
+          isLoading: false,
+          messageResponse: chatHistory,
+          userMessageIds: newUserMessageIds, // Update the userMessageIds state
+        );
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          error: result.errorMessage ?? 'An error occurred',
+          messageResponse: null,
+        );
+      }
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: 'An error occurred',
+        messageResponse: null,
       );
     }
   }

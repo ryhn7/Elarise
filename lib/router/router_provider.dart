@@ -49,11 +49,25 @@ Raw<GoRouter> router(RouterRef ref) => GoRouter(
               name: 'talk-freely',
               builder: (context, state) {
                 final chatRoomId = state.extra as String;
-                return FreelyTalkChatroomScreen(chatRoomId);
+                return FreelyTalkChatroomScreen(chatRoomId, isNewChatRoom: true);
               }),
           GoRoute(
               path: '/grammar-talk',
               name: 'grammar-talk',
+              builder: (context, state) {
+                final chatRoomId = state.extra as String;
+                return GrammarTalkChatroomScreen(chatRoomId, isNewChatRoom: true);
+              }),
+          GoRoute(
+              path: '/talk-freely-detail',
+              name: 'talk-freely-detail',
+              builder: (context, state) {
+                final chatRoomId = state.extra as String;
+                return FreelyTalkChatroomScreen(chatRoomId);
+              }),
+          GoRoute(
+              path: '/grammar-talk-detail',
+              name: 'grammar-talk-detail',
               builder: (context, state) {
                 final chatRoomId = state.extra as String;
                 return GrammarTalkChatroomScreen(chatRoomId);
