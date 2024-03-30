@@ -75,4 +75,24 @@ class SettingRepositoryImpl implements SettingRepository {
       return ResultState.error(e.toString());
     }
   }
+
+  @override
+  Future<ResultState<bool>> updatePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    try {
+      bool reauthenticated =
+          await _baseAuthRepository.reauthenticateWithPassword(currentPassword);
+
+      if (!reauthenticated) {
+        return const ResultState.error('Reauthentication failed');
+      }
+
+      await _baseAuthRepository.updatePassword(newPassword);
+      return const ResultState.success(true);
+    } catch (e) {
+      return ResultState.error(e.toString());
+    }
+  }
 }

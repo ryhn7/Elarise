@@ -8,4 +8,10 @@ abstract interface class SettingRepository {
   Future<ResultState<bool>> logout();
 
   Future<ResultState<User?>> updateProfile({String? name, File? photoPath});
+
+  Future<ResultState<bool>> updatePassword({
+    required String currentPassword,
+    required String newPassword,
+  });
+
 }

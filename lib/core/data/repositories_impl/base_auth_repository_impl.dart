@@ -111,6 +111,38 @@ class BaseAuthRepositoryImpl implements BaseAuthRepository {
       throw FirebaseAuthException(e.toString());
     }
   }
+
+  @override
+  Future<bool> reauthenticateWithPassword(String currentPassword) {
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user != null) {
+        final credential = firebase_auth.EmailAuthProvider.credential(
+            email: user.email!, password: currentPassword);
+        return user
+            .reauthenticateWithCredential(credential)
+            .then((value) => true);
+      } else {
+        throw FirebaseAuthException('User not found');
+      }
+    } catch (e) {
+      throw FirebaseAuthException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> updatePassword(String newPassword) {
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user != null) {
+        return user.updatePassword(newPassword);
+      } else {
+        throw FirebaseAuthException('User not found');
+      }
+    } catch (e) {
+      throw FirebaseAuthException(e.toString());
+    }
+  }
 }
 
 class FirebaseAuthException implements Exception {
