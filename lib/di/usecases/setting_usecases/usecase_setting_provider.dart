@@ -1,4 +1,5 @@
 import 'package:elarise/feature_account_setting/domain/usecases/logout.dart';
+import 'package:elarise/feature_account_setting/domain/usecases/update_password.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../feature_account_setting/domain/usecases/update_profile.dart';
@@ -12,4 +13,6 @@ UseCaseSetting useCaseSetting(UseCaseSettingRef ref) => UseCaseSetting(
     logout: Logout(settingRepository: ref.watch(settingRepositoryProvider)),
     updateProfile: UpdateProfile(
       settingRepository: ref.watch(settingRepositoryProvider),
-    ));
+    ),
+    updatePassword: UpdatePassword(
+        settingRepository: ref.watch(settingRepositoryProvider)));
