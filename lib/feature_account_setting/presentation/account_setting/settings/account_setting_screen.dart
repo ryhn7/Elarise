@@ -127,7 +127,16 @@ class AccountSettingScreen extends ConsumerWidget {
     Widget options() {
       return Column(
         children: [
-          const Option(title: "Change password"),
+          InkWell(
+              onTap: () {
+                ref.read(routerProvider).goNamed('change-password');
+              },
+              child: const Column(
+                children: [
+                  SizedBox(height: 24),
+                  Option(title: "Change password"),
+                ],
+              )),
           InkWell(
               onTap: () {
                 ref.read(routerProvider).goNamed('manage-account');
@@ -160,7 +169,7 @@ class AccountSettingScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     userInformation(),
-                    const SizedBox(height: 48),
+                    const SizedBox(height: 24),
                     options()
                   ],
                 ),
