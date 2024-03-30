@@ -1,4 +1,5 @@
 import 'package:elarise/core/data/remote/api_config.dart';
+import 'package:elarise/feature_account_setting/presentation/account_setting/change_password/change_password_screen.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/edit_profile/edit_profile_screen.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/manage_account/manage_account_screen.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/settings/account_setting_screen.dart';
@@ -49,14 +50,16 @@ Raw<GoRouter> router(RouterRef ref) => GoRouter(
               name: 'talk-freely',
               builder: (context, state) {
                 final chatRoomId = state.extra as String;
-                return FreelyTalkChatroomScreen(chatRoomId, isNewChatRoom: true);
+                return FreelyTalkChatroomScreen(chatRoomId,
+                    isNewChatRoom: true);
               }),
           GoRoute(
               path: '/grammar-talk',
               name: 'grammar-talk',
               builder: (context, state) {
                 final chatRoomId = state.extra as String;
-                return GrammarTalkChatroomScreen(chatRoomId, isNewChatRoom: true);
+                return GrammarTalkChatroomScreen(chatRoomId,
+                    isNewChatRoom: true);
               }),
           GoRoute(
               path: '/talk-freely-detail',
@@ -72,6 +75,10 @@ Raw<GoRouter> router(RouterRef ref) => GoRouter(
                 final chatRoomId = state.extra as String;
                 return GrammarTalkChatroomScreen(chatRoomId);
               }),
+          GoRoute(
+              path: '/change-password',
+              name: 'change-password',
+              builder: (context, state) => const ChangePasswordScreen()),
         ],
         initialLocation: '/',
         debugLogDiagnostics: false,
