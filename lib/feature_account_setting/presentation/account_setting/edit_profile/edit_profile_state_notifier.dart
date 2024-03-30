@@ -14,6 +14,10 @@ class EditProfileStateNotifier extends StateNotifier<EditProfileState> {
     _loadUserPreferences();
   }
 
+  Future<void> refreshUserPreferences() async {
+    _loadUserPreferences(); // This method should fetch the latest user data
+  }
+
   Future<void> _loadUserPreferences() async {
     state = state.copyWith(isLoading: true);
 

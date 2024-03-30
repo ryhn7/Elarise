@@ -50,6 +50,12 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           context, ref, null, editProfileState.isLoading);
     } else if (editProfileState.userPreferences != null &&
         editProfileState.userPreferences!.token != null) {
+      // Triggering user preferences load or refresh
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref
+            .read(editProfileStateNotifierProvider.notifier)
+            .refreshUserPreferences();
+      });
       if (nameController.text.isEmpty) {
         final userName = editProfileState.userPreferences!.name ?? "User";
         nameController.text = userName;
@@ -130,8 +136,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       context: context,
                       builder: (context) => AlertDialog(
                         title: Text('Update Successful',
-                            style:
-                                getSansFranciscoSemiBold16(color: neutralFour)),
+                            style: getSansFranciscoSemiBold16(color: ufoGreen)),
                         content: Text('Profile updated successfully.',
                             style:
                                 getSansFranciscoRegular14(color: neutralFour)),
@@ -143,7 +148,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                               },
                               child: Text('OKAY',
                                   style: getSansFranciscoSemiBold14(
-                                      color: primary))),
+                                      color: neutralFour))),
                         ],
                       ),
                     );
@@ -152,8 +157,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       context: context,
                       builder: (context) => AlertDialog(
                         title: Text('Update Failed',
-                            style:
-                                getSansFranciscoSemiBold16(color: neutralFour)),
+                            style: getSansFranciscoSemiBold16(color: red)),
                         content: Text('Failed to update profile.',
                             style:
                                 getSansFranciscoRegular14(color: neutralFour)),
@@ -165,7 +169,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                               },
                               child: Text('OKAY',
                                   style: getSansFranciscoSemiBold14(
-                                      color: primary))),
+                                      color: neutralFour))),
                         ],
                       ),
                     );
