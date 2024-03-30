@@ -57,7 +57,8 @@ class SignUpStateNotifier extends StateNotifier<SignUpState> {
 
   Future<void> continueWithGoogle() async {
     try {
-      state = state.copyWith(continueWithGoogleLoading: true, user: null, error: null);
+      state = state.copyWith(
+          continueWithGoogleLoading: true, user: null, error: null);
 
       final useCase = ref.read(useCaseAuthProvider);
 
@@ -65,7 +66,9 @@ class SignUpStateNotifier extends StateNotifier<SignUpState> {
 
       if (result is Success) {
         state = state.copyWith(
-            user: result.resultData, continueWithGoogleLoading: false, error: null);
+            user: result.resultData,
+            continueWithGoogleLoading: false,
+            error: null);
       } else {
         state = state.copyWith(
             error: result.errorMessage ?? 'Failed to login',
@@ -73,9 +76,13 @@ class SignUpStateNotifier extends StateNotifier<SignUpState> {
             user: null);
       }
     } catch (e) {
-      state = state.copyWith(error: e.toString(), continueWithGoogleLoading: false, user: null);
+      state = state.copyWith(
+          error: e.toString(), continueWithGoogleLoading: false, user: null);
     }
-  
+  }
+
+  Future<void> clearState() async {
+    state = state.copyWith(error: null);
   }
 }
 

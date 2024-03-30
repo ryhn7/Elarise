@@ -52,6 +52,10 @@ class LoginStateNotifier extends StateNotifier<LoginState> {
       state = state.copyWith(error: e.toString(), continueWithGoogleLoading: false, user: null);
     }
   }
+
+  Future<void> clearState() async {
+    state = state.copyWith(error: null);
+  }
 }
 
 final loginStateNotifierProvider =
