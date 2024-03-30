@@ -83,7 +83,7 @@ class _ElariseAuthTextfieldState extends State<ElariseAuthTextfield> {
                     });
                   },
                   icon: Icon(
-                    _isObscure ? Icons.visibility : Icons.visibility_off,
+                    _isObscure ? Icons.visibility_off : Icons.visibility,
                     color: neutralThree,
                   ),
                 )
