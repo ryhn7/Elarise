@@ -1,4 +1,6 @@
 import 'package:elarise/core/data/remote/api_config.dart';
+import 'package:elarise/core/presentation/error/error_screen.dart';
+import 'package:elarise/core/presentation/error/network_error_screen.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/change_password/change_password_screen.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/edit_profile/edit_profile_screen.dart';
 import 'package:elarise/feature_account_setting/presentation/account_setting/manage_account/manage_account_screen.dart';
@@ -79,6 +81,14 @@ Raw<GoRouter> router(RouterRef ref) => GoRouter(
               path: '/change-password',
               name: 'change-password',
               builder: (context, state) => const ChangePasswordScreen()),
+          GoRoute(
+              path: '/network-error',
+              name: 'network-error',
+              builder: (context, state) => const NetworkErrorScreen()),
+          GoRoute(
+              path: '/common-error',
+              name: 'common-error',
+              builder: (context, state) => const ErrorScreen()),
         ],
         initialLocation: '/',
         debugLogDiagnostics: false,
