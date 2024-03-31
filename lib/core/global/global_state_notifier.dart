@@ -1,7 +1,7 @@
-import 'package:elarise/global/global_state.dart';
+import 'package:elarise/core/global/global_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../di/repositories/user_datastore_repository/user_datastore_repository_provider.dart';
+import '../../di/repositories/user_datastore_repository/user_datastore_repository_provider.dart';
 
 class GlobalStateNotifier extends StateNotifier<GlobalState> {
   final Ref ref;

@@ -3,7 +3,7 @@ import 'package:elarise/feature_account_setting/presentation/account_setting/cha
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../global/global_state_notifier.dart';
+import '../../../../core/global/global_state_notifier.dart';
 import '../../../../router/router_provider.dart';
 import '../../../../theme/colors.dart';
 import '../../../../theme/style.dart';

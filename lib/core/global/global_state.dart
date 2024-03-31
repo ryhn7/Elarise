@@ -1,5 +1,5 @@
-import '../core/domain/entities/user_preferences.dart';
-import '../feature_auth/domain/entities/user.dart';
+import '../domain/entities/user_preferences.dart';
+import '../../feature_auth/domain/entities/user.dart';
 
 class GlobalState {
   final bool isLoading;
