@@ -9,10 +9,12 @@ class AccountState {
   final User? user;
 
   final bool isLogout;
+  final bool isDelete;
 
   AccountState({
     firebase_auth.User? firebaseUser,
     this.isLogout = false,
+    this.isDelete = false,
     this.error,
     this.user,
     this.isLoading = false,
@@ -24,6 +26,7 @@ class AccountState {
     String? error,
     User? user,
     bool? isLogout,
+    bool? isDelete,
     bool? isLoading,
   }) {
     return AccountState(
@@ -32,6 +35,7 @@ class AccountState {
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
       isLogout: isLogout ?? this.isLogout,
+      isDelete: isDelete ?? this.isDelete,
     );
   }
 }

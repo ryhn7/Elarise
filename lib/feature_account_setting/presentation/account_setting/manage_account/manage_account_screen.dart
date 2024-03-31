@@ -8,11 +8,59 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../router/router_provider.dart';
 
-class ManageAccountScreen extends ConsumerWidget {
+class ManageAccountScreen extends ConsumerStatefulWidget {
   const ManageAccountScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ManageAccountScreen> createState() =>
+      _ManageAccountScreenState();
+}
+
+class _ManageAccountScreenState extends ConsumerState<ManageAccountScreen> {
+  void _showDeleteAccountConfirmation(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: neutralOneAlt,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              // Dialog box radius
+            ),
+            title: Text(
+              "Delete account",
+              style: getSansFranciscoBold20(color: earieBlack),
+            ),
+            content: Text(
+                "Your account will be deleted permanently. This action cannot be undone.",
+                style: getSansFranciscoMedium16(
+                    color: earieBlack.withOpacity(0.7))),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("Cancel",
+                    style: getSansFranciscoMedium16(color: earieBlack)),
+              ),
+              TextButton(
+                onPressed: () {
+                  ref
+                      .read(accountStateNotifierProvider.notifier)
+                      .deleteAccount();
+                  ref.read(routerProvider).goNamed('login');
+                },
+                child:
+                    Text("Delete", style: getSansFranciscoMedium16(color: red)),
+              )
+            ],
+          );
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     ref.listen<AccountState>(accountStateNotifierProvider, (previous, next) {
       if (previous != null &&
           previous.firebaseUser != null &&
@@ -53,10 +101,13 @@ class ManageAccountScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 24),
-            const Option(
-              title: "Delete account",
-              subtitle:
-                  "Your account will be deleted permanently. This action cannot be undone.",
+            InkWell(
+              onTap: () => _showDeleteAccountConfirmation(context),
+              child: const Option(
+                title: "Delete account",
+                subtitle:
+                    "Your account will be deleted permanently. This action cannot be undone.",
+              ),
             )
           ],
         ),

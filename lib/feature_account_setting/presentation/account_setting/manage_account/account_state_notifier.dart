@@ -27,6 +27,23 @@ class AccountStateNotifier extends StateNotifier<AccountState> {
       state = state.copyWith(isLogout: false);
     }
   }
+
+  Future<void> deleteAccount() async {
+    try {
+      final useCase = ref.read(useCaseSettingProvider);
+      var result = await useCase.deleteAccount();
+
+      if (result is Success) {
+        state = state.copyWith(firebaseUser: null, isDelete: true);
+        ref.read(loginStateNotifierProvider.notifier).state =
+            LoginState(isLoading: false, user: null);
+      } else {
+        state = state.copyWith(isDelete: false);
+      }
+    } catch (e) {
+      state = state.copyWith(isDelete: false);
+    }
+  }
 }
 
 final accountStateNotifierProvider =
