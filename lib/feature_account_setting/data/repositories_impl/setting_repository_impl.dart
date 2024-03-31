@@ -95,4 +95,15 @@ class SettingRepositoryImpl implements SettingRepository {
       return ResultState.error(e.toString());
     }
   }
+
+  @override
+  Future<ResultState<void>> deleteAccount() async {
+    try {
+      await _userDatastoreRepository.clearUserLogin();
+      await _baseAuthRepository.deleteAccount();
+      return const ResultState.success(true);
+    } catch (e) {
+      return ResultState.error(e.toString());
+    }
+  }
 }

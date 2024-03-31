@@ -14,4 +14,6 @@ abstract interface class SettingRepository {
     required String newPassword,
   });
 
+  Future<ResultState<void>> deleteAccount();
+
 }

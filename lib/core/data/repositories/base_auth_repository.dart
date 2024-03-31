@@ -13,4 +13,5 @@ abstract class BaseAuthRepository {
   Future<firebase_auth.User?> continueWithGoogle();
   Future<bool> reauthenticateWithPassword(String currentPassword);
   Future<void> updatePassword(String newPassword);
+  Future<void> deleteAccount();
 }

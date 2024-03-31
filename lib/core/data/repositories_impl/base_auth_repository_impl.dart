@@ -143,6 +143,20 @@ class BaseAuthRepositoryImpl implements BaseAuthRepository {
       throw FirebaseAuthException(e.toString());
     }
   }
+
+  @override
+  Future<void> deleteAccount() async {
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user != null) {
+        return user.delete();
+      } else {
+        throw FirebaseAuthException('User not found');
+      }
+    } catch (e) {
+      throw FirebaseAuthException(e.toString());
+    }
+  }
 }
 
 class FirebaseAuthException implements Exception {
