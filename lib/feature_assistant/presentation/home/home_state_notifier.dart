@@ -229,6 +229,10 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
           isLoading: false, error: e.toString(), isDeletingChatRoom: false);
     }
   }
+
+  void clearChatRoomHistory() {
+    state = state.copyWith(chatRooms: []);
+  }
 }
 
 final homeStateNotifierProvider =

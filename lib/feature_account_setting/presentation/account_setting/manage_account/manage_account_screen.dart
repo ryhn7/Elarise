@@ -61,11 +61,8 @@ class _ManageAccountScreenState extends ConsumerState<ManageAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AccountState>(accountStateNotifierProvider, (previous, next) {
-      if (previous != null &&
-          previous.firebaseUser != null &&
-          next.isLogout &&
-          next.firebaseUser == null) {
+    ref.listen<AccountState>(accountStateNotifierProvider, (_, state) {
+      if (state.isLogout && state.firebaseUser == null) {
         ref.read(routerProvider).goNamed('login');
       }
     });
