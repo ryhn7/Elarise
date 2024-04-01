@@ -1,5 +1,6 @@
 import 'package:elarise/core/common/result_state.dart';
 import 'package:elarise/di/usecases/auth_usecases/usecase_auth_provider.dart';
+import 'package:elarise/feature_assistant/presentation/home/home_state_notifier.dart';
 import 'package:elarise/feature_auth/presentation/login/login_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,6 +21,7 @@ class LoginStateNotifier extends StateNotifier<LoginState> {
       if (result is Success) {
         state = state.copyWith(
             user: result.resultData, isLoading: false, error: null);
+        ref.read(homeStateNotifierProvider.notifier).getAllFreelyTalkRooms();
       } else {
         state = state.copyWith(
             error: result.errorMessage ?? 'Failed to login',
@@ -33,7 +35,8 @@ class LoginStateNotifier extends StateNotifier<LoginState> {
 
   Future<void> continueWithGoogle() async {
     try {
-      state = state.copyWith(continueWithGoogleLoading: true, user: null, error: null);
+      state = state.copyWith(
+          continueWithGoogleLoading: true, user: null, error: null);
 
       final useCase = ref.read(useCaseAuthProvider);
 
@@ -41,7 +44,9 @@ class LoginStateNotifier extends StateNotifier<LoginState> {
 
       if (result is Success) {
         state = state.copyWith(
-            user: result.resultData, continueWithGoogleLoading: false, error: null);
+            user: result.resultData,
+            continueWithGoogleLoading: false,
+            error: null);
       } else {
         state = state.copyWith(
             error: result.errorMessage ?? 'Failed to login',
@@ -49,7 +54,8 @@ class LoginStateNotifier extends StateNotifier<LoginState> {
             user: null);
       }
     } catch (e) {
-      state = state.copyWith(error: e.toString(), continueWithGoogleLoading: false, user: null);
+      state = state.copyWith(
+          error: e.toString(), continueWithGoogleLoading: false, user: null);
     }
   }
 
