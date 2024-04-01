@@ -255,6 +255,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     GestureDetector(
                       onTap: () {
                         ref.read(routerProvider).goNamed('setting');
+                        // ref.read(routerProvider).goNamed('common-error');
                       },
                       child: CachedNetworkImage(
                         imageUrl: photoUrl,
@@ -463,29 +464,80 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       );
     }
 
-    Widget historyCard() {
+    Widget historyCard(String dropdownValue) {
       final homeState = ref.watch(homeStateNotifierProvider);
 
       // list of chatrooms
       final chatRooms = homeState.chatRooms ?? [];
       final isLoading = homeState.isChatRoomLoading;
 
-      // Determine how many loading cards to show, for example, 6.
-      const loadingCardCount = 6;
+      // No chat rooms available, you can decide to show some placeholder or message
+      if (chatRooms.isEmpty && !isLoading && dropdownValue == 'Talking') {
+        return SliverFillRemaining(
+          hasScrollBody: false,
+          child: Center(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                Image.asset(
+                  'assets/images/start_chat.png',
+                  width: 200,
+                  height: 200,
+                ),
+                Text(
+                  'Got something on your mind? \nElara is here to listen and engage in friendly conversation.',
+                  style: getSansFranciscoMedium18(color: silverFoil),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        );
+      } else if (chatRooms.isEmpty &&
+          !isLoading &&
+          dropdownValue == 'Grammar') {
+        return SliverFillRemaining(
+          hasScrollBody: false,
+          child: Center(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                Image.asset(
+                  'assets/images/start_chat.png',
+                  width: 200,
+                  height: 200,
+                ),
+                Text(
+                  'Need a grammar buddy? \nElara is ready to help you improve your skills through interaction.',
+                  style: getSansFranciscoMedium18(color: silverFoil),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        );
+      } else {
+        // Determine how many loading cards to show, for example, 6.
+        const loadingCardCount = 6;
 
-      return SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            if (isLoading) {
-              return buildChatRoomLoadingCard();
-            } else {
-              final chatRoom = chatRooms[index];
-              return buildChatRoomCard(chatRoom, index, dropdownValue);
-            }
-          },
-          childCount: isLoading ? loadingCardCount : chatRooms.length,
-        ),
-      );
+        return SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              if (isLoading) {
+                return buildChatRoomLoadingCard();
+              } else {
+                final chatRoom = chatRooms[index];
+                return buildChatRoomCard(chatRoom, index, dropdownValue);
+              }
+            },
+            childCount: isLoading ? loadingCardCount : chatRooms.length,
+          ),
+        );
+      }
     }
 
     return Scaffold(
@@ -536,7 +588,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               SliverPadding(
                 padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                sliver: historyCard(),
+                sliver: historyCard(dropdownValue),
               ),
             ],
           ),
