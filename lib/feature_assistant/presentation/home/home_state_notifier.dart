@@ -18,6 +18,16 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
     _loadUserPreferences(); // This method should fetch the latest user data
   }
 
+  void updateChatRoomsBasedOnSelection(String selection) {
+    setDropdownSelection(selection);
+    _fetchChatRoomsBasedOnSelection(selection);
+  }
+
+  void setDropdownSelection(String selection) {
+    state = state.copyWith(dropdownSelection: selection);
+    _fetchChatRoomsBasedOnSelection(selection);
+  }
+
   Future<void> _loadUserPreferences() async {
     state = state.copyWith(isLoading: true);
 
@@ -28,6 +38,14 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
           state.copyWith(userPreferences: userPreferences, isLoading: false);
     } catch (e) {
       state = state.copyWith(error: e.toString(), isLoading: false);
+    }
+  }
+
+  void _fetchChatRoomsBasedOnSelection(String selection) {
+    if (selection == 'Talking') {
+      getAllFreelyTalkRooms();
+    } else if (selection == 'Grammar') {
+      getAllGrammarTalkRooms();
     }
   }
 

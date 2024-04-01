@@ -25,7 +25,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   List<String> dropdownItems = ['Talking', 'Grammar'];
-  String dropdownValue = 'Talking';
   final TextEditingController renameController = TextEditingController();
 
   @override
@@ -212,6 +211,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
 
     final homeState = ref.watch(homeStateNotifierProvider);
+    final dropdownValue = homeState.dropdownSelection;
 
     if (homeState.isLoading) {
       return const Center(child: CircularProgressIndicator());
@@ -221,7 +221,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     } else if (homeState.userPreferences != null &&
         homeState.userPreferences!.token != null) {
       // User is logged in, continue showing HomeScreen
-      return homeScreenContent(context, ref, homeState.userPreferences!);
+      return homeScreenContent(
+          context, ref, homeState.userPreferences!, dropdownValue);
     } else {
       // Handle error or no valid session
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -234,8 +235,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  Widget homeScreenContent(
-      BuildContext context, WidgetRef ref, UserPreferences userPreferences) {
+  Widget homeScreenContent(BuildContext context, WidgetRef ref,
+      UserPreferences userPreferences, String dropdownValue) {
     final userName = userPreferences.name ?? "User";
     final photoUrl = userPreferences.photoProfile ??
         "https://firebasestorage.googleapis.com/v0/b/elarise-1d057.appspot.com/o/profileImage%2Fuser_placeholder.png?alt=media&token=edfb4a25-2f56-479c-9ed3-f58e90ca8ce5";
@@ -434,19 +435,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     style: getSansFranciscoMedium16(color: neutralFour),
                     onChanged: (String? newValue) {
                       // Update the state to the new value
-                      setState(() {
-                        dropdownValue = newValue!;
-                      });
-
-                      if (newValue == 'Talking') {
-                        ref
-                            .read(homeStateNotifierProvider.notifier)
-                            .getAllFreelyTalkRooms();
-                      } else if (newValue == 'Grammar') {
-                        ref
-                            .read(homeStateNotifierProvider.notifier)
-                            .getAllGrammarTalkRooms();
-                      }
+                      ref
+                          .read(homeStateNotifierProvider.notifier)
+                          .setDropdownSelection(newValue!);
                     },
                     items: dropdownItems
                         .map<DropdownMenuItem<String>>((String value) {

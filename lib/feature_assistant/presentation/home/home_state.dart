@@ -10,6 +10,7 @@ class HomeState {
   final bool isCreatingRoom;
   final bool isRenamingChatRoomName;
   final bool isDeletingChatRoom;
+  final String dropdownSelection;
 
   final UserPreferences? userPreferences;
   final ChatRoomResponse? chatRoomResponse;
@@ -21,6 +22,7 @@ class HomeState {
       this.isCreatingRoom = false,
       this.isRenamingChatRoomName = false,
       this.isDeletingChatRoom = false,
+      this.dropdownSelection = 'Talking',
       this.error,
       this.userPreferences,
       this.chatRoomResponse,
@@ -32,6 +34,7 @@ class HomeState {
     bool? isCreatingRoom,
     bool? isRenamingChatRoomName,
     bool? isDeletingChatRoom,
+    String? dropdownSelection,
     UserPreferences? userPreferences,
     ChatRoomResponse? chatRoomResponse,
     List<ChatRoom>? chatRooms,
@@ -44,6 +47,7 @@ class HomeState {
       isRenamingChatRoomName:
           isRenamingChatRoomName ?? this.isRenamingChatRoomName,
       isDeletingChatRoom: isDeletingChatRoom ?? this.isDeletingChatRoom,
+      dropdownSelection: dropdownSelection ?? this.dropdownSelection,
       userPreferences: userPreferences ?? this.userPreferences,
       chatRoomResponse: chatRoomResponse ?? this.chatRoomResponse,
       chatRooms: chatRooms ?? this.chatRooms,

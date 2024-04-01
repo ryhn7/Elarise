@@ -13,6 +13,7 @@ import 'package:jumping_dot/jumping_dot.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../router/router_provider.dart';
+import '../home/home_state_notifier.dart';
 
 class FreelyTalkChatroomScreen extends ConsumerStatefulWidget {
   final String chatRoomId;
@@ -93,6 +94,7 @@ class _FreelyTalkChatroomScreenState
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_rounded, color: earieBlack),
             onPressed: () {
+              ref.read(homeStateNotifierProvider.notifier).updateChatRoomsBasedOnSelection('Talking');
               ref.read(routerProvider).goNamed('home');
             },
           ),

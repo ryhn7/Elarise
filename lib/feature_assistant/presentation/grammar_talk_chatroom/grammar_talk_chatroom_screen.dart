@@ -11,6 +11,7 @@ import '../../../router/router_provider.dart';
 import '../../../theme/colors.dart';
 import '../../../theme/style.dart';
 import '../../domain/entities/elara_response.dart';
+import '../home/home_state_notifier.dart';
 
 class GrammarTalkChatroomScreen extends ConsumerStatefulWidget {
   final String chatRoomId;
@@ -243,6 +244,7 @@ class _GrammarTalkChatroomScreenState
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_rounded, color: earieBlack),
             onPressed: () {
+              ref.read(homeStateNotifierProvider.notifier).updateChatRoomsBasedOnSelection('Grammar');
               ref.read(routerProvider).goNamed('home');
             },
           ),
