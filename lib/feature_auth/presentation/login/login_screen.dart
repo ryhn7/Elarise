@@ -63,21 +63,21 @@ class LoginScreen extends ConsumerWidget {
       );
     }
 
-    Widget buildForgotPasswordButton() {
-      return Align(
-        alignment: Alignment.centerRight,
-        child: TextButton(
-          onPressed: () {},
-          style: TextButton.styleFrom(
-            foregroundColor: primary,
-          ),
-          child: Text(
-            "Forgot Password?",
-            style: getSansFranciscoSemiBold16(color: primary),
-          ),
-        ),
-      );
-    }
+    // Widget buildForgotPasswordButton() {
+    //   return Align(
+    //     alignment: Alignment.centerRight,
+    //     child: TextButton(
+    //       onPressed: () {},
+    //       style: TextButton.styleFrom(
+    //         foregroundColor: primary,
+    //       ),
+    //       child: Text(
+    //         "Forgot Password?",
+    //         style: getSansFranciscoSemiBold16(color: primary),
+    //       ),
+    //     ),
+    //   );
+    // }
 
     Widget buildDividerLoginAlternate() {
       return Row(
@@ -130,9 +130,8 @@ class LoginScreen extends ConsumerWidget {
                   labelText: 'Password',
                   controller: passwordController,
                   obsecureText: true),
-              const SizedBox(height: 16),
-              buildForgotPasswordButton(),
-              const SizedBox(height: 24),
+              // buildForgotPasswordButton(),
+              const SizedBox(height: 52),
               ElariseAuthButton(
                 labelText: loginState.isLoading ? "" : "Login",
                 onPressed: () {
