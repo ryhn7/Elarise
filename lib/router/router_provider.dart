@@ -84,7 +84,10 @@ Raw<GoRouter> router(RouterRef ref) => GoRouter(
           GoRoute(
               path: '/network-error',
               name: 'network-error',
-              builder: (context, state) => const NetworkErrorScreen()),
+              builder: (context, state) {
+                final routeName = state.extra as String;
+                return NetworkErrorScreen(routeName);
+              }  ),
           GoRoute(
               path: '/common-error',
               name: 'common-error',
