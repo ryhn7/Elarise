@@ -1,17 +1,19 @@
-import '../../domain/entities/user.dart';
+import '../../../core/domain/entities/user_preferences.dart';
 
 class SplashState {
   final bool isLoading;
   final String? error;
 
-  final User? user;
+  final UserPreferences? userPreferences;
 
-  SplashState({this.isLoading = false, this.error, this.user});
+  SplashState({this.isLoading = false, this.error, this.userPreferences});
 
-  SplashState copyWith({bool? isLoading, String? error, User? user}) {
+  SplashState copyWith(
+      {bool? isLoading, String? error, UserPreferences? userPreferences}) {
     return SplashState(
-        isLoading: isLoading ?? this.isLoading,
-        error: error ?? this.error,
-        user: user ?? this.user);
+      isLoading: isLoading ?? this.isLoading,
+      error: error ?? this.error,
+      userPreferences: userPreferences ?? this.userPreferences,
+    );
   }
 }
