@@ -1,9 +1,30 @@
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NetworkErrorScreen extends StatelessWidget {
-  const NetworkErrorScreen({super.key});
+import '../../global/global_state_notifier.dart';
+import '../../utils/network_util.dart';
+
+class NetworkErrorScreen extends ConsumerStatefulWidget {
+  final String routeName;
+  const NetworkErrorScreen(this.routeName, {super.key});
+
+  @override
+  ConsumerState<NetworkErrorScreen> createState() => _NetworkErrorScreenState();
+}
+
+class _NetworkErrorScreenState extends ConsumerState<NetworkErrorScreen> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(globalStateNotifierProvider.notifier).routeName = widget.routeName;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,17 +65,36 @@ class NetworkErrorScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 80.0),
                 // make button to refresh
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: primary,
-                  ),
-                  onPressed: () {
-                    // refresh the page
-                  },
-                  child: Text(
-                    'Refresh',
-                    style: getSansFranciscoBold16(color: neutralFour),
-                  ),
-                ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: primary,
+                    ),
+                    onPressed: () async {
+                      final isConnected =
+                          await NetworkUtil().isInternetAvailable();
+
+                      // Check if the widget is still mounted before trying to interact with the context
+                      if (!mounted) return;
+
+                      if (isConnected) {
+                        ref
+                            .read(globalStateNotifierProvider.notifier)
+                            .setInternetConnection(isConnected);
+                        ref.read(globalStateNotifierProvider.notifier).goBack();
+                      } else {
+                        // The device is still offline. Show a SnackBar.
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                'You are still offline. Please check your internet connection.'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      }
+                    },
+                    child: Text(
+                      'Refresh',
+                      style: getSansFranciscoBold16(color: neutralFour),
+                    )),
               ),
             )
           ])),

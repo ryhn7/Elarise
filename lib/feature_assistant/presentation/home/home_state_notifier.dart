@@ -1,3 +1,4 @@
+import 'package:elarise/core/global/global_state_notifier.dart';
 import 'package:elarise/di/repositories/user_datastore_repository/user_datastore_repository_provider.dart';
 import 'package:elarise/feature_assistant/presentation/home/home_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,6 +37,7 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
           await ref.read(userDatastoreRepositoryProvider).getUser();
       state =
           state.copyWith(userPreferences: userPreferences, isLoading: false);
+      ref.read(globalStateNotifierProvider.notifier).checkInternetConnection();
     } catch (e) {
       state = state.copyWith(error: e.toString(), isLoading: false);
     }

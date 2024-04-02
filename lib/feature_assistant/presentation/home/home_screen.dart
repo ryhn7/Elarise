@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:elarise/core/global/global_state_notifier.dart';
 import 'package:elarise/core/utils/date_util.dart';
 import 'package:elarise/feature_assistant/presentation/home/home_state_notifier.dart';
 import 'package:elarise/feature_assistant/presentation/home/widget/chatroom_card.dart';
@@ -212,8 +213,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     final homeState = ref.watch(homeStateNotifierProvider);
     final dropdownValue = homeState.dropdownSelection;
+    final globalState = ref.watch(globalStateNotifierProvider);
 
-    if (homeState.isLoading) {
+    if (globalState.hasInternetConnection == false) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(routerProvider).goNamed('network-error', extra: 'home');
+      });
+      return const SizedBox.shrink();
+    } else if (homeState.isLoading) {
       return const Center(child: CircularProgressIndicator());
     } else if (homeState.isCreatingRoom) {
       // User is logged in, continue showing HomeScreen
