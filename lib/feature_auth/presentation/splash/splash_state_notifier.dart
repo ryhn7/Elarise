@@ -20,8 +20,23 @@ class SplashStateNotifier extends StateNotifier<SplashState> {
       final localUser =
           await ref.read(userDatastoreRepositoryProvider).getUser();
 
-      state = state.copyWith(userPreferences: localUser, isLoading: false);
-      ref.read(routerProvider).goNamed('home');
+      if (localUser.uid != null &&
+          localUser.token != null &&
+          localUser.email != null &&
+          localUser.name != null &&
+          localUser.photoProfile != null) {
+        state = state.copyWith(
+          userPreferences: localUser,
+          isLoading: false,
+        );
+        ref.read(routerProvider).goNamed('home');
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          userPreferences: null,
+        );
+        ref.read(routerProvider).goNamed('login');
+      }
     } catch (e) {
       state = state.copyWith(
         error: e.toString(),
