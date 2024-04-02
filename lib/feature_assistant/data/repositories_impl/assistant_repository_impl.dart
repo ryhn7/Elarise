@@ -31,7 +31,7 @@ class AssistantRepositoryImpl implements AssistantRepository {
         return const ResultState.error('Token is empty');
       }
 
-      final response = await _assistantApi.createFreelyTalkRoom();
+      final response = await _assistantApi.createFreelyTalkRoom(token);
       return ResultState.success(response);
     } catch (e) {
       return ResultState.error(e.toString());
@@ -50,7 +50,7 @@ class AssistantRepositoryImpl implements AssistantRepository {
       }
 
       final response =
-          await _assistantApi.freelyTalkChat(chatRoomId, messageText);
+          await _assistantApi.freelyTalkChat(chatRoomId, messageText, token);
       final message = response.message;
 
       // Call text-to-speech service with the chat response
@@ -72,7 +72,7 @@ class AssistantRepositoryImpl implements AssistantRepository {
         return const ResultState.error('Token is empty');
       }
 
-      final response = await _assistantApi.getAllFreelyTalkRooms();
+      final response = await _assistantApi.getAllFreelyTalkRooms(token);
       return ResultState.success(response);
     } catch (e) {
       return ResultState.error(e.toString());
@@ -89,7 +89,7 @@ class AssistantRepositoryImpl implements AssistantRepository {
         return const ResultState.error('Token is empty');
       }
 
-      final response = await _assistantApi.createGrammarTalkRoom();
+      final response = await _assistantApi.createGrammarTalkRoom(token);
       return ResultState.success(response);
     } catch (e) {
       return ResultState.error(e.toString());
@@ -108,7 +108,7 @@ class AssistantRepositoryImpl implements AssistantRepository {
       }
 
       final response =
-          await _assistantApi.grammarTalkChat(chatRoomId, messageText);
+          await _assistantApi.grammarTalkChat(chatRoomId, messageText, token);
       // final message = response.message;
 
       // Call text-to-speech service with the chat response
@@ -130,7 +130,7 @@ class AssistantRepositoryImpl implements AssistantRepository {
         return const ResultState.error('Token is empty');
       }
 
-      final response = await _assistantApi.getAllGrammarTalkRooms();
+      final response = await _assistantApi.getAllGrammarTalkRooms(token);
       return ResultState.success(response);
     } catch (e) {
       return ResultState.error(e.toString());
@@ -149,7 +149,7 @@ class AssistantRepositoryImpl implements AssistantRepository {
       }
 
       final response =
-          await _assistantApi.editChatRoomName(chatRoomId, chatRoomName);
+          await _assistantApi.editChatRoomName(chatRoomId, chatRoomName, token);
       return ResultState.success(response);
     } catch (e) {
       return ResultState.error(e.toString());
@@ -166,7 +166,7 @@ class AssistantRepositoryImpl implements AssistantRepository {
         return const ResultState.error('Token is empty');
       }
 
-      final response = await _assistantApi.deleteChatRoom(chatRoomId);
+      final response = await _assistantApi.deleteChatRoom(chatRoomId, token);
       return ResultState.success(response);
     } catch (e) {
       return ResultState.error(e.toString());
@@ -184,7 +184,8 @@ class AssistantRepositoryImpl implements AssistantRepository {
         return const ResultState.error('Token is empty');
       }
 
-      final response = await _assistantApi.deleteChat(chatRoomId, idMessage);
+      final response =
+          await _assistantApi.deleteChat(chatRoomId, idMessage, token);
       return ResultState.success(response);
     } catch (e) {
       return ResultState.error(e.toString());
@@ -204,8 +205,8 @@ class AssistantRepositoryImpl implements AssistantRepository {
         return const ResultState.error('Token is empty');
       }
 
-      final response =
-          await _assistantApi.editChat(chatRoomId, idMessage, messageText);
+      final response = await _assistantApi.editChat(
+          chatRoomId, idMessage, messageText, token);
       return ResultState.success(response);
     } catch (e) {
       return ResultState.error(e.toString());
@@ -223,7 +224,7 @@ class AssistantRepositoryImpl implements AssistantRepository {
         return const ResultState.error('Token is empty');
       }
 
-      final response = await _assistantApi.getDetailChatRoom(chatRoomId);
+      final response = await _assistantApi.getDetailChatRoom(chatRoomId, token);
       return ResultState.success(response);
     } catch (e) {
       return ResultState.error(e.toString());

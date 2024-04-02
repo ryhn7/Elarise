@@ -9,10 +9,11 @@ class AssistantApi {
 
   AssistantApi({required this.apiConfig});
 
-  Future<ChatRoomResponse> createFreelyTalkRoom() async {
+  Future<ChatRoomResponse> createFreelyTalkRoom(String token) async {
     try {
       var headers = {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
       };
 
       final response = await apiConfig.postApiService<ChatRoomResponse>(
@@ -27,10 +28,11 @@ class AssistantApi {
     }
   }
 
-  Future<ChatRoomResponse> createGrammarTalkRoom() async {
+  Future<ChatRoomResponse> createGrammarTalkRoom(String token) async {
     try {
       var headers = {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
       };
 
       final response = await apiConfig.postApiService<ChatRoomResponse>(
@@ -46,10 +48,11 @@ class AssistantApi {
   }
 
   Future<ElaraResponse> freelyTalkChat(
-      String chatRoomId, String messageText) async {
+      String chatRoomId, String messageText, String token) async {
     try {
       var headers = {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
       };
 
       var body = {
@@ -69,10 +72,11 @@ class AssistantApi {
   }
 
   Future<ElaraResponse> grammarTalkChat(
-      String chatRoomId, String messageText) async {
+      String chatRoomId, String messageText, String token) async {
     try {
       var headers = {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
       };
 
       var body = {
@@ -91,10 +95,11 @@ class AssistantApi {
     }
   }
 
-  Future<List<ChatRoom>> getAllFreelyTalkRooms() async {
+  Future<List<ChatRoom>> getAllFreelyTalkRooms(String token) async {
     try {
       var headers = {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
       };
 
       final response = await apiConfig.getApiService<GetAllChatroomResponse>(
@@ -119,10 +124,11 @@ class AssistantApi {
     }
   }
 
-  Future<List<ChatRoom>> getAllGrammarTalkRooms() async {
+  Future<List<ChatRoom>> getAllGrammarTalkRooms(String token) async {
     try {
       var headers = {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
       };
 
       final response = await apiConfig.getApiService<GetAllChatroomResponse>(
@@ -148,10 +154,11 @@ class AssistantApi {
   }
 
   Future<ChatRoomResponse> editChatRoomName(
-      String chatRoomId, String chatRoomName) async {
+      String chatRoomId, String chatRoomName, String token) async {
     try {
       var headers = {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
       };
 
       var body = {'chatRoomName': chatRoomName};
@@ -168,10 +175,11 @@ class AssistantApi {
     }
   }
 
-  Future<void> deleteChatRoom(String chatRoomId) async {
+  Future<void> deleteChatRoom(String chatRoomId, String token) async {
     try {
       var headers = {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
       };
 
       final response = await apiConfig.deleteApiService('chatroom/$chatRoomId',
@@ -183,11 +191,12 @@ class AssistantApi {
     }
   }
 
-  Future<ElaraResponse> editChat(
-      String chatRoomId, String idMessage, String messageText) async {
+  Future<ElaraResponse> editChat(String chatRoomId, String idMessage,
+      String messageText, String token) async {
     try {
       var headers = {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
       };
 
       var body = {
@@ -206,10 +215,12 @@ class AssistantApi {
     }
   }
 
-  Future<void> deleteChat(String chatRoomId, String idMessage) async {
+  Future<void> deleteChat(
+      String chatRoomId, String idMessage, String token) async {
     try {
       var headers = {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
       };
 
       final response = await apiConfig.deleteApiService(
@@ -222,10 +233,11 @@ class AssistantApi {
     }
   }
 
-  Future<List<ElaraResponse>> getDetailChatRoom(String chatRoomId) async {
+  Future<List<ElaraResponse>> getDetailChatRoom(String chatRoomId, String token) async {
     try {
       var headers = {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
       };
 
       final response = await apiConfig.getApiService<GetDetailChatroomResponse>(
