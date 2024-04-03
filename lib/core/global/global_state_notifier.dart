@@ -1,4 +1,5 @@
 import 'package:elarise/core/global/global_state.dart';
+import 'package:elarise/feature_assistant/presentation/home/home_state_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../di/repositories/user_datastore_repository/user_datastore_repository_provider.dart';
@@ -47,6 +48,9 @@ class GlobalStateNotifier extends StateNotifier<GlobalState> {
   // method go to the previous route
   void goBack() {
     if (_routeName != null) {
+      if (_routeName == 'home') {
+        ref.read(homeStateNotifierProvider.notifier).getAllFreelyTalkRooms();
+      }
       ref.read(routerProvider).goNamed(_routeName!);
     }
   }
