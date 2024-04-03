@@ -34,8 +34,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   @override
   Widget build(BuildContext context) {
     ref.listen<SplashState>(splashStateNotifierProvider, (previous, next) {
-      if (next.userPreferences != null && !next.isLoading) {
-        if (next.userPreferences?.photoProfile != null) {
+      if (next.user != null ||
+          next.userPreferences != null && !next.isLoading) {
+        if (next.user?.photoProfile != null ||
+            next.userPreferences?.photoProfile != null) {
           precacheImage(
               CachedNetworkImageProvider(
                 next.userPreferences!.photoProfile!,
