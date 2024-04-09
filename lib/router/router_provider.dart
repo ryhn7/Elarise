@@ -85,9 +85,15 @@ Raw<GoRouter> router(RouterRef ref) => GoRouter(
               path: '/network-error',
               name: 'network-error',
               builder: (context, state) {
-                final routeName = state.extra as String;
-                return NetworkErrorScreen(routeName);
-              }  ),
+                // Extracting the routeName and chatRoomId from extras
+                final extras = state.extra as Map<String, dynamic>? ?? {};
+                final routeName = extras['routeName'] as String? ??
+                    'defaultRouteName'; // Use a default or handle null
+                final chatRoomId = extras['chatRoomId'] as String?;
+
+                return NetworkErrorScreen(
+                    routeName: routeName, chatRoomId: chatRoomId);
+              }),
           GoRoute(
               path: '/common-error',
               name: 'common-error',
