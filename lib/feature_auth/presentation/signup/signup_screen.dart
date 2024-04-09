@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:elarise/feature_auth/presentation/signup/signup_state.dart';
 import 'package:elarise/feature_auth/presentation/signup/signup_state_notifier.dart';
 import 'package:elarise/feature_auth/presentation/widget/elaris_auth_button.dart';
@@ -8,6 +10,7 @@ import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/global/global_state_notifier.dart';
 import '../../../router/router_provider.dart';
 
 class SignUpScreen extends ConsumerWidget {
@@ -20,12 +23,13 @@ class SignUpScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<SignUpState>(signUpStateNotifierProvider, (previous, next) {
-      if (next.user != null) {
+    ref.listen<SignUpState>(signUpStateNotifierProvider, (_, state) {
+      if (state.user != null) {
         ref.read(routerProvider).goNamed('home');
-      } else if (next.error != null) {
+      } else if (state.error != null) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(next.error.toString()),
+          content: Text(state.error.toString()),
+          duration: const Duration(seconds: 2),
         ));
       }
     });
@@ -50,6 +54,7 @@ class SignUpScreen extends ConsumerWidget {
               ),
               TextButton(
                   onPressed: () {
+                    ref.read(signUpStateNotifierProvider.notifier).clearState();
                     ref.read(routerProvider).goNamed('login');
                   },
                   style: TextButton.styleFrom(
@@ -125,10 +130,31 @@ class SignUpScreen extends ConsumerWidget {
                 labelText: signUpState.isLoading ? "." : "Sign Up",
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    ref.read(signUpStateNotifierProvider.notifier).signup(
-                        name: nameController.text,
-                        email: emailController.text,
-                        password: passwordController.text);
+                    // Check connectivity before attempting to log in
+                    ref
+                        .read(globalStateNotifierProvider.notifier)
+                        .checkInternetConnection()
+                        .then((_) {
+                      final globalState = ref.read(globalStateNotifierProvider);
+                      if (globalState.hasInternetConnection == false) {
+                        // If not connected, show snackbar
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(
+                              'Are you offline? Check your internet connection, then try again.'),
+                          duration: Duration(seconds: 1),
+                        ));
+                      } else {
+                        // If connected, proceed with login
+                        ref.read(signUpStateNotifierProvider.notifier).signup(
+                            name: nameController.text,
+                            email: emailController.text,
+                            password: passwordController.text);
+                      }
+                    }).catchError((error) {
+                      // Handle any errors that occur during the connectivity check
+                      log('Error checking internet connection: $error');
+                    });
                   }
                 },
                 isLoading: signUpState.isLoading,

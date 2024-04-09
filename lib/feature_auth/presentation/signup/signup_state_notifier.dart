@@ -1,5 +1,6 @@
 import 'package:elarise/feature_auth/presentation/signup/signup_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:elarise/feature_assistant/presentation/home/home_state_notifier.dart';
 
 import '../../../core/common/result_state.dart';
 import '../../../di/usecases/auth_usecases/usecase_auth_provider.dart';
@@ -8,28 +9,7 @@ class SignUpStateNotifier extends StateNotifier<SignUpState> {
   final Ref ref;
 
   SignUpStateNotifier(this.ref)
-      : super(SignUpState(isLoading: false, user: null, error: null)) {
-    _checkUser();
-  }
-
-  Future<void> _checkUser() async {
-    try {
-      final useCase = ref.read(useCaseAuthProvider);
-      var result = await useCase.getCurrentUser();
-
-      if (result is Success) {
-        state = state.copyWith(
-            user: result.resultData, isLoading: false, error: null);
-      } else {
-        state = state.copyWith(
-          user: null,
-          isLoading: false,
-        );
-      }
-    } catch (e) {
-      state = state.copyWith(error: e.toString(), isLoading: false, user: null);
-    }
-  }
+      : super(SignUpState(isLoading: false, user: null, error: null));
 
   Future<void> signup({
     required String name,
@@ -45,6 +25,7 @@ class SignUpStateNotifier extends StateNotifier<SignUpState> {
       if (result is Success) {
         state = state.copyWith(
             user: result.resultData, isLoading: false, error: null);
+        ref.read(homeStateNotifierProvider.notifier).getAllFreelyTalkRooms();
       } else {
         state = state.copyWith(
             error: result.errorMessage ?? 'Failed to sign up',

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:elarise/feature_auth/presentation/login/login_state.dart';
 import 'package:elarise/feature_auth/presentation/login/login_state_notifier.dart';
 import 'package:elarise/feature_auth/presentation/widget/elaris_auth_button.dart';
@@ -9,6 +11,8 @@ import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/global/global_state_notifier.dart';
+
 class LoginScreen extends ConsumerWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -17,13 +21,21 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<LoginState>(loginStateNotifierProvider, (previous, next) {
-      if (next.user != null) {
+    ref.listen<LoginState>(loginStateNotifierProvider, (_, state) {
+      if (state.isLoading) {
+        state.isAttemptingLogin = true;
+      } else if (state.user != null) {
+        state.isAttemptingLogin = false;
         ref.read(routerProvider).goNamed('home');
-      } else if (next.error != null && next.error != "User not found") {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(next.error.toString()),
-        ));
+      } else if (state.error != null) {
+        if (ModalRoute.of(context)!.isCurrent) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Check your email and password, then try again."),
+            duration: Duration(seconds: 2),
+          ));
+        } else if (!state.isLoading) {
+          state.isAttemptingLogin = false;
+        }
       }
     });
 
@@ -47,6 +59,7 @@ class LoginScreen extends ConsumerWidget {
               ),
               TextButton(
                   onPressed: () {
+                    ref.read(loginStateNotifierProvider.notifier).clearState();
                     ref.read(routerProvider).goNamed('signup');
                   },
                   style: TextButton.styleFrom(
@@ -136,9 +149,30 @@ class LoginScreen extends ConsumerWidget {
                 labelText: loginState.isLoading ? "" : "Login",
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    ref.read(loginStateNotifierProvider.notifier).login(
-                        email: emailController.text,
-                        password: passwordController.text);
+                    // Check connectivity before attempting to log in
+                    ref
+                        .read(globalStateNotifierProvider.notifier)
+                        .checkInternetConnection()
+                        .then((_) {
+                      final globalState = ref.read(globalStateNotifierProvider);
+                      if (globalState.hasInternetConnection == false) {
+                        // If not connected, show snackbar
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(
+                              'Are you offline? Check your internet connection, then try again.'),
+                          duration: Duration(seconds: 1),
+                        ));
+                      } else {
+                        // If connected, proceed with login
+                        ref.read(loginStateNotifierProvider.notifier).login(
+                            email: emailController.text,
+                            password: passwordController.text);
+                      }
+                    }).catchError((error) {
+                      // Handle any errors that occur during the connectivity check
+                      log('Error checking internet connection: $error');
+                    });
                   }
                 },
                 isLoading: loginState.isLoading,
