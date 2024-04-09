@@ -8,7 +8,10 @@ import '../../utils/network_util.dart';
 
 class NetworkErrorScreen extends ConsumerStatefulWidget {
   final String routeName;
-  const NetworkErrorScreen(this.routeName, {super.key});
+  final String? chatRoomId;
+
+  const NetworkErrorScreen(
+      {super.key, required this.routeName, this.chatRoomId});
 
   @override
   ConsumerState<NetworkErrorScreen> createState() => _NetworkErrorScreenState();
@@ -19,6 +22,8 @@ class _NetworkErrorScreenState extends ConsumerState<NetworkErrorScreen> {
   void initState() {
     super.initState();
     ref.read(globalStateNotifierProvider.notifier).routeName = widget.routeName;
+    ref.read(globalStateNotifierProvider.notifier).chatRoomId =
+        widget.chatRoomId ?? '';
   }
 
   @override
