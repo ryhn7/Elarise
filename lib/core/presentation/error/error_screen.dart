@@ -1,9 +1,35 @@
+import 'dart:developer';
+
 import 'package:elarise/theme/colors.dart';
 import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ErrorScreen extends StatelessWidget {
-  const ErrorScreen({super.key});
+import '../../global/global_state_notifier.dart';
+
+class ErrorScreen extends ConsumerStatefulWidget {
+  final String routeName;
+  final String? chatRoomId;
+
+  const ErrorScreen({super.key, required this.routeName, this.chatRoomId});
+
+  @override
+  ConsumerState<ErrorScreen> createState() => _ErrorScreenState();
+}
+
+class _ErrorScreenState extends ConsumerState<ErrorScreen> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(globalStateNotifierProvider.notifier).routeName = widget.routeName;
+    ref.read(globalStateNotifierProvider.notifier).chatRoomId =
+        widget.chatRoomId ?? '';
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +78,12 @@ class ErrorScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primary,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    // Check if the widget is still mounted before trying to interact with the context
+                    if (!mounted) return;
+                    log('ErrorScreen: onPressed: routeName: ${widget.routeName}');
+                    ref.read(globalStateNotifierProvider.notifier).goBack();
+                  },
                   child: Text(
                     'Try Again',
                     style: getSansFranciscoBold16(color: neutralFour),
