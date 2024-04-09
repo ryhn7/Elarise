@@ -39,8 +39,13 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
 
   void checkMicrophoneAvailability() async {
     bool available = await speechToText.initialize(
-      onError: (val) => state =
-          state.copyWith(error: "Error initializing speech to text: $val"),
+      onError: (val) {
+        // Log or handle the initialization error
+        state =
+            state.copyWith(error: "Error initializing speech to text: $val");
+        // Ensure listening is stopped if there was an error during initialization
+        stopListening();
+      },
       onStatus: (status) => {},
       debugLogging: true,
     );
@@ -53,22 +58,24 @@ class GrammarTalkChatStateNotifier extends StateNotifier<GrammarTalkChatState> {
   void startListening() {
     if (!state.isListening) {
       speechToText.listen(
-        onResult: (result) {
-          state = state.copyWith(
-              isTyping: false, currentSpokenWord: result.recognizedWords);
+          onResult: (result) {
+            state = state.copyWith(
+                isTyping: false, currentSpokenWord: result.recognizedWords);
 
-          // Use the callback to update the UI
-          onSpeechResult?.call(result.recognizedWords);
+            // Use the callback to update the UI
+            onSpeechResult?.call(result.recognizedWords);
 
-          if (result.finalResult) {
-            sendMessage(result.recognizedWords);
-            state = state.copyWith(isTyping: false);
-            stopListening();
-          }
-        },
-        listenFor: const Duration(seconds: 60),
-        pauseFor: const Duration(seconds: 3),
-      );
+            if (result.finalResult) {
+              sendMessage(result.recognizedWords);
+              state = state.copyWith(isTyping: false);
+              stopListening();
+            }
+          },
+          listenFor: const Duration(seconds: 60),
+          pauseFor: const Duration(seconds: 5),
+          listenOptions: SpeechListenOptions(
+            cancelOnError: true,
+          ));
       state = state.copyWith(isListening: true, isSpeaking: true);
     }
   }

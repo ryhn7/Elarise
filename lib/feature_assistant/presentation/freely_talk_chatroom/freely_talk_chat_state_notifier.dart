@@ -36,30 +36,46 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
 
   void checkMicrophoneAvailability() async {
     bool available = await speechToText.initialize(
-      onError: (val) => state =
-          state.copyWith(error: "Error initializing speech to text: $val"),
+      onError: (val) {
+        // Log or handle the initialization error
+        state =
+            state.copyWith(error: "Error initializing speech to text: $val");
+        // Ensure listening is stopped if there was an error during initialization
+        stopListening();
+      },
       onStatus: (status) => {},
       debugLogging: true,
     );
     if (!available) {
       state = state.copyWith(
           error: "The user has denied the use of speech recognition.");
+      stopListening();
     }
   }
 
   void startListening() {
     if (!state.isListening) {
       speechToText.listen(
-        onResult: (result) {
-          state = state.copyWith(currentSpokenWord: result.recognizedWords);
-          if (result.finalResult) {
-            sendMessage(result.recognizedWords);
-            stopListening();
-          }
-        },
-        listenFor: const Duration(seconds: 60),
-        pauseFor: const Duration(seconds: 3),
-      );
+          onResult: (result) {
+            if (result.recognizedWords.isEmpty) {
+              // No words recognized, stop listening without setting an error
+              stopListening();
+            } else {
+              state = state.copyWith(
+                currentSpokenWord: result.recognizedWords,
+                isSpeaking: true,
+              );
+              if (result.finalResult) {
+                sendMessage(result.recognizedWords);
+                stopListening();
+              }
+            }
+          },
+          listenFor: const Duration(seconds: 60),
+          pauseFor: const Duration(seconds: 5),
+          listenOptions: SpeechListenOptions(
+            cancelOnError: true,
+          ));
       state = state.copyWith(isListening: true, isSpeaking: true);
     }
   }

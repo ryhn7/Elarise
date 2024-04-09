@@ -76,9 +76,10 @@ class _FreelyTalkChatroomScreenState
     // Handle errors (showing a SnackBar for simplicity)
     if (freelyTalkChatState.error != null && !freelyTalkChatState.isLoading) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(freelyTalkChatState.error!)),
-        );
+        ref.read(routerProvider).goNamed('common-error', extra: {
+          'routeName': 'talk-freely-detail',
+          'chatRoomId': widget.chatRoomId,
+        });
       });
     }
 

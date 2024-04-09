@@ -221,12 +221,12 @@ class _GrammarTalkChatroomScreenState
     final grammarTalkChatState =
         ref.watch(grammarTalkChatStateNotifierProvider);
 
-    // Handle errors (showing a SnackBar for simplicity)
     if (grammarTalkChatState.error != null && !grammarTalkChatState.isLoading) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(grammarTalkChatState.error!)),
-        );
+        ref.read(routerProvider).goNamed('common-error', extra: {
+          'routeName': 'grammar-talk-detail',
+          'chatRoomId': widget.chatRoomId,
+        });
       });
     }
 
