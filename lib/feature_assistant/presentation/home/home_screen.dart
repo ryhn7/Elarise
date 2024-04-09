@@ -217,7 +217,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     if (globalState.hasInternetConnection == false) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(routerProvider).goNamed('network-error', extra: 'home');
+        ref.read(routerProvider).goNamed('network-error', extra: {
+          'routeName': 'home',
+        });
       });
       return const SizedBox.shrink();
     } else if (homeState.isLoading) {

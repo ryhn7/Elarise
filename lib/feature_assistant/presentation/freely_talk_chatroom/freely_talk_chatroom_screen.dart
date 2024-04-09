@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jumping_dot/jumping_dot.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../core/global/global_state_notifier.dart';
 import '../../../router/router_provider.dart';
 import '../home/home_state_notifier.dart';
 
@@ -94,7 +95,9 @@ class _FreelyTalkChatroomScreenState
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_rounded, color: earieBlack),
             onPressed: () {
-              ref.read(homeStateNotifierProvider.notifier).updateChatRoomsBasedOnSelection('Talking');
+              ref
+                  .read(homeStateNotifierProvider.notifier)
+                  .updateChatRoomsBasedOnSelection('Talking');
               ref.read(routerProvider).goNamed('home');
             },
           ),
@@ -291,15 +294,36 @@ class _FreelyTalkChatroomScreenState
           repeat: true,
           child: GestureDetector(
             onTap: () {
-              if (isListening) {
-                ref
-                    .read(freelyTalkChatStateNotifierProvider.notifier)
-                    .stopListening();
-              } else {
-                ref
-                    .read(freelyTalkChatStateNotifierProvider.notifier)
-                    .startListening();
-              }
+              // Check connectivity at the moment of the button press
+              ref
+                  .read(globalStateNotifierProvider.notifier)
+                  .checkInternetConnection()
+                  .then((_) {
+                final globalState = ref.read(globalStateNotifierProvider);
+
+                if (globalState.hasInternetConnection == false) {
+                  // If offline, navigate to NetworkErrorScreen directly
+                  ref.read(routerProvider).goNamed('network-error', extra: {
+                    'routeName': 'talk-freely-detail',
+                    'chatRoomId': widget
+                        .chatRoomId, // Ensure you have access to chatRoomId in this context
+                  });
+                } else {
+                  // If online, toggle listening state
+                  if (isListening) {
+                    ref
+                        .read(freelyTalkChatStateNotifierProvider.notifier)
+                        .stopListening();
+                  } else {
+                    ref
+                        .read(freelyTalkChatStateNotifierProvider.notifier)
+                        .startListening();
+                  }
+                }
+              }).catchError((error) {
+                // Handle any errors that occur during the connectivity check
+                log('Error checking internet connection: $error');
+              });
             },
             child: Container(
               width: 60,

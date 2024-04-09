@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jumping_dot/jumping_dot.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../core/global/global_state_notifier.dart';
 import '../../../router/router_provider.dart';
 import '../../../theme/colors.dart';
 import '../../../theme/style.dart';
@@ -55,15 +56,38 @@ class _GrammarTalkChatroomScreenState
 
   void sendMessage(String text) {
     final messageText = messageController.text.trim();
-    if (messageText.isNotEmpty) {
-      ref.read(grammarTalkChatStateNotifierProvider.notifier).sendMessage(text);
-      messageController.clear();
+    // Instead of using the globalState directly, check connectivity at the moment of sending
+    // This ensures the latest state of the connection is used
+    ref
+        .read(globalStateNotifierProvider.notifier)
+        .checkInternetConnection()
+        .then((_) {
+      final globalState = ref.read(globalStateNotifierProvider);
 
-      // Also reset the typing state
-      ref
-          .read(grammarTalkChatStateNotifierProvider.notifier)
-          .updateTypingState(false);
-    }
+      if (messageText.isNotEmpty) {
+        if (globalState.hasInternetConnection == false) {
+          // Instead of using WidgetsBinding.instance.addPostFrameCallback, directly navigate to the error screen
+          // This ensures the navigation happens immediately without waiting for the next frame
+          ref.read(routerProvider).goNamed('network-error', extra: {
+            'routeName': 'grammar-talk-detail',
+            'chatRoomId': widget.chatRoomId,
+          });
+        } else {
+          ref
+              .read(grammarTalkChatStateNotifierProvider.notifier)
+              .sendMessage(text);
+          messageController.clear();
+
+          // Also reset the typing state
+          ref
+              .read(grammarTalkChatStateNotifierProvider.notifier)
+              .updateTypingState(false);
+        }
+      }
+    }).catchError((error) {
+      // Handle any errors that occur during the connectivity check
+      log('Error checking internet connection: $error');
+    });
   }
 
   void enableContextualAppBar(String idMessage, String userMessage) {
@@ -244,7 +268,9 @@ class _GrammarTalkChatroomScreenState
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_rounded, color: earieBlack),
             onPressed: () {
-              ref.read(homeStateNotifierProvider.notifier).updateChatRoomsBasedOnSelection('Grammar');
+              ref
+                  .read(homeStateNotifierProvider.notifier)
+                  .updateChatRoomsBasedOnSelection('Grammar');
               ref.read(routerProvider).goNamed('home');
             },
           ),
@@ -501,17 +527,44 @@ class _GrammarTalkChatroomScreenState
                           )
                         : IconButton(
                             onPressed: () {
-                              if (grammarTalkChatState.isListening) {
-                                ref
-                                    .read(grammarTalkChatStateNotifierProvider
-                                        .notifier)
-                                    .stopListening();
-                              } else {
-                                ref
-                                    .read(grammarTalkChatStateNotifierProvider
-                                        .notifier)
-                                    .startListening();
-                              }
+                              // Check connectivity at the moment of the button press
+                              ref
+                                  .read(globalStateNotifierProvider.notifier)
+                                  .checkInternetConnection()
+                                  .then((_) {
+                                final globalState =
+                                    ref.read(globalStateNotifierProvider);
+
+                                if (globalState.hasInternetConnection ==
+                                    false) {
+                                  // If offline, navigate to NetworkErrorScreen directly
+                                  ref
+                                      .read(routerProvider)
+                                      .goNamed('network-error', extra: {
+                                    'routeName': 'grammar-talk-detail',
+                                    'chatRoomId': widget
+                                        .chatRoomId, // Ensure you have access to chatRoomId in this context
+                                  });
+                                } else {
+                                  // If online, toggle listening state
+                                  if (grammarTalkChatState.isListening) {
+                                    ref
+                                        .read(
+                                            grammarTalkChatStateNotifierProvider
+                                                .notifier)
+                                        .stopListening();
+                                  } else {
+                                    ref
+                                        .read(
+                                            grammarTalkChatStateNotifierProvider
+                                                .notifier)
+                                        .startListening();
+                                  }
+                                }
+                              }).catchError((error) {
+                                // Handle any errors that occur during the connectivity check
+                                log('Error checking internet connection: $error');
+                              });
                             },
                             icon: Icon(
                               grammarTalkChatState.isSpeaking
@@ -519,7 +572,8 @@ class _GrammarTalkChatroomScreenState
                                   : Icons.mic_off,
                               color: Colors.black,
                               size: 32,
-                            )),
+                            ),
+                          ),
                   ))
                 ],
               )
