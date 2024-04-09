@@ -230,6 +230,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     } else if (homeState.userPreferences != null &&
         homeState.userPreferences!.token != null) {
       // User is logged in, continue showing HomeScreen
+      // if (homeState.error != null && !homeState.isLoading) {
+      //   WidgetsBinding.instance.addPostFrameCallback((_) {
+      //     ref.read(routerProvider).goNamed('common-error', extra: {
+      //       'routeName': 'home',
+      //     });
+      //   });
+      // }
       return homeScreenContent(
           context, ref, homeState.userPreferences!, dropdownValue);
     } else {
