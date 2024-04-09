@@ -1,4 +1,5 @@
 import 'package:elarise/core/global/global_state.dart';
+import 'package:elarise/feature_assistant/presentation/grammar_talk_chatroom/grammar_talk_chat_state_notifier.dart';
 import 'package:elarise/feature_assistant/presentation/home/home_state_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,6 +10,7 @@ import '../utils/network_util.dart';
 class GlobalStateNotifier extends StateNotifier<GlobalState> {
   final Ref ref;
   String? _routeName;
+  String? _chatRoomId;
 
   GlobalStateNotifier(this.ref) : super(GlobalState()) {
     _loadUserPreferences();
@@ -45,13 +47,27 @@ class GlobalStateNotifier extends StateNotifier<GlobalState> {
     _routeName = routeName;
   }
 
+  set chatRoomId(String chatRoomId) {
+    _chatRoomId = chatRoomId;
+  }
+
   // method go to the previous route
   void goBack() {
     if (_routeName != null) {
       if (_routeName == 'home') {
         ref.read(homeStateNotifierProvider.notifier).getAllFreelyTalkRooms();
+        ref.read(routerProvider).goNamed(_routeName!);
+      } else if (_routeName == 'grammar-talk-detail' && _chatRoomId != null) {
+        ref
+            .read(grammarTalkChatStateNotifierProvider.notifier)
+            .fetchChatHistory();
+        ref.read(routerProvider).goNamed(_routeName!, extra: _chatRoomId);
+      } else if (_routeName == 'talk-freely-detail' && _chatRoomId != null) {
+        ref
+            .read(grammarTalkChatStateNotifierProvider.notifier)
+            .fetchChatHistory();
+        ref.read(routerProvider).goNamed(_routeName!, extra: _chatRoomId);
       }
-      ref.read(routerProvider).goNamed(_routeName!);
     }
   }
 }
