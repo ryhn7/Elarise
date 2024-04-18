@@ -56,26 +56,16 @@ class FreelyTalkChatStateNotifier extends StateNotifier<FreelyTalkChatState> {
   void startListening() {
     if (!state.isListening) {
       speechToText.listen(
-          onResult: (result) {
-            if (result.recognizedWords.isEmpty) {
-              // No words recognized, stop listening without setting an error
-              stopListening();
-            } else {
-              state = state.copyWith(
-                currentSpokenWord: result.recognizedWords,
-                isSpeaking: true,
-              );
-              if (result.finalResult) {
-                sendMessage(result.recognizedWords);
-                stopListening();
-              }
-            }
-          },
-          listenFor: const Duration(seconds: 60),
-          pauseFor: const Duration(seconds: 5),
-          listenOptions: SpeechListenOptions(
-            cancelOnError: true,
-          ));
+        onResult: (result) {
+          state = state.copyWith(currentSpokenWord: result.recognizedWords);
+          if (result.finalResult) {
+            sendMessage(result.recognizedWords);
+            stopListening();
+          }
+        },
+        listenFor: const Duration(seconds: 60),
+        pauseFor: const Duration(seconds: 5),
+      );
       state = state.copyWith(isListening: true, isSpeaking: true);
     }
   }
