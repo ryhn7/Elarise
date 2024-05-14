@@ -52,7 +52,7 @@ class ChatroomLoadingScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   shimmerEffect(
-                    Image.asset("assets/images/dummy_logo.png",
+                    Image.asset("assets/images/elarise_logo.png",
                         width: 24, height: 24),
                   ),
                   const SizedBox(width: 12),
@@ -107,7 +107,7 @@ class ChatroomLoadingScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 shimmerEffect(
-                  Image.asset("assets/images/dummy_logo.png",
+                  Image.asset("assets/images/elarise_logo.png",
                       width: 24, height: 24),
                 ),
                 const SizedBox(width: 12),
