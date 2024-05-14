@@ -6,6 +6,7 @@ import 'package:elarise/theme/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/utils/network_util.dart';
 import '../../../../router/router_provider.dart';
 
 class ManageAccountScreen extends ConsumerStatefulWidget {
@@ -45,7 +46,14 @@ class _ManageAccountScreenState extends ConsumerState<ManageAccountScreen> {
                     style: getSansFranciscoMedium16(color: earieBlack)),
               ),
               TextButton(
-                onPressed: () {
+                onPressed: () async {
+                  final isOnline = await NetworkUtil().isInternetAvailable();
+                  if (!isOnline) {
+                    ref.read(routerProvider).goNamed('network-error', extra: {
+                      'routeName': 'manage-account',
+                    });
+                    return;
+                  }
                   ref
                       .read(accountStateNotifierProvider.notifier)
                       .deleteAccount();

@@ -67,6 +67,8 @@ class GlobalStateNotifier extends StateNotifier<GlobalState> {
             .read(grammarTalkChatStateNotifierProvider.notifier)
             .fetchChatHistory();
         ref.read(routerProvider).goNamed(_routeName!, extra: _chatRoomId);
+      } else if (_routeName == 'manage-account') {
+        ref.read(routerProvider).goNamed('manage-account');
       }
     }
   }
