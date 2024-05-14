@@ -22,10 +22,7 @@ class LoginScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<LoginState>(loginStateNotifierProvider, (_, state) {
-      if (state.isLoading) {
-        state.isAttemptingLogin = true;
-      } else if (state.user != null) {
-        state.isAttemptingLogin = false;
+      if (state.user != null) {
         ref.read(routerProvider).goNamed('home');
       } else if (state.error != null) {
         if (ModalRoute.of(context)!.isCurrent) {
@@ -33,8 +30,6 @@ class LoginScreen extends ConsumerWidget {
             content: Text("Check your email and password, then try again."),
             duration: Duration(seconds: 2),
           ));
-        } else if (!state.isLoading) {
-          state.isAttemptingLogin = false;
         }
       }
     });
